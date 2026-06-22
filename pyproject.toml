@@ -4,14 +4,21 @@ version = "0.1.1"
 description = "Unofficial read-only MCP server for VeryChic hotel offers"
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.11"
-authors = [{ name = "VeryChic MCP contributors" }]
+authors = [{ name = "Jordan Tete", email = "tetej171@gmail.com" }]
 keywords = ["mcp", "model-context-protocol", "verychic", "hotels", "travel"]
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
 ]
 dependencies = ["curl_cffi>=0.7", "mcp[cli]>=1.2"]
 
@@ -19,6 +26,7 @@ dependencies = ["curl_cffi>=0.7", "mcp[cli]>=1.2"]
 Homepage = "https://github.com/jordantete/verychic-mcp"
 Repository = "https://github.com/jordantete/verychic-mcp"
 Issues = "https://github.com/jordantete/verychic-mcp/issues"
+Changelog = "https://github.com/jordantete/verychic-mcp/releases"
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.6", "build>=1.2"]
@@ -26,8 +34,15 @@ dev = ["pytest>=8", "ruff>=0.6", "build>=1.2"]
 [project.scripts]
 verychic-mcp = "verychic_mcp.server:main"
 
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
 [tool.pytest.ini_options]
-markers = ["network: test nécessitant un accès réseau réel (hors CI)"]
+markers = ["network: test requiring real network access (excluded from CI)"]
 addopts = "-m 'not network'"
 
 [build-system]
