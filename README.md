@@ -79,10 +79,9 @@ assistant can pass them to `verychic_offer_details` on its own.
 ## Use from Claude.ai or Cowork
 
 Cloud clients such as claude.ai and Cowork only connect to remote MCP servers over HTTPS, not
-to a local process. To use VeryChic MCP there, host it yourself in `streamable-http` mode and
-add it as a custom connector by URL. [DEPLOY.md](DEPLOY.md) ships a Docker image and a Render
-blueprint for that. Once deployed, open Claude settings, go to Connectors, add a custom
-connector, and paste your deployment URL.
+to a local process. To use VeryChic MCP there, host it yourself in `streamable-http` mode
+(`verychic-mcp --transport streamable-http`, behind HTTPS) and add it as a custom connector,
+pasting your deployment URL with the `/mcp` path.
 
 Listing in Anthropic's official connector directory (next to Booking or Tripadvisor) is out of
 scope. That directory is reserved for partner integrations that pass a review this kind of tool

@@ -4,6 +4,9 @@
 *.har
 secrets.*
 
+# Config de déploiement perso (Fly) — hors du repo public
+fly.toml
+
 # Python
 __pycache__/
 *.py[cod]
