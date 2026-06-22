@@ -1,9 +1,12 @@
 import json
 from pathlib import Path
 
-from verychic_mcp.models import Offer, Availability, OfferDetails
+from verychic_mcp.models import Availability, Offer, OfferDetails
 from verychic_mcp.parsers import (
-    parse_offer, parse_offers, parse_availabilities, parse_offer_details,
+    parse_availabilities,
+    parse_offer,
+    parse_offer_details,
+    parse_offers,
 )
 
 FIX = Path(__file__).parent / "fixtures"
@@ -24,7 +27,7 @@ def test_parse_offers_from_products_fixture():
     assert first.country == "Monténégro"
     assert first.price == 515
     assert first.currency == "EUR"
-    assert first.url_name == "montenegro-herceg-novi-hotel-kappa-club-iberostar-herceg-novi-4-etoiles"
+    assert first.url_name == "montenegro-herceg-novi-hotel-kappa-club-iberostar-herceg-novi-4-etoiles"  # noqa: E501
 
 
 def test_offer_url_built_from_id_and_slug():

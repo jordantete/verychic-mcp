@@ -4,7 +4,7 @@
 *.har
 secrets.*
 
-# Config de déploiement perso (Fly) — hors du repo public
+# Personal deployment config (Fly) — kept out of the public repo
 fly.toml
 
 # Python
@@ -19,7 +19,7 @@ build/
 .ruff_cache/
 .mypy_cache/
 
-# Node (si la Phase 0 tranche pour Node/TS)
+# Node (if the project ever adds Node/TS)
 node_modules/
 *.tsbuildinfo
 
@@ -28,5 +28,5 @@ node_modules/
 .idea/
 .vscode/
 
-# Scratch de pilotage (subagent-driven-development)
+# Orchestration scratch (subagent-driven-development)
 .superpowers/

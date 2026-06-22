@@ -1,4 +1,4 @@
-"""Modèles de domaine (dataclasses sérialisables)."""
+"""Domain models (serializable dataclasses)."""
 from __future__ import annotations
 
 from dataclasses import dataclass, field

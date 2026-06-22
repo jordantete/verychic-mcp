@@ -2,7 +2,7 @@ import asyncio
 import json
 from pathlib import Path
 
-from verychic_mcp.server import resolve_transport, build_server
+from verychic_mcp.server import build_server, resolve_transport
 
 FIX = Path(__file__).parent / "fixtures"
 
@@ -41,8 +41,8 @@ def test_build_server_registers_three_tools():
 
 
 def test_build_server_disables_dns_rebinding_protection():
-    # Déploiement remote derrière un proxy (Fly) : la protection localhost-only du SDK
-    # rejetterait le Host public ("Invalid Host header"). Elle doit rester désactivée.
+    # Remote deployment behind a proxy (Fly): the SDK's localhost-only protection
+    # would reject the public Host ("Invalid Host header"). It must stay disabled.
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
     assert srv.settings.transport_security is not None
     assert srv.settings.transport_security.enable_dns_rebinding_protection is False

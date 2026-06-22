@@ -1,7 +1,7 @@
-"""Smoke-test réseau réel (opt-in) : confirme que l'API VeryChic répond toujours.
+"""Real-network smoke test (opt-in): confirms the VeryChic API still responds.
 
-Exécution : `pytest -m network`. Exclu de la CI par défaut (addopts).
-Faible volume (le rate-limiter du client espace les requêtes).
+Run with `pytest -m network`. Excluded from CI by default (addopts).
+Low volume (the client's rate-limiter spaces out the requests).
 """
 import pytest
 
@@ -14,7 +14,7 @@ pytestmark = pytest.mark.network
 
 def test_list_deals_live_returns_offers():
     offers = list_deals(VeryChicClient(), limit=5)
-    assert offers, "aucune offre renvoyée par l'API live"
+    assert offers, "no offers returned by the live API"
     first = offers[0]
     assert first.external_id is not None
     assert first.name
@@ -26,5 +26,5 @@ def test_offer_details_live_has_availabilities():
     cv = get_channel_version(client)
     details = offer_details(client, offer.source, offer.external_id, channel_version=cv)
     assert details.offer.external_id == offer.external_id
-    # la dispo peut être vide selon l'offre, mais l'appel doit aboutir et parser
+    # availability may be empty depending on the offer, but the call must succeed and parse
     assert isinstance(details.availabilities, list)

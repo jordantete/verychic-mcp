@@ -1,4 +1,4 @@
-"""Client HTTP anonyme : empreinte navigateur, rate-limiting, erreurs actionnables."""
+"""Anonymous HTTP client: browser fingerprint, rate-limiting, actionable errors."""
 from __future__ import annotations
 
 import time
@@ -8,7 +8,7 @@ from .errors import CloudflareBlocked, NotFound, UpstreamError
 
 
 def classify_block(status: int, headers: dict, body: str) -> None:
-    """Lève l'exception adaptée si la réponse n'est pas exploitable ; sinon ne fait rien."""
+    """Raise the appropriate exception if the response is unusable; otherwise do nothing."""
     lower = {str(k).lower(): str(v) for k, v in headers.items()}
     is_cf = "cf-mitigated" in lower or "just a moment" in body.lower()
     if status == 403 and is_cf:
@@ -16,12 +16,12 @@ def classify_block(status: int, headers: dict, body: str) -> None:
     if status == 404:
         raise NotFound()
     if not (200 <= status < 300):
-        raise UpstreamError(f"HTTP {status} depuis VeryChic.")
+        raise UpstreamError(f"HTTP {status} from VeryChic.")
     return None
 
 
 def _make_session():
-    from curl_cffi import requests  # import paresseux (réseau requis seulement à l'exécution)
+    from curl_cffi import requests  # lazy import (network only needed at runtime)
     return requests.Session(impersonate=IMPERSONATE)
 
 
@@ -33,7 +33,7 @@ class VeryChicClient:
         self._timeout = timeout
         self._clock = clock
         self._sleep = sleep
-        self._last = None  # instant de la dernière requête
+        self._last = None  # timestamp of the last request
 
     def _respect_rate_limit(self) -> None:
         if self._last is not None:
@@ -50,7 +50,7 @@ class VeryChicClient:
         try:
             return resp.json()
         except Exception as exc:
-            raise UpstreamError("Réponse VeryChic non-JSON.") from exc
+            raise UpstreamError("Non-JSON response from VeryChic.") from exc
 
     def get_text(self, url: str, params: dict | None = None) -> str:
         self._respect_rate_limit()

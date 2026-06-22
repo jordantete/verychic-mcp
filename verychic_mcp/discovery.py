@@ -1,4 +1,4 @@
-"""Auto-découverte de paramètres volatils (channelVersion) avec fallback en dur."""
+"""Auto-discovery of volatile parameters (channelVersion) with a hardcoded fallback."""
 from __future__ import annotations
 
 import re
@@ -14,7 +14,7 @@ def extract_channel_version(html: str) -> str | None:
 
 
 def get_channel_version(client, *, fallback: str = CHANNEL_VERSION_FALLBACK) -> str:
-    """Best-effort : lit channelVersion depuis la home live ; sinon retourne le fallback."""
+    """Best-effort: read channelVersion from the live home page; otherwise return the fallback."""
     try:
         html = client.get_text(SITE_BASE + "/")
     except Exception:

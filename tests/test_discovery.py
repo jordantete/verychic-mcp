@@ -1,5 +1,5 @@
-from verychic_mcp.discovery import extract_channel_version, get_channel_version
 from verychic_mcp.config import CHANNEL_VERSION_FALLBACK
+from verychic_mcp.discovery import extract_channel_version, get_channel_version
 
 
 def test_extract_channel_version_found():
@@ -8,7 +8,7 @@ def test_extract_channel_version_found():
 
 
 def test_extract_channel_version_absent():
-    assert extract_channel_version("<html>rien ici</html>") is None
+    assert extract_channel_version("<html>nothing here</html>") is None
 
 
 class _Client:
@@ -17,7 +17,7 @@ class _Client:
 
     def get_text(self, url, params=None):
         if self._boom:
-            raise RuntimeError("réseau coupé")
+            raise RuntimeError("network down")
         return self._text
 
 
@@ -27,7 +27,7 @@ def test_get_channel_version_uses_live_value():
 
 
 def test_get_channel_version_falls_back_on_absence():
-    assert get_channel_version(_Client(text="rien")) == CHANNEL_VERSION_FALLBACK
+    assert get_channel_version(_Client(text="nothing")) == CHANNEL_VERSION_FALLBACK
 
 
 def test_get_channel_version_falls_back_on_error():

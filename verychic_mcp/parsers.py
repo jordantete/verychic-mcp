@@ -1,4 +1,4 @@
-"""Transforme le JSON brut VeryChic en modèles de domaine."""
+"""Transforms raw VeryChic JSON into domain models."""
 from __future__ import annotations
 
 from .models import Availability, Offer, OfferDetails
@@ -11,7 +11,7 @@ def parse_offer(d: dict) -> Offer:
         name=d.get("name", ""),
         destination=d.get("destinationName"),
         country=d.get("country"),
-        # selon l'endpoint le prix est dans price ou normalizedPrice
+        # depending on the endpoint, the price is in price or normalizedPrice
         price=d.get("price") if d.get("price") is not None else d.get("normalizedPrice"),
         currency=d.get("currency") or d.get("productCurrency"),
         short_desc=d.get("shortDesc"),

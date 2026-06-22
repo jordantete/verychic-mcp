@@ -2,7 +2,7 @@ import json
 from datetime import date
 from pathlib import Path
 
-from verychic_mcp.api import list_deals, search_offers, offer_details, default_months
+from verychic_mcp.api import default_months, list_deals, offer_details, search_offers
 from verychic_mcp.errors import NotFound, UpstreamError
 
 FIX = Path(__file__).parent / "fixtures"
@@ -13,10 +13,10 @@ def _load(name):
 
 
 class RouterClient:
-    """Client factice : route chaque URL vers la bonne fixture, journalise les params.
+    """Fake client: routes each URL to the right fixture, logs the params.
 
-    ``raise_on`` est un dict optionnel mapping un sous-string d'URL vers une exception
-    à lever au lieu de retourner la fixture correspondante.
+    ``raise_on`` is an optional dict mapping a URL substring to an exception
+    to raise instead of returning the matching fixture.
     """
     def __init__(self, raise_on=None):
         self.calls = []
@@ -37,7 +37,7 @@ class RouterClient:
             return _load("preview_sample.json")
         if "checkin-availabilities" in url:
             return _load("checkin_availabilities_sample.json")
-        raise AssertionError(f"URL inattendue: {url}")
+        raise AssertionError(f"Unexpected URL: {url}")
 
 
 def test_list_deals_limits_results():
@@ -78,7 +78,7 @@ def test_default_months_format():
 
 
 def test_offer_details_package_uses_vacation_package_route():
-    """ORCHESTRA_TO doit utiliser /vacation-package/ et non /hotel/."""
+    """ORCHESTRA_TO must use /vacation-package/, not /hotel/."""
     c = RouterClient(raise_on={"/hotel/ORCHESTRA_TO/": NotFound()})
     details = offer_details(c, "ORCHESTRA_TO", 44983, channel_version="26.06.18.00")
     urls = [u for u, _ in c.calls]
@@ -88,7 +88,7 @@ def test_offer_details_package_uses_vacation_package_route():
 
 
 def test_offer_details_availabilities_best_effort_on_error():
-    """checkin-availabilities en erreur ne doit pas faire planter offer_details."""
+    """A failing checkin-availabilities must not break offer_details."""
     c = RouterClient(raise_on={"checkin-availabilities": UpstreamError()})
     details = offer_details(c, "ORCHESTRA", 44983, channel_version="26.06.18.00")
     assert details.availabilities == []

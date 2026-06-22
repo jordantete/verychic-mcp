@@ -31,10 +31,10 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
     client = client if client is not None else VeryChicClient()
     if channel_version is None:
         channel_version = get_channel_version(client)
-    # Transport HTTP distant : le serveur est public/anonyme et tourne derrière un proxy
-    # (Fly, etc.) qui présente un Host public. La protection anti-DNS-rebinding du SDK
-    # n'autorise par défaut que localhost et rejetterait ce Host ("Invalid Host header").
-    # On la désactive explicitement : aucun secret ni binding localhost à protéger ici.
+    # Remote HTTP transport: the server is public/anonymous and runs behind a proxy
+    # (Fly, etc.) that presents a public Host. The SDK's DNS-rebinding protection only
+    # allows localhost by default and would reject that Host ("Invalid Host header").
+    # We disable it explicitly: no secret nor localhost binding to protect here.
     mcp = FastMCP(
         "verychic",
         transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
@@ -42,20 +42,20 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
 
     @mcp.tool()
     def verychic_list_deals(limit: int = 20) -> list[dict]:
-        """Liste les offres VeryChic du moment (par défaut 20)."""
+        """List current VeryChic offers (20 by default)."""
         return [_offer_dict(o) for o in api.list_deals(client, limit=limit)]
 
     @mcp.tool()
     def verychic_search_offers(destination: str | None = None, country: str | None = None,
                                max_price: float | None = None, limit: int = 20) -> list[dict]:
-        """Recherche/filtre les offres par destination (sous-chaîne), pays et/ou prix max."""
+        """Search/filter offers by destination (substring), country, and/or max price."""
         offers = api.search_offers(client, destination=destination, country=country,
                                    max_price=max_price, limit=limit)
         return [_offer_dict(o) for o in offers]
 
     @mcp.tool()
     def verychic_offer_details(source: str, external_id: int) -> dict:
-        """Détail d'une offre (avantages, galerie) + disponibilités/prix par dates."""
+        """Offer details (advantages, gallery) plus availability/prices by date."""
         details = api.offer_details(client, source, external_id, channel_version=channel_version)
         out = asdict(details)
         out["offer"]["offer_url"] = details.offer.offer_url

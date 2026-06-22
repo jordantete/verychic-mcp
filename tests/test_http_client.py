@@ -1,6 +1,7 @@
 import pytest
+
 from verychic_mcp.errors import CloudflareBlocked, NotFound, UpstreamError
-from verychic_mcp.http_client import classify_block, VeryChicClient
+from verychic_mcp.http_client import VeryChicClient, classify_block
 
 
 class FakeResp:
@@ -16,7 +17,7 @@ class FakeResp:
 
 
 class FakeSession:
-    """Session factice : renvoie des réponses préprogrammées et journalise les appels."""
+    """Fake session: returns preprogrammed responses and logs the calls."""
     def __init__(self, responses):
         self._responses = list(responses)
         self.calls = []
@@ -61,7 +62,7 @@ def test_get_json_raises_on_404():
 
 
 def test_rate_limit_sleeps_between_calls():
-    # horloge factice qui n'avance pas → la 2e requête doit dormir ~min_interval
+    # fake clock that doesn't advance → the 2nd request must sleep ~min_interval
     slept = []
     ticks = iter([100.0, 100.0, 100.0, 100.0])
     client = VeryChicClient(

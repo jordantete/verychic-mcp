@@ -1,4 +1,4 @@
-"""Couche API : compose le client HTTP, les routes et les parsers."""
+"""API layer: composes the HTTP client, routes, and parsers."""
 from __future__ import annotations
 
 from datetime import date
@@ -50,7 +50,7 @@ def default_months(n: int = 5, today: date | None = None) -> list[str]:
 def offer_details(client, source: str, external_id: int, *, channel_version: str,
                   months: list[str] | None = None) -> OfferDetails:
     months = months or default_months()
-    # Les packages tour-opérateur (ORCHESTRA_TO) sont exposés sous /vacation-package/
+    # Tour-operator packages (ORCHESTRA_TO) are exposed under /vacation-package/
     base_kind = "vacation-package" if source == "ORCHESTRA_TO" else "hotel"
     base = client.get_json(
         f"{API_BASE}/{base_kind}/{source}/{external_id}.json",
@@ -66,7 +66,7 @@ def offer_details(client, source: str, external_id: int, *, channel_version: str
             {"monthYear": ",".join(months), "channel": CHANNEL},
         )
     except (NotFound, UpstreamError):
-        # Les packages ne publient pas de dispo par date (404/400) ; on n'avale PAS
-        # un éventuel blocage Cloudflare, qui doit remonter.
+        # Packages don't expose date availability (404/400); we do NOT swallow
+        # a possible Cloudflare block, which must propagate.
         avails = []
     return parse_offer_details(base, preview, avails)
