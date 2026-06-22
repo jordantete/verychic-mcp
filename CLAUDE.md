@@ -1,93 +1,94 @@
 # CLAUDE.md — verychic-mcp
 
-Serveur MCP **non officiel, read-only, anonyme** pour les offres d'hôtels VeryChic.
-3 outils : `verychic_list_deals`, `verychic_search_offers`, `verychic_offer_details`
-(détail + disponibilité/prix par dates). HTTP pur (curl_cffi), double transport
-(stdio + streamable-http). Non affilié à VeryChic — voir le disclaimer du `README.md`.
+**Unofficial, read-only, anonymous** MCP server for VeryChic hotel offers.
+3 tools: `verychic_list_deals`, `verychic_search_offers`, `verychic_offer_details`
+(details + availability/prices by date). Plain HTTP (curl_cffi), dual transport
+(stdio + streamable-http). Not affiliated with VeryChic — see the disclaimer in `README.md`.
 
-## Les 4 principes à intégrer
+## The 4 principles to apply
 
-1. **Think Before Coding** — expliciter les hypothèses ; si plusieurs interprétations, les présenter (ne pas trancher en silence) ; si plus simple existe, le dire ; si flou, s'arrêter et demander.
-2. **Simplicity First** — code minimal qui résout le problème ; rien de spéculatif ; pas d'abstraction pour usage unique ; si 200 lignes pour 50, réécrire.
-3. **Surgical Changes** — ne toucher que le nécessaire ; ne pas « améliorer » le code adjacent ; matcher le style existant ; signaler le dead code, ne pas le supprimer ; nettoyer seulement les orphelins créés par ses propres changements.
-4. **Goal-Driven Execution** — transformer la tâche en critères vérifiables (« fix the bug » → « écrire un test qui le reproduit puis le faire passer ») ; plan bref multi-étapes avec vérification par étape.
+1. **Think Before Coding** — make assumptions explicit; if several interpretations exist, present them (don't silently pick one); if something simpler exists, say so; if unclear, stop and ask.
+2. **Simplicity First** — minimal code that solves the problem; nothing speculative; no abstraction for a single use; if it's 200 lines for 50, rewrite.
+3. **Surgical Changes** — touch only what's needed; don't "improve" adjacent code; match the existing style; flag dead code, don't delete it; clean up only the orphans created by your own changes.
+4. **Goal-Driven Execution** — turn the task into verifiable criteria ("fix the bug" → "write a test that reproduces it, then make it pass"); short multi-step plan with per-step verification.
 
-## Commandes
+## Commands
 
 ```bash
-pip install -e ".[dev]"               # installer (deps : curl_cffi, mcp[cli])
-pytest                                # tests hors-ligne (fixtures) — exclut @network
-pytest -m network                     # smoke-test réseau réel (touche l'API live, faible volume)
+pip install -e ".[dev]"               # install (deps: curl_cffi, mcp[cli])
+pytest                                # offline tests (fixtures) — excludes @network
+pytest -m network                     # real-network smoke test (hits the live API, low volume)
 ruff check verychic_mcp tests         # lint
-verychic-mcp --help                   # CLI (transports stdio / streamable-http)
-verychic-mcp                          # lance en stdio (défaut)
-python -m build                       # construit le wheel (publication)
+verychic-mcp --help                   # CLI (stdio / streamable-http transports)
+verychic-mcp                          # runs in stdio (default)
+python -m build                       # builds the wheel (publishing)
 ```
 
-Tests **hors-ligne** : ils tournent sur des fixtures JSON réelles dans `tests/fixtures/`
-(capturées en Phase 0), aucune dépendance réseau. Le smoke `@network` est opt-in et
-exclu de la CI par défaut (`addopts = "-m 'not network'"`).
+**Offline** tests: they run against real JSON fixtures in `tests/fixtures/`
+(captured in Phase 0), with no network dependency. The `@network` smoke test is opt-in and
+excluded from CI by default (`addopts = "-m 'not network'"`).
 
-## Architecture (une responsabilité par module, testable isolément)
+## Architecture (one responsibility per module, independently testable)
 
 ```
-config.py      → constantes : routes, PRODUCT_PARAMS, rate-limit, fallback channelVersion
-errors.py      → VeryChicError + CloudflareBlocked / NotFound / UpstreamError (messages actionnables)
-http_client.py → VeryChicClient : session curl_cffi (empreinte Chrome), rate-limit injectable,
-                 classify_block() mappe les réponses HTTP en exceptions. get_json / get_text.
-discovery.py   → get_channel_version() : lit channelVersion sur le site live, fallback en dur
-models.py      → dataclasses Offer / Availability / OfferDetails (+ offer_url, cheapest_price)
-parsers.py     → JSON brut → modèles (tolérant aux champs manquants via .get)
-api.py         → list_deals / search_offers / offer_details : compose client + routes + parsers
-server.py      → FastMCP : enregistre les 3 outils, resolve_transport(), main()
+config.py      → constants: routes, PRODUCT_PARAMS, rate-limit, channelVersion fallback
+errors.py      → VeryChicError + CloudflareBlocked / NotFound / UpstreamError (actionable messages)
+http_client.py → VeryChicClient: curl_cffi session (Chrome fingerprint), injectable rate-limit,
+                 classify_block() maps HTTP responses to exceptions. get_json / get_text.
+discovery.py   → get_channel_version(): reads channelVersion from the live site, hardcoded fallback
+models.py      → Offer / Availability / OfferDetails dataclasses (+ offer_url, cheapest_price)
+parsers.py     → raw JSON → models (tolerant to missing fields via .get)
+api.py         → list_deals / search_offers / offer_details: composes client + routes + parsers
+server.py      → FastMCP: registers the 3 tools, resolve_transport(), main()
 ```
 
-Flux d'un appel : `server` (outil) → `api` (route + params) → `http_client.get_json` → `parsers` → modèle sérialisé en dict.
+Call flow: `server` (tool) → `api` (route + params) → `http_client.get_json` → `parsers` → model serialized to a dict.
 
-## Spécificités de l'API VeryChic
+## VeryChic API specifics
 
-- Base unifiée : `https://api.verychic.com/verychic-endpoints/v1` (+ `search.verychic.com`).
-  Tout est **public/anonyme** (200 sans login), **pas de challenge Cloudflare** (confirmé en Phase 0).
-- **`memberStatus=PROSPECT`** = visiteur anonyme (valeur d'enum valide ; `P` est rejeté en 422).
-  Centralisé dans `config.PRODUCT_PARAMS` — un seul endroit à changer.
-- Deux types de `source` dans le catalogue, à router différemment dans `offer_details` :
-  - `ORCHESTRA` (hôtel) → base `/hotel/{source}/{id}.json` ; dispo via `/product/.../checkin-availabilities.json` (200).
-  - `ORCHESTRA_TO` (package tour-op) → base `/vacation-package/{source}/{id}.json` ; `checkin-availabilities` répond **400** → la dispo est **best-effort** (catch `NotFound`/`UpstreamError` → `[]`, mais on laisse remonter `CloudflareBlocked`).
-- Page d'offre côté site : `https://www.verychic.fr/p/{externalId}/{urlName}` (→ `Offer.offer_url`).
-- `channelVersion` (paramètre volatil de `preview.json`) est auto-découvert, avec fallback en dur dans `config.py`.
+- Unified base: `https://api.verychic.com/verychic-endpoints/v1` (+ `search.verychic.com`).
+  Everything is **public/anonymous** (200 without login), **no Cloudflare challenge** (confirmed in Phase 0).
+- **`memberStatus=PROSPECT`** = anonymous visitor (valid enum value; `P` is rejected with 422).
+  Centralized in `config.PRODUCT_PARAMS` — a single place to change.
+- Two `source` types in the catalog, routed differently in `offer_details`:
+  - `ORCHESTRA` (hotel) → base `/hotel/{source}/{id}.json`; availability via `/product/.../checkin-availabilities.json` (200).
+  - `ORCHESTRA_TO` (tour-operator package) → base `/vacation-package/{source}/{id}.json`; `checkin-availabilities` returns **400** → availability is **best-effort** (catch `NotFound`/`UpstreamError` → `[]`, but let `CloudflareBlocked` propagate).
+- Offer page on the site: `https://www.verychic.fr/p/{externalId}/{urlName}` (→ `Offer.offer_url`).
+- `channelVersion` (a volatile parameter of `preview.json`) is auto-discovered, with a hardcoded fallback in `config.py`.
 
 ## Conventions
 
-- **Read-only, anonyme, faible volume** : aucun credential, aucune écriture/réservation, rate-limit ≥ 1 s entre requêtes (dans `http_client`). Posture défensive : pas d'extraction massive, pas de contournement Cloudflare.
-- **Erreurs actionnables** : toujours via les exceptions de `errors.py`, jamais un stacktrace brut.
-- **TDD + fixtures réelles** : pour toute évolution des parsers/API, ajouter/étendre un test hors-ligne sur une fixture. Un changement de comportement face à l'API live se valide via le smoke `@network`.
-- Messages de commit / docs en français ; README en anglais (convention OSS).
+- **Read-only, anonymous, low volume**: no credentials, no writes/bookings, rate-limit ≥ 1 s between requests (in `http_client`). Defensive posture: no bulk extraction, no Cloudflare bypass.
+- **Actionable errors**: always via the exceptions in `errors.py`, never a raw stack trace.
+- **TDD + real fixtures**: for any change to parsers/API, add/extend an offline test on a fixture. A behavior change against the live API is validated via the `@network` smoke test.
+- **Language**: all code, inline comments, docstrings, and project docs (this file, README, notes) are written in English (OSS codebase). The only exception is the **JSON fixtures**, which keep real (French) API data — don't translate them. Commit messages stay in French.
 
-## Publication / Release
+## Publishing / Release
 
-Repo public : **https://github.com/jordantete/verychic-mcp**.
+Public repo: **https://github.com/jordantete/verychic-mcp**.
 
-La publication PyPI est **automatisée par `.github/workflows/release.yml`** au push d'un
-tag `v*` : `test → build → publish-pypi → github-release`. L'auth PyPI se fait par
-**Trusted Publishing (OIDC)** — **aucun token stocké**. Setup PyPI une fois : un *trusted
-publisher* (projet `verychic-mcp`, owner `jordantete`, repo `verychic-mcp`, workflow
-`release.yml`, environnement `pypi`).
+PyPI publishing is **automated by `.github/workflows/release.yml`** on pushing a
+`v*` tag: `test → build → publish-pypi → github-release`. PyPI auth uses
+**Trusted Publishing (OIDC)** — **no token stored**. One-time PyPI setup: a *trusted
+publisher* (project `verychic-mcp`, owner `jordantete`, repo `verychic-mcp`, workflow
+`release.yml`, environment `pypi`).
 
-Publier une version (SemVer) :
+Publish a version (SemVer):
 ```bash
 git switch main && git pull
-pytest && ruff check verychic_mcp tests   # doit passer avant de tagger
-# bumper "version" dans pyproject.toml (X.Y.Z), puis :
+pytest && ruff check verychic_mcp tests   # must pass before tagging
+# bump "version" in pyproject.toml (X.Y.Z), then:
 git add pyproject.toml && git commit -m "chore: release vX.Y.Z"
 git tag vX.Y.Z
 git push origin main --tags
 ```
-Le workflow fait le reste (build + upload PyPI + GitHub Release). Une fois publié,
-`uvx verychic-mcp` fonctionne sans cloner. Ne jamais committer de token PyPI.
+The workflow does the rest (build + PyPI upload + GitHub Release). Once published,
+`uvx verychic-mcp` works without cloning. Never commit a PyPI token.
 
-## État & suivi
+## Status & tracking
 
-MCP **fonctionnel et validé contre l'API live**, repo GitHub public, CI de release en place
-(sur `main`). Reste : 1ère publication PyPI (config trusted publisher + tag) et déploiement
-remote pour Cowork. Améliorations notées et suivi : projet Notion `verychic-mcp` et
-`docs/superpowers/` (spec, verdict Phase 0, plans).
+MCP **functional and validated against the live API**, public GitHub repo, release CI in place
+(on `main`). Published to PyPI (latest `0.1.1`, `uvx verychic-mcp` works) and deployed remotely on
+**Fly.io** (`https://verychic-mcp.fly.dev/mcp`; `fly.toml` is gitignored, kept out of the public
+repo). Remaining: wire the connector into Cowork (UI step). Tracked improvements and follow-ups:
+the `verychic-mcp` Notion project and `docs/superpowers/` (spec, Phase 0 verdict, plans).
