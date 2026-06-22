@@ -1,0 +1,29 @@
+{
+  "advantages": [
+    "Petits déjeuners ou formule All Inclusive",
+    "Hébergement gratuit d'un enfant dans la chambre des parents",
+    "Réduction de 15% sur les soins du spa et 1 accès au hammam offerts (min. 5 nuits)"
+  ],
+  "includedAddedValues": [
+    "-Hébergement en Chambre Deluxe vue jardin ou en Chambre Deluxe vue piscine",
+    "-Choix entre l'offre petits déjeuners ou la formule All Inclusive (comprend les petits-déjeuners, les déjeuners, les dîners et les boissons tout au long de la journée dans les bars et restaurants inclus dans la formule, pendant les heures d'ouverture)",
+    "Hébergement gratuit d'un enfant de moins de 12 ans dans la chambre des parents"
+  ],
+  "nonIncludedAddedValues": [
+    "Repas & boissons non mentionnés",
+    "Taxes de séjour de 49,50 MAD (environ 4,65€) par personne et par nuit à régler sur place",
+    "Transferts (aller/retour de l'aéroport à l'hôtel et inter-aéroports si correspondance durant votre voyage)"
+  ],
+  "gallery": [
+    "https://back-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/RAK_Hotel_Kenzi_Menara_Palace_Spa_Et_Resort/kenzi_menara_palace_01.jpg",
+    "https://orchestra-admin.verychic.com/admin/TS/fckUserFiles/Image/RAK_Hotel_Kenzi_Menara_Palace_Spa_Et_Resort/juin2026/caption.jpg",
+    "https://orchestra-admin.verychic.com/admin/TS/fckUserFiles/Image/RAK_Hotel_Kenzi_Menara_Palace_Spa_Et_Resort/juin2026/149015144.jpg"
+  ],
+  "publishingStatusForVipTier": {
+    "PROSPECT": {
+      "status": "PUBLISHED",
+      "startDate": "2026-06-02T00:05+0200",
+      "endDate": "2026-06-21T23:55+0200"
+    }
+  }
+}

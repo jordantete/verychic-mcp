@@ -1,0 +1,29 @@
+# Secrets / credentials — never commit
+.env
+.env.*
+*.har
+secrets.*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Node (si la Phase 0 tranche pour Node/TS)
+node_modules/
+*.tsbuildinfo
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Scratch de pilotage (subagent-driven-development)
+.superpowers/

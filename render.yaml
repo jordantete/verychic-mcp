@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: verychic-mcp
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    # Pas de healthCheckPath : le serveur streamable-http sert MCP sur un sous-chemin,
+    # "/" renverrait 404. Render retombe sur un check d'ouverture du port.
+    autoDeploy: false

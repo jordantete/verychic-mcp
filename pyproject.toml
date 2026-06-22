@@ -1,0 +1,38 @@
+[project]
+name = "verychic-mcp"
+version = "0.1.0"
+description = "Unofficial read-only MCP server for VeryChic hotel offers"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [{ name = "VeryChic MCP contributors" }]
+keywords = ["mcp", "model-context-protocol", "verychic", "hotels", "travel"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Internet :: WWW/HTTP",
+]
+dependencies = ["curl_cffi>=0.7", "mcp[cli]>=1.2"]
+
+[project.urls]
+Homepage = "https://github.com/jordantete/verychic-mcp"
+Repository = "https://github.com/jordantete/verychic-mcp"
+Issues = "https://github.com/jordantete/verychic-mcp/issues"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6", "build>=1.2"]
+
+[project.scripts]
+verychic-mcp = "verychic_mcp.server:main"
+
+[tool.pytest.ini_options]
+markers = ["network: test nécessitant un accès réseau réel (hors CI)"]
+addopts = "-m 'not network'"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["verychic_mcp"]

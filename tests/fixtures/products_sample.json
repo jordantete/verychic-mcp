@@ -1,0 +1,329 @@
+{
+  "content": [
+    {
+      "source": "ORCHESTRA_TO",
+      "externalId": 301375,
+      "name": "Kappa Club Iberostar Herceg Novi ****",
+      "image": "https://orchestra-admin.verychic.com/admin/TS/fckUserFiles/Image/HNO_Iberostar_Herceg_Novi/juin2026/hotel2.jpg",
+      "imageHash": "fff0a5a7796b11ac8837dc2db6c8ce37",
+      "productCurrency": "EUR",
+      "normalizedPrice": 515.0,
+      "destinationName": "Herceg Novi, Monténégro",
+      "country": "Monténégro",
+      "countryCode": "ME",
+      "shortDesc": "Une adresse pour des vacances authentiques, idéale pour découvrir les trésors de la baie de Kotor et la douceur de vivre du Monténégro.",
+      "discount": null,
+      "latitude": 42.43522632,
+      "longitude": 18.5167517,
+      "language": "fr",
+      "transportation": "OPTIONAL_FLIGHT",
+      "advantages": [
+        "Formule All Inclusive",
+        "Transfert collectif aller-retour de l'aéroport à l'hôtel inclus (si réservation avec vols)"
+      ],
+      "vipAdvantages": {
+        "PLATINUM": [],
+        "GOLD": [],
+        "SILVER": []
+      },
+      "thematics": [
+        "HBFBALLIN",
+        "M1000",
+        "E",
+        "SOLEIL5H",
+        "EARLYPE",
+        "8NIGHTS",
+        "MED",
+        "FR_15AOUT",
+        "I",
+        "WITHFLIGHTS",
+        "PAIEMENT4X",
+        "PISCINE",
+        "NOTES",
+        "BALKANS",
+        "7NIGHTS",
+        "PENSIONS"
+      ],
+      "flags": [],
+      "destinations": [
+        "BALKANS",
+        "MONTENE"
+      ],
+      "admLocations": [
+        "MONTENEGRO",
+        "MONTENEGRO.REGIONSUD",
+        "MONTENEGRO.REGIONSUD.HERCEGNOVI.Njivice"
+      ],
+      "type": "PCK",
+      "subtype": "TO",
+      "labels": [
+        "HOTVOL",
+        "HOTEL"
+      ],
+      "pricePreLabel": "à partir de",
+      "pricePostLabel": "par pers. pour 3 nuits",
+      "servicesTitle": null,
+      "recommendedActivitiesTitle": null,
+      "exclusiveOffer": true,
+      "manager": "AP",
+      "opinions": {
+        "opinionCount": 0,
+        "generalGrade": null,
+        "locationGrade": null,
+        "publicAreaGrade": null,
+        "roomGrade": null,
+        "serviceGrade": null,
+        "foodGrade": null
+      },
+      "salesMode": "FLASH",
+      "offerEndDate": "2026-06-20T23:55+0200",
+      "offerStartDate": "2026-06-06T00:05+0200",
+      "publishingStatus": "PUBLISHED",
+      "publishingStatusForVipTier": {
+        "PROSPECT": {
+          "status": "PUBLISHED",
+          "startDate": "2026-06-06T00:05+0200",
+          "endDate": "2026-06-20T23:55+0200"
+        }
+      },
+      "price": 515,
+      "priceWithFlights": 515,
+      "currency": "EUR",
+      "amountBeforeDiscount": 0,
+      "externalLink": null,
+      "urlName": "montenegro-herceg-novi-hotel-kappa-club-iberostar-herceg-novi-4-etoiles",
+      "relatedProducts": [],
+      "subTypeTags": [
+        "HOTVOL",
+        "HOTEL"
+      ]
+    },
+    {
+      "source": "ORCHESTRA",
+      "externalId": 36509,
+      "name": "Sofitel New York ****",
+      "image": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/JFK_Sofitel_new_york/Avril2026/Lobby.jpg",
+      "imageHash": "4f3f4ebd16d555c51da60468114bb055",
+      "productCurrency": "USD",
+      "normalizedPrice": 180.52,
+      "destinationName": "New York, États-Unis",
+      "country": "États-Unis",
+      "countryCode": "US",
+      "shortDesc": "L’alliance du luxe à la française avec une gastronomie raffinée : la touche Sofitel au cœur de Manhattan.",
+      "discount": 61.0,
+      "latitude": 40.75579819,
+      "longitude": -73.98177783,
+      "language": "fr",
+      "transportation": "NONE",
+      "advantages": [
+        "Hébergement seul ou petits-déjeuners selon l'offre choisie",
+        "VeryFlexible : réservez en toute sérénité !"
+      ],
+      "vipAdvantages": {
+        "PLATINUM": [],
+        "GOLD": [],
+        "SILVER": []
+      },
+      "thematics": [
+        "VERYFLEXIBLE",
+        "REDUCTION60",
+        "NOUVELAN",
+        "7NIGHTS",
+        "R1000",
+        "REDUCTION",
+        "ALLLUXE",
+        "FR_15AOUT",
+        "CITYBREAKSMONDE",
+        "ALL",
+        "REDUCTION40",
+        "H",
+        "R500"
+      ],
+      "flags": [],
+      "destinations": [
+        "EUA",
+        "AMNORD"
+      ],
+      "admLocations": [
+        "ETATSUNIS",
+        "ETATSUNIS.REGNEWYORK",
+        "ETATSUNIS.REGNEWYORK.NEWYORK"
+      ],
+      "type": "HTL",
+      "subtype": "HOTEL",
+      "labels": [
+        "HOTEL",
+        "HOTVOL"
+      ],
+      "pricePreLabel": "à partir de",
+      "pricePostLabel": "par chambre",
+      "servicesTitle": "SERVICES DE L'HÔTEL",
+      "recommendedActivitiesTitle": "SOYEZ BRILLANTS, NE MANQUEZ SURTOUT PAS...",
+      "exclusiveOffer": false,
+      "manager": "CGA",
+      "opinions": {
+        "opinionCount": 0,
+        "generalGrade": null,
+        "locationGrade": null,
+        "publicAreaGrade": null,
+        "roomGrade": null,
+        "serviceGrade": null,
+        "foodGrade": null
+      },
+      "salesMode": "FLASH",
+      "offerEndDate": "2026-06-20T23:55+0200",
+      "offerStartDate": "2026-06-09T00:05+0200",
+      "publishingStatus": "PUBLISHED",
+      "publishingStatusForVipTier": {
+        "PROSPECT": {
+          "status": "PUBLISHED",
+          "startDate": "2026-06-09T00:05+0200",
+          "endDate": "2026-06-20T23:55+0200"
+        }
+      },
+      "price": 182,
+      "priceWithFlights": 0,
+      "currency": "EUR",
+      "amountBeforeDiscount": 465,
+      "externalLink": null,
+      "urlName": "etats-unis-new-york-hotel-sofitel-new-york-4-etoiles",
+      "relatedProducts": [
+        {
+          "source": "ORCHESTRA_TO",
+          "externalId": 434348,
+          "transportationMode": "OPTIONAL_FLIGHT",
+          "activePublications": [
+            {
+              "publicationType": "PUBLISHED",
+              "vipTier": "PROSPECT"
+            }
+          ],
+          "excludedBrandings": [
+            "SRP",
+            "VP"
+          ],
+          "price": 806.0,
+          "pricePreLabel": "à partir de",
+          "pricePostLabel": "par chambre"
+        }
+      ],
+      "subTypeTags": [
+        "HOTEL",
+        "HOTVOL"
+      ]
+    },
+    {
+      "source": "ORCHESTRA",
+      "externalId": 25122,
+      "name": "Empreinte Hôtel & Spa **** - Dernière minute",
+      "image": "https://back-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/ORE_Empreinte_Hotel_and_Spa/empreinteshotel_11.jpg",
+      "imageHash": "0b9224ddb19870b69789f4ab35309607",
+      "productCurrency": "EUR",
+      "normalizedPrice": 115.0,
+      "destinationName": "Orléans, France",
+      "country": "France",
+      "countryCode": "FR",
+      "shortDesc": "Expérience unique au cœur d’Orléans.",
+      "discount": 47.0,
+      "latitude": 47.898009,
+      "longitude": 1.905793,
+      "language": "fr",
+      "transportation": "NONE",
+      "advantages": [],
+      "vipAdvantages": {
+        "PLATINUM": [],
+        "GOLD": [],
+        "SILVER": []
+      },
+      "thematics": [
+        "R250",
+        "NOUVELLESVENTES",
+        "FRBEL",
+        "TONIGHTISH",
+        "R1000",
+        "FRANCE_VEEPEE",
+        "ETOILES_4ET5",
+        "3NIGHTS",
+        "R500",
+        "REDUCTION40"
+      ],
+      "flags": [],
+      "destinations": [
+        "FRANCE",
+        "FRANCE.CEN",
+        "FRANCE.A"
+      ],
+      "admLocations": [
+        "FR",
+        "FR.CENTREVALDELOIRE",
+        "FR.CENTREVALDELOIRE.ORLEANS"
+      ],
+      "type": "HTL",
+      "subtype": "HOTEL",
+      "labels": [
+        "TONIGHT"
+      ],
+      "pricePreLabel": "à partir de",
+      "pricePostLabel": "par chambre",
+      "servicesTitle": "SERVICES DE L'HÔTEL",
+      "recommendedActivitiesTitle": "",
+      "exclusiveOffer": false,
+      "manager": "ADE",
+      "opinions": {
+        "opinionCount": 0,
+        "generalGrade": null,
+        "locationGrade": null,
+        "publicAreaGrade": null,
+        "roomGrade": null,
+        "serviceGrade": null,
+        "foodGrade": null
+      },
+      "salesMode": "TONIGHT",
+      "offerEndDate": "2026-06-21T02:00+0200",
+      "offerStartDate": "2026-06-18T00:00+0200",
+      "publishingStatus": "PUBLISHED",
+      "publishingStatusForVipTier": {
+        "PROSPECT": {
+          "status": "PUBLISHED",
+          "startDate": "2026-06-18T00:00+0200",
+          "endDate": "2026-06-21T02:00+0200"
+        }
+      },
+      "price": 115,
+      "priceWithFlights": null,
+      "currency": "EUR",
+      "amountBeforeDiscount": null,
+      "externalLink": null,
+      "urlName": "empreinte-hotel-spa-derniere-minute",
+      "relatedProducts": [],
+      "subTypeTags": [
+        "TONIGHT"
+      ]
+    }
+  ],
+  "pageable": {
+    "sort": {
+      "sorted": false,
+      "unsorted": true,
+      "empty": true
+    },
+    "pageNumber": 0,
+    "pageSize": 2000,
+    "offset": 0,
+    "paged": true,
+    "unpaged": false
+  },
+  "totalElements": 411,
+  "totalPages": 1,
+  "last": true,
+  "numberOfElements": 411,
+  "size": 2000,
+  "number": 0,
+  "sort": {
+    "sorted": false,
+    "unsorted": true,
+    "empty": true
+  },
+  "first": true,
+  "empty": false
+}

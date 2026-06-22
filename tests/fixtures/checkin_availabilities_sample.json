@@ -1,0 +1,42 @@
+[
+  {
+    "date": "20/06/2026",
+    "price": 169,
+    "currency": "EUR",
+    "departureCityCode": "XXX",
+    "nights": 1,
+    "days": 2
+  },
+  {
+    "date": "21/06/2026",
+    "price": 169,
+    "currency": "EUR",
+    "departureCityCode": "XXX",
+    "nights": 1,
+    "days": 2
+  },
+  {
+    "date": "22/06/2026",
+    "price": 169,
+    "currency": "EUR",
+    "departureCityCode": "XXX",
+    "nights": 1,
+    "days": 2
+  },
+  {
+    "date": "23/06/2026",
+    "price": 169,
+    "currency": "EUR",
+    "departureCityCode": "XXX",
+    "nights": 1,
+    "days": 2
+  },
+  {
+    "date": "24/06/2026",
+    "price": 169,
+    "currency": "EUR",
+    "departureCityCode": "XXX",
+    "nights": 1,
+    "days": 2
+  }
+]

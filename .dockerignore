@@ -1,0 +1,13 @@
+.git
+.github
+docs
+tests
+dist
+build
+*.har
+.superpowers
+__pycache__
+*.pyc
+.venv
+.ruff_cache
+.pytest_cache

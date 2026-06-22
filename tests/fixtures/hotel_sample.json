@@ -1,0 +1,1508 @@
+{
+  "source": "ORCHESTRA",
+  "externalId": 44983,
+  "name": "Hotel Kaktus Playa *****",
+  "image": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/new_kaktus_terrasse.png",
+  "imageHash": "07c5f36429e6e57cbe4a9d5514a42fba",
+  "productCurrency": "EUR",
+  "normalizedPrice": 148.0,
+  "destinationName": "Catalogne, Espagne",
+  "country": "Espagne",
+  "countryCode": "ES",
+  "shortDesc": "Escapade sereine en bord de mer.",
+  "discount": 57.0,
+  "latitude": 41.611058,
+  "longitude": 2.65064,
+  "language": "fr",
+  "transportation": "NONE",
+  "advantages": [
+    "Demi-pension incluse",
+    "1 accès de 60 min au spa offert",
+    "VeryFlexible : réservez en toute sérénité !"
+  ],
+  "vipAdvantages": {
+    "PLATINUM": [
+      "1 accès supplémentaire de 60 min au spa offert"
+    ],
+    "GOLD": [],
+    "SILVER": []
+  },
+  "thematics": [
+    "PONT14",
+    "R250",
+    "SOLEIL5H",
+    "HBFBALLIN",
+    "REDUCTION",
+    "REDUCTION40",
+    "FR_MEILLEURESVENTES",
+    "EARLYPE",
+    "E",
+    "PRESTIGE",
+    "WEVC",
+    "I",
+    "R1000",
+    "R500",
+    "VERYFLEXIBLE",
+    "FR_15AOUT",
+    "TONIGHTISH",
+    "EI",
+    "MED",
+    "PISCINE"
+  ],
+  "flags": [],
+  "destinations": [
+    "ES"
+  ],
+  "admLocations": [
+    "ES",
+    "ES.CATALOGNE",
+    "ES.CATALOGNE.CALELLA"
+  ],
+  "type": "HTL",
+  "subtype": "HOTEL",
+  "labels": [
+    "HOTVOL",
+    "HOTEL"
+  ],
+  "pricePreLabel": "à partir de",
+  "pricePostLabel": "par chambre",
+  "servicesTitle": "SERVICES DE L'HÔTEL",
+  "recommendedActivitiesTitle": "NE MANQUEZ PAS…",
+  "exclusiveOffer": false,
+  "manager": "LMG",
+  "opinions": {
+    "opinionCount": 67,
+    "generalGrade": 8.5,
+    "locationGrade": 8.1,
+    "publicAreaGrade": 9.1,
+    "roomGrade": 9.2,
+    "serviceGrade": 8.9,
+    "foodGrade": 9.1
+  },
+  "salesMode": "FLASH",
+  "offerEndDate": "2026-06-24T23:55+0200",
+  "offerStartDate": "2026-06-14T00:05+0200",
+  "publishingStatus": "PUBLISHED",
+  "publishingStatusForVipTier": {
+    "PROSPECT": {
+      "status": "PUBLISHED",
+      "startDate": "2026-06-14T00:05+0200",
+      "endDate": "2026-06-28T23:55+0200"
+    },
+    "PLATINUM": {
+      "status": "PUBLISHED",
+      "startDate": "2026-06-14T00:05+0200",
+      "endDate": "2026-06-28T23:55+0200"
+    }
+  },
+  "price": 148,
+  "priceWithFlights": null,
+  "currency": "EUR",
+  "amountBeforeDiscount": 344,
+  "externalLink": null,
+  "urlName": "espagne-calella-hotel-kaktus-playa-5-etoiles",
+  "relatedProducts": [
+    {
+      "source": "ORCHESTRA_TO",
+      "externalId": 112339,
+      "transportationMode": "OPTIONAL_FLIGHT",
+      "activePublications": [
+        {
+          "publicationType": "PUBLISHED",
+          "vipTier": "PROSPECT"
+        },
+        {
+          "publicationType": "PUBLISHED",
+          "vipTier": "PLATINUM"
+        }
+      ],
+      "excludedBrandings": [
+        "SRP",
+        "VP"
+      ],
+      "price": 288.0,
+      "pricePreLabel": "à partir de",
+      "pricePostLabel": "par chambre"
+    }
+  ],
+  "newsletterDesc": "Sur la côte barcelonaise",
+  "newsletterShortDesc": "Sur la côte barcelonaise",
+  "location": {
+    "city": "Calella",
+    "cityCode": "BCN",
+    "country": "Espagne",
+    "countryCode": "ES",
+    "destination": "Catalogne, Espagne",
+    "distances": "",
+    "email": "booking-kaktusplaya@kaktushotels.com",
+    "latitude": "41.61105800",
+    "longitude": "2.65064000",
+    "zoomLevel": "9",
+    "postalCode": "08370",
+    "street": "Carrer Gaudí, 8",
+    "surroundings": "<div align=\"justify\">L’<strong>Hotel Kaktus Playa *****</strong> est situé sur la côte catalane à <strong>Calella</strong>, une charmante station balnéaire de la <strong>Costa del Maresme</strong>, offrant de longues plages de sable doré et un accès facile aux trésors culturels de <strong>Barcelone </strong>et <strong>Gérone</strong>, ainsi qu’aux paysages naturels du parc du <strong>Montnegre i el Corredor</strong>.</div>",
+    "telephone": "0034 937 66 07 28",
+    "address": "Carrer Gaudí, 8. Calella (Catalogne). Espagne",
+    "region": "Catalogne",
+    "subRegion": "Calella",
+    "destinationGeoData": "region:3336901,country:ES",
+    "directions": [
+      {
+        "description": "<p><u>3 aéroports à proximité de l'hôtel</u> : <br />Aéroport de Gérone-Costa Brava : 42 km<br />Aéroport de Barcelone-El Prat : 71 km<br />Aéroport de Reus : 160 km</p>",
+        "modeOfTransport": "EN AVION",
+        "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/avion.png"
+      },
+      {
+        "description": "<p>Depuis Lloret de Mar : 21 km<br />Depuis Gérone : 45 km<br />Depuis Barcelone : 55 km</p>",
+        "modeOfTransport": "EN VOITURE",
+        "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/voiture.png"
+      },
+      {
+        "description": "<p>Gare de Calella : 1 km</p>",
+        "modeOfTransport": "EN TRAIN",
+        "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/train.png"
+      }
+    ]
+  },
+  "gallery": [
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/new_kaktus_terrasse.png",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/mars2026/538170228.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/mars2026/345194249.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/mars2026/538170231.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/mars2026/76073884.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/new_kaktus_07.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/new_kaktus_16.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/new_kaktus_13.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/new_kaktus_14.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/new_kaktus_05.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/new_kaktus_03.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/new_kaktus_02.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/mars2026/328335055.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/kaktus_playa_12.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/new_kaktus_19.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/mars2026/345197913.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/mars2026/91578240.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/iStock981948296.jpg",
+    "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/iStock519551104.jpg"
+  ],
+  "video": {
+    "title": "",
+    "platform": "",
+    "videoRef": ""
+  },
+  "experience": {
+    "subtitle": "Escapade sereine en bord de mer.",
+    "author": "Par Massiva Aliane, correspondante de VeryChic",
+    "intro": "<div align=\"justify\">Et si le goût du voyage s’attrapait sur ces côtes tranquilles, suspendues entre Barcelone, la transgressive, et une Catalogne au naturel resplendissant ? Calella, ville paisible de la province de Barcelone, vous installe au bord de la Méditerranée avec l’Hotel Kaktus Playa *****. Les plaisirs ibériques s’y regroupent : délices gastronomiques dont on profite pleinement grâce à la demi-pension, baignades à la piscine ou à la mer, alanguissement au spa. On profite de tout le confort que cette adresse nous offre : regain d’énergie assuré ! On ira le porter à travers les villes sublimes et les terres fertiles, tout comme sur les jolies plages de la côte…</div>",
+    "body": "<div align=\"justify\">Le réveil sonne tranquillement, il signe la plus confortable des nuits, plongé dans la literie moelleuse d’une chambre en bord de mer. Ouvrez les rideaux, la lumière inonde la chambre, la vue donne sur la piscine. Lieu de bonheur que l’on ira vite apprivoiser après le petit-déjeuner. Faites-vous servir tout ce que vous souhaitez : café fumant, jus frais, fruits méditerranéens… La journée démarre délicieusement bien à l’Hotel Kaktus Playa *****. Les vacances aussi !<br /><br />Installé sur une jolie côte proche de Barcelone, on s’offre tous les choix. Ceux d’explorer les longues plages au sable doré, où les villages aux ruelles labyrinthiques donnent un vrai goût d’authenticité. Autant que la fougue et l’art majeur de Barcelone. Toutes les envies sont comblées.<br /><br />À l'Hotel Kaktus Playa *****, le bien-être est de mise : la belle piscine extérieure ourlée de transats et le spa reposant invitent à la détente, tandis que le restaurant au charme méditerranéen et les deux bars tranquilles offrent de beaux moments de partage, à savourer face aux plus beaux couchers de soleil. C’est ça les vacances sur la Costa del Maresme. Le bonheur d’être juste là.</div>",
+    "whatWeLove": [
+      {
+        "text": "La situation idéale en bord de mer et près du centre-ville de Calella, tout en étant à proximité de Barcelone.",
+        "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/carte.png"
+      },
+      {
+        "text": "La demi-pension, idéale pour savourer la cuisine du restaurant, avec eau et vin gratuits pendant les repas.",
+        "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/food.png"
+      },
+      {
+        "text": "La gentillesse du personnel, toujours à l’écoute et aux petits soins pour ses visiteurs.",
+        "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/team.png"
+      },
+      {
+        "text": "Profiter de moments de détente au bord de la piscine extérieure ou intérieure au spa de l’hôtel. Un accès de 60 minutes au spa par personne vous est offert !",
+        "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/pool.png"
+      }
+    ]
+  },
+  "conditions": [
+    "Séjour de 3 ou 5 nuits minimum en fonction des dates sélectionnées au moment de la réservation",
+    "Taxe de séjour par personne et par nuit à régler sur place",
+    "Le spa doit être réservé auprès de la réception",
+    "Cette offre vous permet de réserver dès aujourd’hui en versant seulement un acompte. Si vous le souhaitez, vous pouvez aussi régler la totalité de votre réservation en contactant notre service client par téléphone"
+  ],
+  "services": [
+    {
+      "text": "Réception ouverte 24h/24<br>Arrivée à partir de 15h et départ avant 12h",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/gourmet.png"
+    },
+    {
+      "text": "201 chambres non-fumeurs (possibilité de fumer sur le balcon)",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/lit.png"
+    },
+    {
+      "text": "Lit bébé (0-2 ans) disponible au tarif de 10 € par nuit sur demande et confirmation de l'hôtel <br><span style=\"text-decoration: underline; color: #c0aa8d;\"><a style=\"color: #c0aa8d; text-decoration: underline;\" href=\"https://www.verychic.fr/contact\" target=\"_blank\" rel=\"noopener\">Cliquez ici</a></span> pour plus d'informations",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/litbebe.png"
+    },
+    {
+      "text": "Wi-Fi disponible gratuitement dans les chambres et les parties communes de l'hôtel",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/wifi.png"
+    },
+    {
+      "text": "Restaurant : cuisine méditerranéenne - ouvert tous les jours de 8h à 10h30 et de 20h à 22h<br>Menus pour régimes spécifiques disponibles sur demande et confirmation de l'hôtel",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/food.png"
+    },
+    {
+      "text": "2 bars :<br>- <i>Lobby Bar</i> - ouvert tous les jours de 10h à minuit<br>- <i>Pool Club</i> - ouvert tous les jours de 10h à minuit",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/cocktail.png"
+    },
+    {
+      "text": "Spa : piscine intérieure, hammam, sauna, bain à remous - supplément à prévoir<br>1 accès de 60 min au spa offert par personne et par séjour (réservation obligatoire auprès de la réception)<br>Le spa doit être réservé auprès de la réception<br>Accès réservé aux personnes de plus de 16 ans (les enfants de moins de 16 ans doivent être accompagnés d'un adulte)",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/spa.png"
+    },
+    {
+      "text": "Salle de fitness : tapis de course, vélos de course, vélos elliptiques, rameurs, sit-up bar, tapis de sol - ouverte tous les jours de 9h à 21h<br>Accès libre",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/salle_sport.png"
+    },
+    {
+      "text": "Piscine extérieure avec espace pour enfants - ouverte de 8h à 20h <br> 1 piscine panoramique <i>Kaktus Lodge</i> - ouverte de 10h à 20h (au tarif de 20 € par personne et par jour) <br>Serviettes à disposition gratuitement",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/pool.png"
+    },
+    {
+      "text": "Plage à 100 mètres",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/parasol.png"
+    },
+    {
+      "text": "Parking privé disponible au tarif de 20 € par nuit",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/parking.png"
+    },
+    {
+      "text": "Borne de recharge pour véhicules électriques disponible - supplément à prévoir",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/garage.png"
+    },
+    {
+      "text": "Transferts aller-retour disponibles en option dès la réservation - supplément à prévoir :<br>- Transfert collectif aller-retour de l'aéroport international de Barcelone<br>- Transfert privatif aller-retour de l'aéroport international de Barcelone (1 à 3 personnes ou 4 à 7 personnes)",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/transfert.png"
+    },
+    {
+      "text": "Établissement accessible aux personnes à mobilité réduite sur demande et confirmation de l'hôtel",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/handicap.png"
+    },
+    {
+      "text": "Animaux de compagnie non admis au sein de l’établissement",
+      "picto": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/pictos/new_pictos/chien.png"
+    }
+  ],
+  "recommendedActivities": [
+    {
+      "description": "De prendre un bain de nature au sein du Parc del Montnegre i el Corredor, une véritable forêt en bord de mer recouverte de pinèdes, chênes et cerisiers et aux paysages diversifiés. Parc du Montnegre et du Corredor, Vallgorguina.",
+      "latitude": "",
+      "longitude": ""
+    },
+    {
+      "description": "De visiter la magnifique ville de Gérone, connue pour son architecture médiévale, ses ruines romaines et sa forteresse, on y parcourra 2000 ans d’histoire.",
+      "latitude": "",
+      "longitude": ""
+    },
+    {
+      "description": "De profiter des belles plages de la Costa Brava telles que la plage de Garbí au pied de l’hôtel, ou encore, les plages de Roques Blanques et del Cavallo.",
+      "latitude": "",
+      "longitude": ""
+    },
+    {
+      "description": "De plonger dans les merveilles architecturales de Barcelone et admirer la créativité d’un Gaudí, les cathédrales gothiques, le Palais de la Musique ou le Palais National aux styles Renaissance espagnole, moderniste ou symboliste.",
+      "latitude": "",
+      "longitude": ""
+    }
+  ],
+  "adultsOnly": false,
+  "showBirthdayPicker": false,
+  "maxAllowedBabies": 2,
+  "maxAllowedChildren": 8,
+  "maxAllowedAdults": 12,
+  "maxAllowedTravellers": 12,
+  "maxBabyAge": 2,
+  "maxChildAge": 11,
+  "includedAddedValues": [
+    "-Demi-pension incluse (comprend les petits-déjeuners et les dîners - eau et vin inclus pendant les repas)",
+    "1 accès de 60 min au spa offert par personne et par séjour (réservation obligatoire auprès de la réception)",
+    "VeryFlexible hôtel : annulation et remboursement par avoir jusqu'à 8 jours avant le jour de votre départ hors frais de dossier, assurance, transports et activités. Des frais de traitement s'appliqueront : 20 € pour toute réservation inférieure à 500 € et 50 € au-delà. L’avoir est utilisable sur tout le site VeryChic.fr sans limitation de durée"
+  ],
+  "vipAddedValues": {
+    "PLATINUM": [
+      "1 accès supplémentaire de 60 min au spa offert par personne et par séjour (réservation obligatoire auprès de la réception)"
+    ],
+    "GOLD": [],
+    "SILVER": []
+  },
+  "nonIncludedAddedValues": [
+    "Repas & boissons non mentionnés",
+    "Taxe de séjour par personne et par nuit à régler sur place",
+    "Transferts (aller/retour de l'aéroport à l'hôtel et inter-aéroports si correspondance durant votre voyage)",
+    "Transferts : si vous avez réservé un service de transferts sur VeryChic, merci d’envoyer vos informations de vol maximum 4 jours avant le départ. Sans cela, le transfert n'est pas garanti",
+    "Assurances complémentaires facultatives",
+    "Avant votre départ, nous vous invitons à vérifier la validité de votre document d’identité, les éventuels visas nécessaires ainsi que les conditions d’entrée du pays de destination ou de transit. Ces formalités en vigueur sont à la charge et sous la responsabilité de chaque voyageur, qui doit s’assurer de la conformité de ses documents aux exigences des autorités locales. Aucun remboursement ne sera possible en cas de refus d’embarquement lié à des documents non valides. Nous vous conseillons de consulter le site de France Diplomatie. Le service client reste à votre disposition pour vous accompagner dans vos démarches",
+    "La date d'entrée à l'hôtel correspond à la date d'arrivée à destination. Dans le cas où le vol arrive à partir de 00h05, heure locale de destination, le client devra attendre jusqu'à l'heure de check-in pour pouvoir accéder à la chambre. Si le client souhaite entrer plus tôt dans la chambre, il peut contacter notre équipe de service clientèle et, en fonction de l'heure d'arrivée, nous pourrons organiser une nuit supplémentaire ou un early check-in, moyennant le coût indiqué par l'établissement",
+    "Frais de traitement en cas d'annulation",
+    "Tout ce qui n'est pas mentionné dans \"Notre prix comprend\""
+  ],
+  "dateSelectionMethod": "CALENDAR",
+  "kpi": [
+    4.37969,
+    0.00315
+  ],
+  "priceInProductCurrency": 148.0,
+  "relatedProduct": [
+    "ORCHESTRA_TO__112339"
+  ],
+  "tags": [],
+  "conversionRate": 1,
+  "pricePostLabelWithTransportation": null,
+  "productBlocks": [],
+  "veryFlexibleService": null,
+  "cmsContentSections": [
+    {
+      "title": "Réservez en toute flexibilité",
+      "subtitle": null,
+      "icon": null,
+      "image": {
+        "name": "test2.png",
+        "alternativeText": null,
+        "caption": null,
+        "width": 900,
+        "height": 600,
+        "formats": {
+          "small": {
+            "ext": ".png",
+            "url": "https://static.verychic.com/cms/production/small_test2_cd4b73577c.png",
+            "hash": "small_test2_cd4b73577c",
+            "mime": "image/png",
+            "name": "small_test2.png",
+            "path": null,
+            "size": 651.14,
+            "width": 750,
+            "height": 500,
+            "sizeInBytes": 651144
+          },
+          "xsmall": {
+            "ext": ".png",
+            "url": "https://static.verychic.com/cms/production/xsmall_test2_cd4b73577c.png",
+            "hash": "xsmall_test2_cd4b73577c",
+            "mime": "image/png",
+            "name": "xsmall_test2.png",
+            "path": null,
+            "size": 6.32,
+            "width": 64,
+            "height": 43,
+            "sizeInBytes": 6323
+          },
+          "thumbnail": {
+            "ext": ".png",
+            "url": "https://static.verychic.com/cms/production/thumbnail_test2_cd4b73577c.png",
+            "hash": "thumbnail_test2_cd4b73577c",
+            "mime": "image/png",
+            "name": "thumbnail_test2.png",
+            "path": null,
+            "size": 70.35,
+            "width": 234,
+            "height": 156,
+            "sizeInBytes": 70346
+          }
+        },
+        "hash": "test2_cd4b73577c",
+        "ext": ".png",
+        "mime": "image/png",
+        "size": 260.34,
+        "url": "https://static.verychic.com/cms/production/test2_cd4b73577c.png",
+        "previewUrl": null,
+        "provider": "strapi-provider-upload-aws-s3-advanced",
+        "provider_metadata": null,
+        "createdAt": "2026-03-10T11:50:44.136Z",
+        "updatedAt": "2026-03-19T10:08:27.117Z"
+      },
+      "text": "<div style=\"display: block; text-align: justify;\">\n<u>Vos garanties VeryChic</u> :\n<br>\n  - Annulation possible sans justificatif jusqu'à 8 jours avant le départ (offre sans vols)<br>\n  - Remboursement sous forme d'avoir, hors frais de dossier, assurance, transports et activités<br>\n  - Frais de traitement : 20€ pour réservations inférieures à 500€ et 50€ pour réservations supérieures à 500€<br>\n  - L’avoir est utilisable sur tout le site \n  <a href=\"https://www.verychic.fr\" target=\"_blank\" rel=\"noopener\" style=\"color: #d2a971; text-decoration: underline;\">\n    Verychic.fr\n  </a><br>\n  <br>\n</div>",
+      "expandedText": "<u>Vos assurances complémentaires</u> :<br>\n  <i>\n    Pour une expérience de voyage sereine, pensez à souscrire à une assurance qui vous couvrira, \n    vous et vos proches, en cas d'aléas ou de dépenses imprévues.<br>\n  </i><br>\n <b>• Assurance annulation premium</b> : \n<br>Annulation justifiée avant le départ (sauf frais de dossier et franchise)\n<br><b>• Assurance multirisques premium</b> :<br>\n  - Annulation « toutes causes » justifiées<br>\n  - Vol manqué (remboursement si départ dans les 24h ou prochain vol disponible)<br>\n  - Retard de vol (indemnisation forfaitaire pour +4h de retard)<br>\n  - Interruption de séjour (remboursement pour prestations non utilisées)<br>\n  - Rapatriement et assistance médicale 24h/24 et 7j/7<br>\n  - Garanties bagages en cas de vol, dommage ou perte<br>\n  - Responsabilité civile à l’étranger (dommages causés à des tiers pendant le séjour)",
+      "eliteTier": "PROSPECT",
+      "slot": "STRENGTHS",
+      "order": 2
+    },
+    {
+      "title": "Transfert aéroport : réservez dès maintenant",
+      "subtitle": null,
+      "icon": "icon-taxi-1",
+      "image": {
+        "name": "TRANSFERTCOL.png",
+        "alternativeText": null,
+        "caption": null,
+        "width": 900,
+        "height": 600,
+        "formats": {
+          "small": {
+            "ext": ".png",
+            "url": "https://static.verychic.com/cms/production/small_TRANSFERTCOL_9924acd4e6.png",
+            "hash": "small_TRANSFERTCOL_9924acd4e6",
+            "mime": "image/png",
+            "name": "small_TRANSFERTCOL.png",
+            "path": null,
+            "size": 289.47,
+            "width": 750,
+            "height": 500,
+            "sizeInBytes": 289467
+          },
+          "xsmall": {
+            "ext": ".png",
+            "url": "https://static.verychic.com/cms/production/xsmall_TRANSFERTCOL_9924acd4e6.png",
+            "hash": "xsmall_TRANSFERTCOL_9924acd4e6",
+            "mime": "image/png",
+            "name": "xsmall_TRANSFERTCOL.png",
+            "path": null,
+            "size": 4.43,
+            "width": 64,
+            "height": 43,
+            "sizeInBytes": 4433
+          },
+          "thumbnail": {
+            "ext": ".png",
+            "url": "https://static.verychic.com/cms/production/thumbnail_TRANSFERTCOL_9924acd4e6.png",
+            "hash": "thumbnail_TRANSFERTCOL_9924acd4e6",
+            "mime": "image/png",
+            "name": "thumbnail_TRANSFERTCOL.png",
+            "path": null,
+            "size": 37.6,
+            "width": 234,
+            "height": 156,
+            "sizeInBytes": 37603
+          }
+        },
+        "hash": "TRANSFERTCOL_9924acd4e6",
+        "ext": ".png",
+        "mime": "image/png",
+        "size": 88.46,
+        "url": "https://static.verychic.com/cms/production/TRANSFERTCOL_9924acd4e6.png",
+        "previewUrl": null,
+        "provider": "strapi-provider-upload-aws-s3-advanced",
+        "provider_metadata": null,
+        "createdAt": "2025-04-18T14:48:33.291Z",
+        "updatedAt": "2025-04-18T14:48:33.291Z"
+      },
+      "text": "<div style=\"display: block; text-align: justify;\"><br>De l'aéroport à l'hôtel, l'esprit libre. Réservez votre transfert directement sur VeryChic, et profitez d'une prise en charge organisée dès votre arrivée.</div>",
+      "expandedText": null,
+      "eliteTier": "PROSPECT",
+      "slot": "LOCATION",
+      "order": 1
+    }
+  ],
+  "calendarInfo": null,
+  "disponibilities": [
+    {
+      "date": "20/06/2026",
+      "price": 169,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "21/06/2026",
+      "price": 169,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "22/06/2026",
+      "price": 169,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "23/06/2026",
+      "price": 169,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "24/06/2026",
+      "price": 169,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "25/06/2026",
+      "price": 169,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "26/06/2026",
+      "price": 169,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "27/06/2026",
+      "price": 169,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "28/06/2026",
+      "price": 169,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "29/06/2026",
+      "price": 169,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "30/06/2026",
+      "price": 169,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "01/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "02/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "03/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "04/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "05/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "06/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "07/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "08/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "09/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "10/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "11/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "12/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "13/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "14/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "15/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "16/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "17/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "18/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "19/07/2026",
+      "price": 188,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "20/07/2026",
+      "price": 200,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "21/07/2026",
+      "price": 200,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "22/07/2026",
+      "price": 200,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "23/07/2026",
+      "price": 200,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "24/07/2026",
+      "price": 200,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "25/07/2026",
+      "price": 200,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "26/07/2026",
+      "price": 200,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "27/07/2026",
+      "price": 200,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "28/07/2026",
+      "price": 200,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "29/07/2026",
+      "price": 200,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "30/07/2026",
+      "price": 200,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "31/07/2026",
+      "price": 200,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "01/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "02/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "03/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "04/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "05/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "06/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "07/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "08/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "09/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "10/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "11/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "12/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "13/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "14/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "15/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "16/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "17/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "18/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "19/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "20/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "21/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "22/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "23/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "24/08/2026",
+      "price": 216,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "25/08/2026",
+      "price": 193,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "26/08/2026",
+      "price": 193,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "27/08/2026",
+      "price": 193,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "28/08/2026",
+      "price": 193,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "29/08/2026",
+      "price": 193,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "30/08/2026",
+      "price": 193,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "31/08/2026",
+      "price": 193,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "01/09/2026",
+      "price": 176,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "02/09/2026",
+      "price": 176,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "03/09/2026",
+      "price": 176,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "04/09/2026",
+      "price": 176,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "05/09/2026",
+      "price": 176,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "06/09/2026",
+      "price": 176,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "07/09/2026",
+      "price": 176,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "08/09/2026",
+      "price": 176,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "09/09/2026",
+      "price": 176,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "10/09/2026",
+      "price": 176,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "11/09/2026",
+      "price": 176,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "12/09/2026",
+      "price": 176,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "13/09/2026",
+      "price": 176,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "14/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "15/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "16/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "17/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "18/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "19/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "20/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "21/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "22/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "23/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "24/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "25/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "26/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "27/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "28/09/2026",
+      "price": 165,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "06/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "07/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "08/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "09/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "10/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "11/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "12/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "13/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "14/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "15/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "16/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "17/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "18/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "19/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "20/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "21/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "22/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "23/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "24/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "25/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "26/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "27/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "28/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    },
+    {
+      "date": "29/10/2026",
+      "price": 148,
+      "currency": "EUR",
+      "departureCityCode": "XXX",
+      "nights": 1,
+      "days": 2
+    }
+  ],
+  "stars": 5,
+  "accommodationType": "HOTEL",
+  "roomTabTitle": "",
+  "rooms": [
+    {
+      "type": "POOL",
+      "title": "Chambre Urban vue piscine",
+      "subtitle": "Capacité maximale : 2 adultes, 1 enfant et 1 bébé / 3 adultes et 1 bébé / 1 adulte et 2 enfants",
+      "addedValue": "",
+      "description": "<p>- 26 m²<br />- 1 grand lit double ou 2 lits simples et 1 lit d'appoint<br />- Chambre avec vue sur la piscine, balcon, climatisation, télévision à écran plat avec chaînes satellite, bureau, coffre-fort, insonorisation, téléphone, service de réveil, Wi-Fi<br />- Salle de bains avec douche à effet de pluie, toilettes, sèche-cheveux, articles de toilette gratuits</p>",
+      "picture": "https://admin-verychic.orchestra-platform.com/admin/TS/fckUserFiles/Image/BCN_Hotel_Kaktus_Playa/chambre_urban_vue_piscine_min.jpg",
+      "advantages": [
+        ""
+      ],
+      "active": true
+    }
+  ],
+  "subTypeTags": [
+    "HOTVOL",
+    "HOTEL"
+  ]
+}
