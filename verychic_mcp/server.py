@@ -5,6 +5,7 @@ import argparse
 from dataclasses import asdict
 
 from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 
 from . import api
 from .discovery import get_channel_version
@@ -30,7 +31,14 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
     client = client if client is not None else VeryChicClient()
     if channel_version is None:
         channel_version = get_channel_version(client)
-    mcp = FastMCP("verychic")
+    # Transport HTTP distant : le serveur est public/anonyme et tourne derrière un proxy
+    # (Fly, etc.) qui présente un Host public. La protection anti-DNS-rebinding du SDK
+    # n'autorise par défaut que localhost et rejetterait ce Host ("Invalid Host header").
+    # On la désactive explicitement : aucun secret ni binding localhost à protéger ici.
+    mcp = FastMCP(
+        "verychic",
+        transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
+    )
 
     @mcp.tool()
     def verychic_list_deals(limit: int = 20) -> list[dict]:

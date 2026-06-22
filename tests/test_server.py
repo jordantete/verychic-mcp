@@ -38,3 +38,11 @@ def test_build_server_registers_three_tools():
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
     names = {t.name for t in asyncio.run(srv.list_tools())}
     assert names == {"verychic_list_deals", "verychic_search_offers", "verychic_offer_details"}
+
+
+def test_build_server_disables_dns_rebinding_protection():
+    # Déploiement remote derrière un proxy (Fly) : la protection localhost-only du SDK
+    # rejetterait le Host public ("Invalid Host header"). Elle doit rester désactivée.
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    assert srv.settings.transport_security is not None
+    assert srv.settings.transport_security.enable_dns_rebinding_protection is False
