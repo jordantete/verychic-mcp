@@ -2,7 +2,9 @@ import asyncio
 import json
 from pathlib import Path
 
-from verychic_mcp.server import build_server, resolve_transport
+from starlette.testclient import TestClient
+
+from verychic_mcp.server import LOGO_URL, build_server, resolve_transport
 
 FIX = Path(__file__).parent / "fixtures"
 
@@ -49,6 +51,24 @@ def test_build_server_declares_icon_and_website():
     icon = srv.icons[0]
     assert icon.src.endswith("assets/logo.png")
     assert icon.mimeType == "image/png"
+
+
+def test_favicon_route_redirects_to_logo():
+    # Remote connectors take their icon from the domain favicon, not serverInfo,
+    # so we redirect /favicon.ico to the public logo.
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    with TestClient(srv.streamable_http_app()) as c:
+        r = c.get("/favicon.ico", follow_redirects=False)
+    assert r.status_code in (302, 307)
+    assert r.headers["location"] == LOGO_URL
+
+
+def test_root_page_links_icon():
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    with TestClient(srv.streamable_http_app()) as c:
+        r = c.get("/")
+    assert r.status_code == 200
+    assert LOGO_URL in r.text
 
 
 def test_build_server_disables_dns_rebinding_protection():
