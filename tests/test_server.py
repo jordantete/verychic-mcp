@@ -40,6 +40,17 @@ def test_build_server_registers_three_tools():
     assert names == {"verychic_list_deals", "verychic_search_offers", "verychic_offer_details"}
 
 
+def test_build_server_declares_icon_and_website():
+    # The custom remote connector shows a generic globe unless the server declares
+    # an icon in serverInfo. We expose the project logo (raw GitHub URL) + website.
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    assert srv.website_url == "https://github.com/jordantete/verychic-mcp"
+    assert srv.icons, "server should declare at least one icon"
+    icon = srv.icons[0]
+    assert icon.src.endswith("assets/logo.png")
+    assert icon.mimeType == "image/png"
+
+
 def test_build_server_disables_dns_rebinding_protection():
     # Remote deployment behind a proxy (Fly): the SDK's localhost-only protection
     # would reject the public Host ("Invalid Host header"). It must stay disabled.

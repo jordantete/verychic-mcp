@@ -1,4 +1,4 @@
-"""Serveur MCP (FastMCP) exposant 3 outils VeryChic, en double transport."""
+"""MCP server (FastMCP) exposing the 3 VeryChic tools, dual transport."""
 from __future__ import annotations
 
 import argparse
@@ -6,6 +6,7 @@ from dataclasses import asdict
 
 from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
+from mcp.types import Icon
 
 from . import api
 from .discovery import get_channel_version
@@ -35,8 +36,17 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
     # (Fly, etc.) that presents a public Host. The SDK's DNS-rebinding protection only
     # allows localhost by default and would reject that Host ("Invalid Host header").
     # We disable it explicitly: no secret nor localhost binding to protect here.
+    # Declare a website and an icon in serverInfo so clients (e.g. a Claude Desktop
+    # custom connector) can show the project logo instead of the generic placeholder.
+    # The logo is the one already served publicly from the repo (see README header).
     mcp = FastMCP(
         "verychic",
+        website_url="https://github.com/jordantete/verychic-mcp",
+        icons=[Icon(
+            src="https://raw.githubusercontent.com/jordantete/verychic-mcp/main/assets/logo.png",
+            mimeType="image/png",
+            sizes=["512x512"],
+        )],
         transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
     )
 
