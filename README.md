@@ -19,6 +19,7 @@ offer's availability and prices by date. Read-only, anonymous, no account needed
 [![Python](https://img.shields.io/badge/python-%3E%3D3.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![MCP](https://img.shields.io/badge/MCP-server-7C3AED?style=flat-square)](https://modelcontextprotocol.io)
 [![Smithery](https://smithery.ai/badge/tetej171/verychic-mcp)](https://smithery.ai/servers/tetej171/verychic-mcp)
+[![Glama score](https://glama.ai/mcp/servers/jordantete/verychic-mcp/badges/score.svg)](https://glama.ai/mcp/servers/jordantete/verychic-mcp)
 
 <br>
 
