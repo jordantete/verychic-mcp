@@ -21,19 +21,24 @@ MCP server to **Claude Desktop** and use it. The video must embed both in
   guaranteed-inline README fallback (GitHub does not reliably play committed MP4
   via `![]()`). A **poster PNG** (first frame) accompanies the MP4.
 
-## Storyboard (~30 s)
+## Storyboard (~30 s) — v2: remote connector (no manual config)
 
-1. **Intro (~2 s)** — VeryChic MCP logo + title *"Connect VeryChic to Claude Desktop"*.
-2. **Connect (~12 s)** — Settings → Developer → *Edit Config*; the
-   `claude_desktop_config.json` fills in (typing animation) with:
-   ```json
-   { "mcpServers": { "verychic": { "command": "uvx", "args": ["verychic-mcp"] } } }
-   ```
-   Restart → the three `verychic_*` tools appear in the tools panel.
-3. **Live demo (~15 s)** — user asks *"Find VeryChic deals in Spain under €600"*;
-   the `verychic_search_offers` tool call animates (running → done); the assistant
-   replies with the real offers above (name, stars, price, one advantage).
-4. **Outro (~3 s)** — `uvx verychic-mcp` + repo / PyPI links.
+Reworked to show the **remote-connector flow** (paste the hosted URL), dark theme,
+**French UI** to match the real Claude Desktop app (screenshots provided by the user).
+No `uvx` / no `claude_desktop_config.json` editing.
+
+1. **Intro (~2 s)** — VeryChic MCP logo + title.
+2. **Connect (~14 s)** — the *Connecteurs* settings page (dark, FR); cursor clicks
+   **Ajouter ▾** → dropdown (*Parcourir les connecteurs* / *Ajouter un connecteur
+   personnalisé*) → the **"Ajouter un connecteur personnalisé"** modal opens. Type
+   **Nom** = `very-chic-mcp` and **URL du serveur MCP distant** =
+   `https://verychic-mcp.fly.dev/mcp`, click **Ajouter**. The `very-chic-mcp` row
+   appears in the list (type *Web*, badge *Personnalisé*, status ✓).
+3. **Live demo (~14 s)** — user asks *"Trouve les meilleures offres VeryChic en
+   Espagne sous 600 €"*; the `verychic_search_offers` tool call animates
+   (running → done); the assistant replies with the real offers (name, stars, price,
+   one advantage).
+4. **Outro (~3 s)** — endpoint URL + repo / PyPI links.
 
 ## Components (one responsibility each)
 
