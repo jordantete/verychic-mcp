@@ -33,6 +33,14 @@ offer's availability and prices by date. Read-only, anonymous, no account needed
 > never logs in, and uses no credentials. A conservative rate limit (≥ 1 s between requests) is
 > built into the client. See the [disclaimer](#disclaimer) for terms of use.
 
+## Demo
+
+Connecting VeryChic MCP to Claude Desktop, then asking for Spain deals under €600:
+
+![Connecting VeryChic MCP to Claude Desktop](assets/connect-claude-desktop.gif)
+
+▶ [Watch it as MP4](assets/connect-claude-desktop.mp4)
+
 ## Quick start
 
 Add the server to your MCP client config. With [`uv`](https://docs.astral.sh/uv/) installed,

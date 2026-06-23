@@ -23,6 +23,9 @@ build/
 node_modules/
 *.tsbuildinfo
 
+# Demo video recorder output (recordings + verification screenshots)
+demo/out/
+
 # OS / editor
 .DS_Store
 .idea/

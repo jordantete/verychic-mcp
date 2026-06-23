@@ -9,6 +9,9 @@ from __future__ import annotations
 LOGO_URL = "https://raw.githubusercontent.com/jordantete/verychic-mcp/main/assets/logo.png"
 WEBSITE_URL = "https://github.com/jordantete/verychic-mcp"
 PYPI_URL = "https://pypi.org/project/verychic-mcp/"
+# Demo video (served from the repo over raw, like the logo above).
+VIDEO_URL = "https://raw.githubusercontent.com/jordantete/verychic-mcp/main/assets/connect-claude-desktop.mp4"
+POSTER_URL = "https://raw.githubusercontent.com/jordantete/verychic-mcp/main/assets/connect-claude-desktop-poster.png"
 
 _PAGE = """<!doctype html>
 <html lang="en">
@@ -105,6 +108,11 @@ h1 em{ font-style:italic; font-weight:500; display:inline-block; padding-right:.
   border-color:transparent; font-weight:500; }
 .btn.primary:hover{ color:#0c0a09; box-shadow:0 12px 34px rgba(216,178,122,.30); }
 
+/* demo video */
+.demo{ max-width:880px; margin:2.4rem auto 0; border:1px solid var(--line-2); border-radius:18px;
+  overflow:hidden; background:#0a0908; box-shadow:0 26px 80px rgba(0,0,0,.55); }
+.demo video{ display:block; width:100%; height:auto; }
+
 /* sections */
 section{ margin-top:clamp(4rem,9vw,6.5rem); }
 .eyebrow{ font-family:var(--mono); font-size:.7rem; letter-spacing:.26em; text-transform:uppercase;
@@ -172,6 +180,15 @@ footer a:hover{ color:var(--gold-2); border-color:var(--line-2); }
       <a class="btn" href="__PYPI_URL__">PyPI ↗</a>
     </div>
   </header>
+
+  <section>
+    <p class="eyebrow reveal">See it in action</p>
+    <h2 class="reveal">From config to deals in 30 seconds</h2>
+    <p class="sub reveal">Add the server in Claude Desktop, then ask for hotel deals in plain language.</p>
+    <div class="demo reveal" style="animation-delay:.06s">
+      <video src="__VIDEO_URL__" poster="__POSTER_URL__" controls muted loop playsinline preload="metadata"></video>
+    </div>
+  </section>
 
   <section>
     <p class="eyebrow reveal">What it does</p>
@@ -256,4 +273,6 @@ def render_landing(endpoint: str) -> str:
             .replace("__LOGO_URL__", LOGO_URL)
             .replace("__WEBSITE_URL__", WEBSITE_URL)
             .replace("__PYPI_URL__", PYPI_URL)
+            .replace("__VIDEO_URL__", VIDEO_URL)
+            .replace("__POSTER_URL__", POSTER_URL)
             .replace("__ENDPOINT__", endpoint))

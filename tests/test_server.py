@@ -102,6 +102,8 @@ def test_render_landing_injects_endpoint():
     assert "https://example.test/mcp" in html
     assert "__ENDPOINT__" not in html  # all tokens replaced
     assert "__LOGO_URL__" not in html
+    assert "__VIDEO_URL__" not in html
+    assert "__POSTER_URL__" not in html
     assert PYPI_URL in html
 
 
