@@ -51,6 +51,8 @@ uvx verychic-mcp --help   # all options
 ```
 
 The same `command`/`args` pair works in every stdio client; only the wrapping config differs.
+These configs are for **local clients** (stdio). For cloud clients like claude.ai or Cowork,
+which connect over HTTPS instead, see [Use from Claude.ai or Cowork](#use-from-claudeai-or-cowork).
 
 <details>
 <summary><b>Claude Code</b> (one-liner)</summary>
@@ -179,8 +181,9 @@ day-by-day `availabilities` for a hotel:
 
 ## Use from Claude.ai or Cowork
 
-Cloud clients such as claude.ai and Cowork only connect to remote MCP servers over HTTPS, not
-to a local process. To use VeryChic MCP there, host it yourself in `streamable-http` mode
+Unlike the local clients in [Quick start](#quick-start), cloud clients such as claude.ai and
+Cowork only connect to remote MCP servers over HTTPS, not to a local process. To use VeryChic
+MCP there, host it yourself in `streamable-http` mode
 (`verychic-mcp --transport streamable-http`, behind HTTPS) and add it as a custom connector,
 pasting your deployment URL with the `/mcp` path.
 
