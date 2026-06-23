@@ -1,10 +1,12 @@
+<!-- mcp-name: io.github.jordantete/verychic-mcp -->
+
 <div align="center">
 
 <img src="https://raw.githubusercontent.com/jordantete/verychic-mcp/main/assets/logo.png" alt="VeryChic MCP" width="96" height="96" />
 
 # VeryChic MCP
 
-### Search VeryChic hotel deals from any MCP client
+### Find, filter, and price VeryChic hotel deals from any MCP client
 
 Browse current flash-sale offers, filter them by destination or price, and read an
 offer's availability and prices by date. Read-only, anonymous, no account needed.
@@ -25,6 +27,10 @@ offer's availability and prices by date. Read-only, anonymous, no account needed
 </div>
 
 ---
+
+> **Read-only and anonymous.** This server only *searches and reads* offers — it never books,
+> never logs in, and uses no credentials. A conservative rate limit (≥ 1 s between requests) is
+> built into the client. See the [disclaimer](#disclaimer) for terms of use.
 
 ## Quick start
 
@@ -122,6 +128,34 @@ claude mcp add verychic -- uvx verychic-mcp
 | `verychic_offer_details` | One offer's content (advantages, gallery) plus its availability and prices by date. |
 
 Every call is read-only and anonymous, with a conservative rate limit built into the client.
+
+### `verychic_list_deals`
+
+Returns the current offers (a list of offer objects).
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `limit` | integer | no | Max number of offers to return. Defaults to `20`. |
+
+### `verychic_search_offers`
+
+Returns the offers matching every filter you pass (filters are combined with AND).
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `destination` | string | no | Case-insensitive substring matched against the offer's destination *or* name. |
+| `country` | string | no | Exact, case-insensitive country match (e.g. `"Espagne"`). |
+| `max_price` | number | no | Keep only offers priced at or below this value. |
+| `limit` | integer | no | Max number of offers to return. Defaults to `20`. |
+
+### `verychic_offer_details`
+
+Returns one offer's full content plus, for hotels, its day-by-day availability and prices.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `source` | string | yes | `ORCHESTRA` for a hotel, `ORCHESTRA_TO` for a tour-operator package. |
+| `external_id` | integer | yes | The offer's id, as returned by `verychic_list_deals` / `verychic_search_offers`. |
 
 ---
 
