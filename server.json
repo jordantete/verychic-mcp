@@ -3,7 +3,7 @@
   "name": "io.github.jordantete/verychic-mcp",
   "title": "VeryChic Hotel Deals",
   "description": "Unofficial read-only MCP server for VeryChic hotel offers",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "websiteUrl": "https://github.com/jordantete/verychic-mcp",
   "repository": {
     "url": "https://github.com/jordantete/verychic-mcp",
@@ -14,7 +14,7 @@
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
       "identifier": "verychic-mcp",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "runtimeHint": "uvx",
       "transport": {
         "type": "stdio"
