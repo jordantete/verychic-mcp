@@ -36,9 +36,10 @@ offer's availability and prices by date. Read-only, anonymous, no account needed
 
 ## Demo
 
-Connecting VeryChic MCP to Claude Desktop, then asking for Spain deals under €600:
+Adding the hosted VeryChic MCP server to Claude Desktop as a custom connector, then asking
+for Spain deals under €600:
 
-![Connecting VeryChic MCP to Claude Desktop](assets/connect-claude-desktop.gif)
+![Adding VeryChic MCP to Claude Desktop as a custom connector](assets/connect-claude-desktop.gif)
 
 ▶ [Watch it as MP4](assets/connect-claude-desktop.mp4)
 

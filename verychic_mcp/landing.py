@@ -183,8 +183,8 @@ footer a:hover{ color:var(--gold-2); border-color:var(--line-2); }
 
   <section>
     <p class="eyebrow reveal">See it in action</p>
-    <h2 class="reveal">From config to deals in 30 seconds</h2>
-    <p class="sub reveal">Add the server in Claude Desktop, then ask for hotel deals in plain language.</p>
+    <h2 class="reveal">From connector to deals in 30 seconds</h2>
+    <p class="sub reveal">Add it in Claude Desktop as a custom connector, then ask for hotel deals in plain language.</p>
     <div class="demo reveal" style="animation-delay:.06s">
       <video src="__VIDEO_URL__" poster="__POSTER_URL__" controls muted loop playsinline preload="metadata"></video>
     </div>
