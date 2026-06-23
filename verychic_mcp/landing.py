@@ -15,8 +15,8 @@ _PAGE = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VeryChic MCP — hotel deals for any MCP client</title>
-<meta name="description" content="Unofficial, read-only MCP server for VeryChic hotel offers. Search flash-sale deals, filter by destination or price, read availability and prices by date — from any MCP client.">
+<title>VeryChic MCP: hotel deals for any MCP client</title>
+<meta name="description" content="Unofficial, read-only MCP server for VeryChic hotel offers. Search flash-sale deals, filter by destination or price, and read availability and prices by date from any MCP client.">
 <meta property="og:title" content="VeryChic MCP">
 <meta property="og:description" content="Search VeryChic flash-sale hotel deals from any MCP client.">
 <meta property="og:image" content="__LOGO_URL__">
@@ -63,8 +63,6 @@ main{ position:relative; z-index:1; max-width:1000px; margin:0 auto; padding:cla
 
 /* hero */
 .hero{ text-align:center; padding-top:clamp(1rem,5vw,3rem); }
-.kicker{ font-family:var(--mono); font-size:.74rem; letter-spacing:.32em;
-  text-transform:uppercase; color:var(--gold); }
 .logo-wrap{ position:relative; width:104px; height:104px; margin:1.6rem auto 1.4rem; }
 .logo-wrap img{ width:100%; height:100%; border-radius:24px; display:block;
   border:1px solid var(--line-2);
@@ -74,9 +72,9 @@ main{ position:relative; z-index:1; max-width:1000px; margin:0 auto; padding:cla
   background:radial-gradient(circle, rgba(216,178,122,.30), transparent 60%);
   filter:blur(18px); z-index:-1; }
 h1{ font-family:var(--serif); font-weight:400; font-optical-sizing:auto;
-  font-size:clamp(2.9rem,9vw,5.6rem); line-height:.92; letter-spacing:-.02em;
-  margin:.2rem 0 .1rem; }
-h1 em{ font-style:italic; font-weight:500;
+  font-size:clamp(2.9rem,9vw,5.6rem); line-height:1; letter-spacing:-.02em;
+  margin:.2rem 0 .1rem; padding:.06em .12em; overflow:visible; }
+h1 em{ font-style:italic; font-weight:500; display:inline-block; padding-right:.14em;
   background:linear-gradient(120deg,var(--gold-2),var(--gold)); -webkit-background-clip:text;
   background-clip:text; color:transparent; }
 .lede{ max-width:46ch; margin:1.2rem auto 0; color:var(--muted); font-size:1.12rem; }
@@ -158,10 +156,9 @@ footer a:hover{ color:var(--gold-2); border-color:var(--line-2); }
 <div class="blob"></div>
 <main>
   <header class="hero">
-    <span class="kicker reveal" style="animation-delay:.02s">Model Context Protocol · Server</span>
     <div class="logo-wrap reveal" style="animation-delay:.08s"><img src="__LOGO_URL__" alt="VeryChic MCP logo"></div>
     <h1 class="reveal" style="animation-delay:.14s">VeryChic <em>MCP</em></h1>
-    <p class="lede reveal" style="animation-delay:.2s">Search VeryChic flash-sale hotel deals, filter by destination or price, and read availability &amp; prices by date — straight from any MCP client.</p>
+    <p class="lede reveal" style="animation-delay:.2s">Search VeryChic flash-sale hotel deals, filter them by destination or price, and read availability and prices by date, straight from any MCP client.</p>
     <p class="tags reveal" style="animation-delay:.26s"><b>Unofficial</b> · <b>Read-only</b> · <b>Anonymous</b></p>
     <div class="endpoint reveal" style="animation-delay:.32s">
       <span class="label">Remote endpoint (HTTPS)</span>
@@ -194,7 +191,7 @@ footer a:hover{ color:var(--gold-2); border-color:var(--line-2); }
       <div class="card reveal" style="animation-delay:.19s">
         <div class="n">03</div>
         <h3>verychic_offer_details</h3>
-        <p>Full content, gallery, and day-by-day availability &amp; prices for one offer.</p>
+        <p>Full content, gallery, and day-by-day availability and prices for one offer.</p>
       </div>
     </div>
   </section>
