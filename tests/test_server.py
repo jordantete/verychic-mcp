@@ -68,7 +68,41 @@ def test_root_page_links_icon():
     with TestClient(srv.streamable_http_app()) as c:
         r = c.get("/")
     assert r.status_code == 200
+    assert "text/html" in r.headers["content-type"]
     assert LOGO_URL in r.text
+    # Landing content: the 3 tools and the live endpoint (built from the Host header).
+    assert "verychic_list_deals" in r.text
+    assert "verychic_offer_details" in r.text
+    assert "https://testserver/mcp" in r.text
+
+
+def test_safe_host_rejects_injection():
+    from verychic_mcp.server import _safe_host
+    # A malicious Host header must never be reflected into the page.
+    assert _safe_host('evil"><script>alert(1)</script>') == "verychic-mcp.fly.dev"
+    assert _safe_host(None) == "verychic-mcp.fly.dev"
+    assert _safe_host("") == "verychic-mcp.fly.dev"
+    # Legitimate hosts (with port) pass through unchanged.
+    assert _safe_host("verychic-mcp.fly.dev") == "verychic-mcp.fly.dev"
+    assert _safe_host("localhost:8000") == "localhost:8000"
+
+
+def test_root_page_does_not_reflect_malicious_host():
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    with TestClient(srv.streamable_http_app()) as c:
+        r = c.get("/", headers={"host": "a.example/../<svg onload=alert(1)>"})
+    assert r.status_code == 200
+    assert "<svg onload" not in r.text
+    assert "https://verychic-mcp.fly.dev/mcp" in r.text
+
+
+def test_render_landing_injects_endpoint():
+    from verychic_mcp.landing import PYPI_URL, render_landing
+    html = render_landing("https://example.test/mcp")
+    assert "https://example.test/mcp" in html
+    assert "__ENDPOINT__" not in html  # all tokens replaced
+    assert "__LOGO_URL__" not in html
+    assert PYPI_URL in html
 
 
 def test_build_server_disables_dns_rebinding_protection():

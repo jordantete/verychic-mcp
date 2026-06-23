@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 from dataclasses import asdict
 
 from mcp.server.fastmcp import FastMCP
@@ -12,10 +13,16 @@ from starlette.responses import HTMLResponse, RedirectResponse
 from . import api
 from .discovery import get_channel_version
 from .http_client import VeryChicClient
+from .landing import LOGO_URL, WEBSITE_URL, render_landing
 
-# Public project logo (already served from the repo, see README header).
-LOGO_URL = "https://raw.githubusercontent.com/jordantete/verychic-mcp/main/assets/logo.png"
-WEBSITE_URL = "https://github.com/jordantete/verychic-mcp"
+# Hostname chars + optional port only. Rejecting anything else keeps the (attacker-
+# controlled) Host header out of the landing HTML — no reflected XSS possible.
+_HOST_RE = re.compile(r"^[A-Za-z0-9.\-:]+$")
+_DEFAULT_HOST = "verychic-mcp.fly.dev"
+
+
+def _safe_host(raw: str | None) -> str:
+    return raw if raw and _HOST_RE.match(raw) else _DEFAULT_HOST
 
 
 def resolve_transport(argv: list[str]) -> tuple[str, str, int]:
@@ -50,24 +57,16 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
         transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
     )
 
-    # Remote connectors derive their icon from the origin's favicon, not serverInfo.
-    # Serve a favicon (redirect to the public logo) and a small landing page that
-    # links it, so the logo shows up instead of the generic globe.
+    # The HTTP origin also serves a favicon (redirect to the public logo) and a
+    # landing page at "/", so visiting the deployment URL shows a real page.
     @mcp.custom_route("/favicon.ico", methods=["GET"])
     async def favicon(request):  # noqa: ANN001, ANN202
         return RedirectResponse(LOGO_URL)
 
     @mcp.custom_route("/", methods=["GET"])
     async def index(request):  # noqa: ANN001, ANN202
-        return HTMLResponse(
-            f'<!doctype html><html><head><meta charset="utf-8">'
-            f'<title>VeryChic MCP</title>'
-            f'<link rel="icon" type="image/png" href="{LOGO_URL}">'
-            f'</head><body><h1>VeryChic MCP</h1>'
-            f'<p>Unofficial, read-only MCP server for VeryChic hotel offers. '
-            f'MCP endpoint: <code>/mcp</code>. '
-            f'<a href="{WEBSITE_URL}">Project on GitHub</a>.</p></body></html>'
-        )
+        host = _safe_host(request.headers.get("host"))
+        return HTMLResponse(render_landing(f"https://{host}/mcp"))
 
     @mcp.tool()
     def verychic_list_deals(limit: int = 20) -> list[dict]:
