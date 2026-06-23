@@ -1,0 +1,11 @@
+# Smithery configuration — local (stdio) listing.
+# The server is read-only and anonymous: no configuration or env vars are needed.
+# https://smithery.ai/docs
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties: {}
+    required: []
+  commandFunction: |
+    (config) => ({ command: "uvx", args: ["verychic-mcp"] })
