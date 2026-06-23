@@ -23,8 +23,9 @@ build/
 node_modules/
 *.tsbuildinfo
 
-# Demo video recorder output (recordings + verification screenshots)
-demo/out/
+# Demo video generator (kept local — only the rendered assets/ are committed)
+demo/
+scripts/
 
 # OS / editor
 .DS_Store
