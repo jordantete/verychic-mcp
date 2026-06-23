@@ -64,3 +64,22 @@ def test_parse_offer_details_combines_sources():
     assert isinstance(details.gallery, list)
     assert len(details.availabilities) == 5
     assert details.cheapest_price == 169  # min des prix de dispo
+
+
+def test_offer_details_availabilities_supported_defaults_true():
+    details = parse_offer_details(
+        _load("hotel_sample.json"),
+        _load("preview_sample.json"),
+        _load("checkin_availabilities_sample.json"),
+    )
+    assert details.availabilities_supported is True
+
+
+def test_offer_details_availabilities_supported_can_be_false():
+    details = parse_offer_details(
+        _load("hotel_sample.json"),
+        _load("preview_sample.json"),
+        [],
+        availabilities_supported=False,
+    )
+    assert details.availabilities_supported is False

@@ -68,7 +68,9 @@ Ask your assistant things like:
 - "Get the details and dated prices for the ORCHESTRA hotel offer 44983."
 - "Get the details for the ORCHESTRA_TO package offer 301375." Tour-operator packages bundle
   flights with the hotel, so they do not expose day-by-day prices the way a single hotel does.
-  The tool still returns the offer content and advantages.
+  The tool still returns the offer content and advantages, and sets
+  `availabilities_supported: false` so an empty `availabilities` reads as "not supported for this
+  offer type", not "no dates available".
 
 Offers carry a `source` (`ORCHESTRA` for a hotel, `ORCHESTRA_TO` for a package) and an
 `external_id`. Both come back from `verychic_list_deals` and `verychic_search_offers`, so the

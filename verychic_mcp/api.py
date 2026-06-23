@@ -51,7 +51,9 @@ def offer_details(client, source: str, external_id: int, *, channel_version: str
                   months: list[str] | None = None) -> OfferDetails:
     months = months or default_months()
     # Tour-operator packages (ORCHESTRA_TO) are exposed under /vacation-package/
-    base_kind = "vacation-package" if source == "ORCHESTRA_TO" else "hotel"
+    # and have no checkin-availabilities endpoint (date availability unsupported).
+    is_package = source == "ORCHESTRA_TO"
+    base_kind = "vacation-package" if is_package else "hotel"
     base = client.get_json(
         f"{API_BASE}/{base_kind}/{source}/{external_id}.json",
         {**PRODUCT_PARAMS, "channel": CHANNEL, "opinionCount": 20},
@@ -69,4 +71,4 @@ def offer_details(client, source: str, external_id: int, *, channel_version: str
         # Packages don't expose date availability (404/400); we do NOT swallow
         # a possible Cloudflare block, which must propagate.
         avails = []
-    return parse_offer_details(base, preview, avails)
+    return parse_offer_details(base, preview, avails, availabilities_supported=not is_package)

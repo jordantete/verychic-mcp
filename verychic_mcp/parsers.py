@@ -44,7 +44,8 @@ def parse_availabilities(items: list) -> list[Availability]:
     return out
 
 
-def parse_offer_details(base: dict, preview: dict, avails: list) -> OfferDetails:
+def parse_offer_details(base: dict, preview: dict, avails: list,
+                        availabilities_supported: bool = True) -> OfferDetails:
     return OfferDetails(
         offer=parse_offer(base),
         advantages=list(preview.get("advantages") or []),
@@ -52,4 +53,5 @@ def parse_offer_details(base: dict, preview: dict, avails: list) -> OfferDetails
         non_included_added_values=list(preview.get("nonIncludedAddedValues") or []),
         gallery=list(preview.get("gallery") or []),
         availabilities=parse_availabilities(avails),
+        availabilities_supported=availabilities_supported,
     )

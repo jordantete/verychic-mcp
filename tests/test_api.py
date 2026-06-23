@@ -92,3 +92,18 @@ def test_offer_details_availabilities_best_effort_on_error():
     c = RouterClient(raise_on={"checkin-availabilities": UpstreamError()})
     details = offer_details(c, "ORCHESTRA", 44983, channel_version="26.06.18.00")
     assert details.availabilities == []
+
+
+def test_offer_details_package_marks_availabilities_unsupported():
+    """ORCHESTRA_TO packages don't expose date availability: flag it explicitly."""
+    c = RouterClient(raise_on={"checkin-availabilities": NotFound()})
+    details = offer_details(c, "ORCHESTRA_TO", 44983, channel_version="26.06.18.00")
+    assert details.availabilities_supported is False
+    assert details.availabilities == []
+
+
+def test_offer_details_hotel_marks_availabilities_supported():
+    """ORCHESTRA hotels expose date availability: flagged as supported."""
+    c = RouterClient()
+    details = offer_details(c, "ORCHESTRA", 44983, channel_version="26.06.18.00")
+    assert details.availabilities_supported is True

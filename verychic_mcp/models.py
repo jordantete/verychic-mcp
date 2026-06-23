@@ -50,6 +50,10 @@ class OfferDetails:
     non_included_added_values: list[str] = field(default_factory=list)
     gallery: list[str] = field(default_factory=list)
     availabilities: list[Availability] = field(default_factory=list)
+    # False for tour-operator packages (ORCHESTRA_TO): the source has no
+    # checkin-availabilities endpoint, so an empty `availabilities` means
+    # "not supported", not "no dates available".
+    availabilities_supported: bool = True
 
     @property
     def cheapest_price(self) -> int | None:
