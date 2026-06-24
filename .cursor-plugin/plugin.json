@@ -1,0 +1,18 @@
+{
+  "name": "verychic-mcp",
+  "displayName": "VeryChic MCP",
+  "version": "0.1.4",
+  "description": "Read-only, anonymous access to VeryChic flash-sale hotel deals — search and filter offers and read availability and prices by date. Unofficial, not affiliated with VeryChic.",
+  "author": {
+    "name": "Jordan Tete",
+    "email": "tetej171@gmail.com"
+  },
+  "homepage": "https://github.com/jordantete/verychic-mcp",
+  "repository": "https://github.com/jordantete/verychic-mcp",
+  "license": "MIT",
+  "logo": "assets/logo.png",
+  "keywords": ["mcp", "model-context-protocol", "verychic", "hotels", "travel", "deals"],
+  "category": "other",
+  "tags": ["travel", "hotels", "deals"],
+  "mcpServers": "./mcp.json"
+}

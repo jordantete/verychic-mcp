@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "verychic": {
+      "command": "uvx",
+      "args": ["verychic-mcp"]
+    }
+  }
+}
