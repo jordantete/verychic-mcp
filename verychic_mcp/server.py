@@ -10,9 +10,15 @@ from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
 from mcp.types import Icon
 from pydantic import Field
-from starlette.responses import HTMLResponse, RedirectResponse
+from starlette.responses import (
+    FileResponse,
+    HTMLResponse,
+    PlainTextResponse,
+    RedirectResponse,
+)
 
 from . import api
+from .assets import ASSET_MEDIA_TYPES, resolve_asset
 from .discovery import get_channel_version
 from .http_client import VeryChicClient
 from .landing import LOGO_URL, WEBSITE_URL, render_landing
@@ -69,6 +75,17 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
     async def index(request):  # noqa: ANN001, ANN202
         host = _safe_host(request.headers.get("host"))
         return HTMLResponse(render_landing(f"https://{host}/mcp"))
+
+    # The landing's demo video + poster are served here with the correct
+    # Content-Type (GitHub raw serves .mp4 as application/octet-stream + nosniff,
+    # which Safari/iOS can refuse). Only whitelisted basenames are served.
+    @mcp.custom_route("/assets/{name}", methods=["GET"])
+    async def asset(request):  # noqa: ANN001, ANN202
+        name = request.path_params["name"]
+        path = resolve_asset(name)
+        if path is None:
+            return PlainTextResponse("Not found", status_code=404)
+        return FileResponse(path, media_type=ASSET_MEDIA_TYPES[name])
 
     @mcp.tool()
     def verychic_list_deals(

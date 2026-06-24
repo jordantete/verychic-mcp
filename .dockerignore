@@ -11,3 +11,6 @@ __pycache__
 .venv
 .ruff_cache
 .pytest_cache
+
+# Heavy demo GIF is README-only (served from GitHub raw), not by the app.
+assets/connect-claude-desktop.gif

@@ -5,6 +5,11 @@ COPY pyproject.toml README.md LICENSE ./
 COPY verychic_mcp ./verychic_mcp
 RUN pip install --no-cache-dir .
 
+# Static assets served by the landing page (demo video + poster) with the right
+# Content-Type. The CMD runs from /app, where assets.py resolves ./assets.
+# The heavy GIF is excluded via .dockerignore (README-only, served from raw).
+COPY assets ./assets
+
 ENV PORT=8000
 EXPOSE 8000
 

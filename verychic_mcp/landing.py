@@ -9,9 +9,13 @@ from __future__ import annotations
 LOGO_URL = "https://raw.githubusercontent.com/jordantete/verychic-mcp/main/assets/logo.png"
 WEBSITE_URL = "https://github.com/jordantete/verychic-mcp"
 PYPI_URL = "https://pypi.org/project/verychic-mcp/"
-# Demo video (served from the repo over raw, like the logo above).
-VIDEO_URL = "https://raw.githubusercontent.com/jordantete/verychic-mcp/main/assets/connect-claude-desktop.mp4"
-POSTER_URL = "https://raw.githubusercontent.com/jordantete/verychic-mcp/main/assets/connect-claude-desktop-poster.png"
+# Demo video + poster: served by the app (see verychic_mcp/assets.py) with the
+# correct Content-Type. Root-relative, so they resolve against the page origin.
+# GitHub raw serves .mp4 as application/octet-stream + nosniff, which Safari/iOS
+# can refuse to play — hence app-served here (the logo above stays on raw: it
+# serves as image/png and is reused for og:image/favicon, which need absolute).
+VIDEO_URL = "/assets/connect-claude-desktop.mp4"
+POSTER_URL = "/assets/connect-claude-desktop-poster.png"
 
 _PAGE = """<!doctype html>
 <html lang="en">

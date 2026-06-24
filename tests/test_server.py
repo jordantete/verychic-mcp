@@ -107,6 +107,49 @@ def test_render_landing_injects_endpoint():
     assert PYPI_URL in html
 
 
+def test_landing_video_and_poster_are_app_served():
+    # The demo video must be served by the app (correct Content-Type), not from
+    # GitHub raw (which serves .mp4 as application/octet-stream + nosniff).
+    from verychic_mcp.landing import POSTER_URL, VIDEO_URL, render_landing
+    assert VIDEO_URL == "/assets/connect-claude-desktop.mp4"
+    assert POSTER_URL == "/assets/connect-claude-desktop-poster.png"
+    html = render_landing("https://example.test/mcp")
+    assert 'src="/assets/connect-claude-desktop.mp4"' in html
+    assert 'poster="/assets/connect-claude-desktop-poster.png"' in html
+
+
+def test_assets_route_serves_video_with_video_mime():
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    with TestClient(srv.streamable_http_app()) as c:
+        r = c.get("/assets/connect-claude-desktop.mp4")
+    assert r.status_code == 200
+    assert r.headers["content-type"] == "video/mp4"
+    assert int(r.headers["content-length"]) > 0
+
+
+def test_assets_route_serves_poster_as_png():
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    with TestClient(srv.streamable_http_app()) as c:
+        r = c.get("/assets/connect-claude-desktop-poster.png")
+    assert r.status_code == 200
+    assert r.headers["content-type"] == "image/png"
+
+
+def test_assets_route_404_for_unknown_name():
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    with TestClient(srv.streamable_http_app()) as c:
+        r = c.get("/assets/does-not-exist.mp4")
+    assert r.status_code == 404
+
+
+def test_assets_route_404_for_path_traversal():
+    # Only whitelisted basenames are served; traversal must never reach the repo.
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    with TestClient(srv.streamable_http_app()) as c:
+        r = c.get("/assets/..%2f..%2fpyproject.toml")
+    assert r.status_code == 404
+
+
 def test_build_server_disables_dns_rebinding_protection():
     # Remote deployment behind a proxy (Fly): the SDK's localhost-only protection
     # would reject the public Host ("Invalid Host header"). It must stay disabled.
