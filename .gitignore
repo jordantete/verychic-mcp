@@ -34,3 +34,6 @@ scripts/
 
 # Orchestration scratch (subagent-driven-development)
 .superpowers/
+
+# Design docs / specs — kept local, out of the public repo
+docs/
