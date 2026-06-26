@@ -23,6 +23,10 @@ offer's availability and prices by date. Read-only, anonymous, no account needed
 
 <br>
 
+[![Open the live landing page](https://img.shields.io/badge/%F0%9F%8C%90_Live_site-verychic--mcp.fly.dev-d8b27a?style=for-the-badge&labelColor=0c0a09)](https://verychic-mcp.fly.dev/)
+
+<br>
+
 [![Install in Cursor](https://img.shields.io/badge/Cursor-Install_server-000000?style=flat-square&logo=cursor&logoColor=white)](https://cursor.com/install-mcp?name=verychic&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJ2ZXJ5Y2hpYy1tY3AiXX0=)
 [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=verychic&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22verychic-mcp%22%5D%7D)
 
