@@ -10,8 +10,6 @@ extend as codes are confirmed. Unknown/volatile codes are silently ignored.
 """
 from __future__ import annotations
 
-from collections.abc import Iterable
-
 # theme key -> the raw `thematics` codes that mean it. Single source of truth.
 THEME_TO_CODES: dict[str, frozenset[str]] = {
     "pool": frozenset({"PISCINE"}),
@@ -41,10 +39,11 @@ _CODE_TO_THEME: dict[str, str] = {
 }
 
 
-def decode_themes(codes: Iterable[str] | None) -> list[str]:
+def decode_themes(codes: list[str] | None) -> list[str]:
     """Map raw `thematics` codes to curated theme labels.
 
     Sorted, de-duplicated; unknown codes are dropped; None/empty -> []. Never raises.
+    Callers pass the offer's raw `thematics` list (or None).
     """
     if not codes:
         return []
