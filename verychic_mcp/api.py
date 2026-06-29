@@ -47,6 +47,7 @@ def list_deals(client, *, limit: int = 20) -> list[Offer]:
 def search_offers(client, *, destination: str | None = None, country: str | None = None,
                   max_price: float | None = None, min_discount: float | None = None,
                   min_stars: int | None = None, flights_included: bool | None = None,
+                  theme: str | None = None,
                   sort_by: str | None = None, limit: int = 20) -> list[Offer]:
     offers = _fetch_all_offers(client)
     if destination:
@@ -64,6 +65,8 @@ def search_offers(client, *, destination: str | None = None, country: str | None
         offers = [o for o in offers if o.stars is not None and o.stars >= min_stars]
     if flights_included is not None:
         offers = [o for o in offers if o.flights_included == flights_included]
+    if theme:
+        offers = [o for o in offers if theme in o.themes]
     offers = _sort_offers(offers, sort_by)
     return offers[:limit]
 
