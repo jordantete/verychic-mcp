@@ -22,7 +22,7 @@ def test_decode_none_and_empty_return_empty():
 
 
 def test_theme_names_match_mapping_keys_sorted():
-    assert THEME_NAMES == tuple(sorted(THEME_TO_CODES))
+    assert tuple(sorted(THEME_TO_CODES)) == THEME_NAMES
 
 
 def test_every_mapped_code_appears_in_exactly_one_theme():

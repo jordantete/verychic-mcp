@@ -234,3 +234,14 @@ def test_search_offers_tool_theme_enum_matches_mapping():
     # Find the branch that carries the enum values without hardcoding the index.
     enum = next(b["enum"] for b in prop["anyOf"] if "enum" in b)
     assert set(enum) == set(THEME_NAMES)
+
+
+def test_search_offers_filters_by_theme():
+    # End-to-end through the tool: the theme filter narrows results and every
+    # returned offer carries the requested theme in its decoded `themes`.
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    _content, structured = asyncio.run(srv.call_tool(
+        "verychic_search_offers", {"theme": "luxury"}))
+    assert structured is not None
+    assert structured["result"], "expected at least one 'luxury' offer in the fixture"
+    assert all("luxury" in o["themes"] for o in structured["result"])
