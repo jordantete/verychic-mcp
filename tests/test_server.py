@@ -5,6 +5,7 @@ from pathlib import Path
 from starlette.testclient import TestClient
 
 from verychic_mcp.server import LOGO_URL, build_server, resolve_transport
+from verychic_mcp.themes import THEME_NAMES
 
 FIX = Path(__file__).parent / "fixtures"
 
@@ -221,3 +222,15 @@ def test_search_offers_accepts_sort_and_filter_params():
     discounts = [o["discount"] for o in structured["result"]]
     assert discounts == sorted(discounts, reverse=True)
     assert all(d >= 50 for d in discounts)
+
+
+def test_search_offers_tool_theme_enum_matches_mapping():
+    # Sync-guard: the tool's `theme` enum must stay in sync with THEME_TO_CODES (anti-drift).
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    tools = {t.name: t for t in asyncio.run(srv.list_tools())}
+    schema = tools["verychic_search_offers"].inputSchema
+    prop = schema["properties"]["theme"]
+    # Optional[Literal[...]] renders as anyOf: [{enum: [...]}, {type: null}].
+    # Find the branch that carries the enum values without hardcoding the index.
+    enum = next(b["enum"] for b in prop["anyOf"] if "enum" in b)
+    assert set(enum) == set(THEME_NAMES)

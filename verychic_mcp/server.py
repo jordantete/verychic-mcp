@@ -23,6 +23,7 @@ from .discovery import get_channel_version
 from .http_client import VeryChicClient
 from .landing import LOGO_URL, WEBSITE_URL, render_landing
 from .models import OfferDetailsOut, OfferOut
+from .themes import THEME_NAMES
 
 # All three tools are read-only, side-effect free, and reach a live external API
 # (the public VeryChic catalogue). Advertising these hints lets clients reason
@@ -160,6 +161,11 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
             description="Filter on whether flights are part of the offer: true keeps "
             "flight-bearing offers, false keeps hotel-only offers. Omit to not filter.",
         )] = None,
+        theme: Annotated[Literal[THEME_NAMES] | None, Field(
+            description="Keep only offers matching this curated theme, decoded from the "
+            "catalogue's thematics tags. One of: " + ", ".join(THEME_NAMES) + ". Omit to "
+            "not filter by theme.",
+        )] = None,
         sort_by: Annotated[Literal["discount", "price", "rating", "stars"] | None, Field(
             description="Sort the results: 'discount' (biggest discount first), 'price' "
             "(cheapest first), 'rating' (best-rated first), 'stars' (most stars first). "
@@ -188,13 +194,14 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
         null), `stars` (1-5, may be null), `price_label` (human-readable price unit, e.g.
         "à partir de par pers. pour 3 nuits" vs "par chambre" — read this before comparing
         prices), `price_with_flights` (EUR, null when not applicable), `flights_included`
-        (bool), and `rating` (hotel grade, often null in the catalogue). An empty list means
-        no offer matched the filters.
+        (bool), `rating` (hotel grade, often null in the catalogue), and `themes` (curated
+        theme labels decoded from the catalogue's thematics tags, e.g. ["pool", "luxury"]).
+        An empty list means no offer matched the filters.
         """
         offers = api.search_offers(client, destination=destination, country=country,
                                    max_price=max_price, min_discount=min_discount,
                                    min_stars=min_stars, flights_included=flights_included,
-                                   sort_by=sort_by, limit=limit)
+                                   theme=theme, sort_by=sort_by, limit=limit)
         return [_offer_dict(o) for o in offers]
 
     @mcp.tool(
