@@ -141,9 +141,9 @@ def test_search_sort_by_price_asc():
 
 def test_search_default_sort_preserves_catalogue_order():
     offers = search_offers(RouterClient())
-    assert [o.external_id for o in offers] == [
-        o.external_id for o in list_deals(RouterClient(), limit=20)
-    ]
+    # Independent ground truth from the fixture: catalogue order is preserved
+    # when sort_by is None (do not compare against list_deals — it delegates here).
+    assert [o.external_id for o in offers] == [301375, 36509, 25122]
 
 
 def test_list_deals_still_returns_first_n_unchanged():
