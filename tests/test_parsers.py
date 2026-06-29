@@ -83,3 +83,43 @@ def test_offer_details_availabilities_supported_can_be_false():
         availabilities_supported=False,
     )
     assert details.availabilities_supported is False
+
+
+def test_parse_offer_extracts_stars_from_name():
+    offers = parse_offers(_load("products_sample.json"))
+    assert offers[0].stars == 4  # name ends with "****"
+
+
+def test_parse_stars_falls_back_to_url_name():
+    from verychic_mcp.parsers import parse_stars
+    assert parse_stars("Hotel without rating", "ville-hotel-x-4-etoiles") == 4
+
+
+def test_parse_stars_none_when_absent():
+    from verychic_mcp.parsers import parse_stars
+    assert parse_stars("Plain hotel name", None) is None
+
+
+def test_parse_offer_builds_price_label():
+    offers = parse_offers(_load("products_sample.json"))
+    # pricePreLabel + pricePostLabel recombined
+    assert offers[0].price_label == "à partir de par pers. pour 3 nuits"
+    assert offers[1].price_label == "à partir de par chambre"
+
+
+def test_parse_offer_price_with_flights_zero_becomes_none():
+    offers = parse_offers(_load("products_sample.json"))
+    assert offers[0].price_with_flights == 515   # non-zero kept
+    assert offers[1].price_with_flights is None   # 0 -> None
+    assert offers[2].price_with_flights is None   # missing -> None
+
+
+def test_parse_offer_flights_included_from_transportation():
+    offers = parse_offers(_load("products_sample.json"))
+    assert offers[0].flights_included is True    # OPTIONAL_FLIGHT
+    assert offers[1].flights_included is False   # NONE
+
+
+def test_parse_offer_rating_from_opinions():
+    offers = parse_offers(_load("products_sample.json"))
+    assert offers[0].rating is None  # opinions.generalGrade is null in catalogue

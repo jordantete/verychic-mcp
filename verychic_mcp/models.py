@@ -25,6 +25,11 @@ class Offer:
     longitude: float | None = None
     image: str | None = None
     advantages: list[str] = field(default_factory=list)
+    stars: int | None = None
+    price_label: str | None = None
+    price_with_flights: float | None = None
+    flights_included: bool = False
+    rating: float | None = None
 
     @property
     def offer_url(self) -> str | None:
@@ -85,6 +90,11 @@ class OfferOut(TypedDict):
     longitude: float | None
     image: str | None
     advantages: list[str]
+    stars: int | None
+    price_label: str | None
+    price_with_flights: float | None
+    flights_included: bool
+    rating: float | None
     offer_url: str | None
 
 

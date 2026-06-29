@@ -1,7 +1,38 @@
 """Transforms raw VeryChic JSON into domain models."""
 from __future__ import annotations
 
+import re
+
 from .models import Availability, Offer, OfferDetails
+
+# Stars appear as a run of asterisks in the name ("Sofitel New York ****"),
+# or as "<n>-etoiles" inside the urlName slug. Tolerant: returns None if neither.
+_NAME_STARS_RE = re.compile(r"\*{1,5}")
+_URL_STARS_RE = re.compile(r"(\d)\s*-?\s*etoiles?")
+
+# transportation values other than "NONE" mean a flight is part of the offer.
+_NO_FLIGHT = {"", "NONE", None}
+
+
+def parse_stars(name: str | None, url_name: str | None) -> int | None:
+    if name:
+        m = _NAME_STARS_RE.search(name)
+        if m:
+            return len(m.group(0))
+    if url_name:
+        m = _URL_STARS_RE.search(url_name)
+        if m:
+            return int(m.group(1))
+    return None
+
+
+def parse_price_label(d: dict) -> str | None:
+    parts = [p for p in (d.get("pricePreLabel"), d.get("pricePostLabel")) if p]
+    return " ".join(parts) if parts else None
+
+
+def parse_flights_included(d: dict) -> bool:
+    return d.get("transportation") not in _NO_FLIGHT
 
 
 def parse_offer(d: dict) -> Offer:
@@ -23,6 +54,12 @@ def parse_offer(d: dict) -> Offer:
         longitude=d.get("longitude"),
         image=d.get("image"),
         advantages=list(d.get("advantages") or []),
+        stars=parse_stars(d.get("name"), d.get("urlName")),
+        price_label=parse_price_label(d),
+        # priceWithFlights is 0 (or absent) when there is no flight price; treat as None.
+        price_with_flights=d.get("priceWithFlights") or None,
+        flights_included=parse_flights_included(d),
+        rating=(d.get("opinions") or {}).get("generalGrade"),
     )
 
 
