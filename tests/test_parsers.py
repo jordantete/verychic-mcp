@@ -123,3 +123,25 @@ def test_parse_offer_flights_included_from_transportation():
 def test_parse_offer_rating_from_opinions():
     offers = parse_offers(_load("products_sample.json"))
     assert offers[0].rating is None  # opinions.generalGrade is null in catalogue
+
+
+def test_parse_offer_nullifies_implausible_discount():
+    # The live catalogue occasionally returns corrupt discounts (e.g. 263%);
+    # outside 0-100% it must become None, not surface as a fake "best deal".
+    def disc(v):
+        return parse_offer({"source": "X", "externalId": 1, "name": "n", "discount": v}).discount
+    assert disc(263.0) is None
+    assert disc(-5.0) is None
+    assert disc(70.0) == 70.0    # plausible value passes through
+    assert disc(0.0) == 0.0      # zero discount is valid
+    assert disc(100.0) == 100.0  # upper bound inclusive
+
+
+def test_parse_offer_nullifies_non_positive_price():
+    def price(extra):
+        return parse_offer({"source": "X", "externalId": 1, "name": "n", **extra}).price
+    assert price({"price": -50}) is None
+    assert price({"price": 0}) is None
+    # falls back to normalizedPrice when the primary price is implausible
+    assert price({"price": -50, "normalizedPrice": 200}) == 200
+    assert price({"price": 75}) == 75  # plausible price kept

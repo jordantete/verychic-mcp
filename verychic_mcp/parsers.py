@@ -35,6 +35,22 @@ def parse_flights_included(d: dict) -> bool:
     return d.get("transportation") not in _NO_FLIGHT
 
 
+def plausible_price(*values: float | None) -> float | None:
+    # The live catalogue sometimes returns corrupt non-positive prices (e.g. -50).
+    # Pick the first strictly-positive candidate; otherwise the price is unknown.
+    for v in values:
+        if v is not None and v > 0:
+            return v
+    return None
+
+
+def plausible_discount(v: float | None) -> float | None:
+    # Discounts outside 0-100% are corrupt (e.g. 263%); treat them as unknown so
+    # they are excluded by min_discount and sink to the bottom of sort_by=discount,
+    # instead of surfacing as a fake "best deal".
+    return v if v is not None and 0 <= v <= 100 else None
+
+
 def parse_offer(d: dict) -> Offer:
     return Offer(
         source=d.get("source", ""),
@@ -42,11 +58,12 @@ def parse_offer(d: dict) -> Offer:
         name=d.get("name", ""),
         destination=d.get("destinationName"),
         country=d.get("country"),
-        # depending on the endpoint, the price is in price or normalizedPrice
-        price=d.get("price") if d.get("price") is not None else d.get("normalizedPrice"),
+        # depending on the endpoint, the price is in price or normalizedPrice;
+        # guard against corrupt non-positive values (prefer the first plausible one).
+        price=plausible_price(d.get("price"), d.get("normalizedPrice")),
         currency=d.get("currency") or d.get("productCurrency"),
         short_desc=d.get("shortDesc"),
-        discount=d.get("discount"),
+        discount=plausible_discount(d.get("discount")),
         url_name=d.get("urlName"),
         sales_mode=d.get("salesMode"),
         offer_end_date=d.get("offerEndDate"),
