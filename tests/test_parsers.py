@@ -145,3 +145,18 @@ def test_parse_offer_nullifies_non_positive_price():
     # falls back to normalizedPrice when the primary price is implausible
     assert price({"price": -50, "normalizedPrice": 200}) == 200
     assert price({"price": 75}) == 75  # plausible price kept
+
+
+def test_parse_offer_decodes_themes_from_thematics():
+    offers = {o.external_id: o for o in parse_offers(_load("products_sample.json"))}
+    # 301375 has PISCINE + SOLEIL5H (and many internal codes that are dropped).
+    assert offers[301375].themes == ["pool", "sun"]
+    # 36509 has CITYBREAKSMONDE + ALLLUXE.
+    assert offers[36509].themes == ["city_break", "luxury"]
+    # 25122 has TONIGHTISH.
+    assert offers[25122].themes == ["last_minute"]
+
+
+def test_parse_offer_themes_absent_is_empty_list():
+    offer = parse_offers({"content": [{"externalId": 1, "name": "X"}]})[0]
+    assert offer.themes == []

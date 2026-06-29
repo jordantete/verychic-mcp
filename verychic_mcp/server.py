@@ -23,6 +23,7 @@ from .discovery import get_channel_version
 from .http_client import VeryChicClient
 from .landing import LOGO_URL, WEBSITE_URL, render_landing
 from .models import OfferDetailsOut, OfferOut
+from .themes import THEME_NAMES
 
 # All three tools are read-only, side-effect free, and reach a live external API
 # (the public VeryChic catalogue). Advertising these hints lets clients reason
@@ -160,6 +161,14 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
             description="Filter on whether flights are part of the offer: true keeps "
             "flight-bearing offers, false keeps hotel-only offers. Omit to not filter.",
         )] = None,
+        # Literal[THEME_NAMES] subscripts Literal with a tuple constant: pydantic expands
+        # it to the enum at runtime (kept in sync with the mapping, guarded by a test). This
+        # form is not standard PEP 586 — a static type-checker would want the names inlined.
+        theme: Annotated[Literal[THEME_NAMES] | None, Field(
+            description="Keep only offers matching this curated theme, decoded from the "
+            "catalogue's thematics tags. One of: " + ", ".join(THEME_NAMES) + ". Omit to "
+            "not filter by theme.",
+        )] = None,
         near_lat: Annotated[float | None, Field(
             description="Latitude of a search center for proximity search, in decimal "
             "degrees. Must be given together with near_lng. Omit for no geo search.",
@@ -202,8 +211,9 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
         null), `stars` (1-5, may be null), `price_label` (human-readable price unit, e.g.
         "à partir de par pers. pour 3 nuits" vs "par chambre" — read this before comparing
         prices), `price_with_flights` (EUR, null when not applicable), `flights_included`
-        (bool), and `rating` (hotel grade, often null in the catalogue). An empty list means
-        no offer matched the filters.
+        (bool), `rating` (hotel grade, often null in the catalogue), and `themes` (curated
+        theme labels decoded from the catalogue's thematics tags, e.g. ["pool", "luxury"]).
+        An empty list means no offer matched the filters.
 
         Proximity search: pass `near_lat` and `near_lng` (decimal degrees, together) to
         compute each offer's `distance_km` from that point; add `radius_km` to keep only
@@ -213,6 +223,7 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
         offers = api.search_offers(client, destination=destination, country=country,
                                    max_price=max_price, min_discount=min_discount,
                                    min_stars=min_stars, flights_included=flights_included,
+                                   theme=theme,
                                    near_lat=near_lat, near_lng=near_lng, radius_km=radius_km,
                                    sort_by=sort_by, limit=limit)
         return [_offer_dict(o) for o in offers]

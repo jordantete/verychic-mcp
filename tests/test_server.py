@@ -5,6 +5,7 @@ from pathlib import Path
 from starlette.testclient import TestClient
 
 from verychic_mcp.server import LOGO_URL, build_server, resolve_transport
+from verychic_mcp.themes import THEME_NAMES
 
 FIX = Path(__file__).parent / "fixtures"
 
@@ -241,3 +242,26 @@ def test_search_offers_distance_km_null_without_center():
     _content, structured = asyncio.run(srv.call_tool("verychic_search_offers", {"limit": 1}))
     assert structured is not None and structured["result"]
     assert structured["result"][0]["distance_km"] is None
+
+
+def test_search_offers_tool_theme_enum_matches_mapping():
+    # Sync-guard: the tool's `theme` enum must stay in sync with THEME_TO_CODES (anti-drift).
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    tools = {t.name: t for t in asyncio.run(srv.list_tools())}
+    schema = tools["verychic_search_offers"].inputSchema
+    prop = schema["properties"]["theme"]
+    # Optional[Literal[...]] renders as anyOf: [{enum: [...]}, {type: null}].
+    # Find the branch that carries the enum values without hardcoding the index.
+    enum = next(b["enum"] for b in prop["anyOf"] if "enum" in b)
+    assert set(enum) == set(THEME_NAMES)
+
+
+def test_search_offers_filters_by_theme():
+    # End-to-end through the tool: the theme filter narrows results and every
+    # returned offer carries the requested theme in its decoded `themes`.
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    _content, structured = asyncio.run(srv.call_tool(
+        "verychic_search_offers", {"theme": "luxury"}))
+    assert structured is not None
+    assert structured["result"], "expected at least one 'luxury' offer in the fixture"
+    assert all("luxury" in o["themes"] for o in structured["result"])

@@ -192,3 +192,18 @@ def test_search_radius_or_distance_sort_without_center_raises():
         search_offers(RouterClient(), radius_km=500)
     with pytest.raises(VeryChicError):
         search_offers(RouterClient(), sort_by="distance")
+
+
+def test_search_offers_theme_keeps_only_matching():
+    # Offer 301375 has themes ['pool', 'sun']; others do not have 'pool'.
+    res = search_offers(RouterClient(), theme="pool")
+    assert [o.external_id for o in res] == [301375]
+
+
+def test_search_offers_theme_no_match_returns_empty():
+    assert search_offers(RouterClient(), theme="spa") == []
+
+
+def test_search_offers_theme_combines_with_other_filter():
+    # 25122 has theme 'last_minute' but is in France, not Italie — yields nothing.
+    assert search_offers(RouterClient(), theme="last_minute", country="Italie") == []
