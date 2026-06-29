@@ -4,7 +4,7 @@ from __future__ import annotations
 import argparse
 import re
 from dataclasses import asdict
-from typing import Annotated
+from typing import Annotated, Literal
 
 from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
@@ -108,7 +108,10 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
             "N offers of the live catalogue.",
         )] = 20,
     ) -> list[OfferOut]:
-        """Browse the VeryChic flash-sale hotel offers available right now.
+        """[DEPRECATED] Use `verychic_search_offers` (call it with no filter for the same
+        result). Kept for backward compatibility; will be removed in a future major version.
+
+        Browse the VeryChic flash-sale hotel offers available right now.
 
         When to use: to discover the current catalogue without any filter. To narrow by
         destination, country, or price use `verychic_search_offers` instead; to get the
@@ -143,9 +146,28 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
             description="Inclusive upper bound on the offer price, in EUR. Offers with no "
             "price are excluded when this is set. Omit for no price cap.",
         )] = None,
+        min_discount: Annotated[float | None, Field(
+            description="Keep only offers whose discount percentage is at least this value "
+            "(e.g. 40 for '40% off or more'). Offers with no discount are excluded. Omit "
+            "for no discount filter.",
+        )] = None,
+        min_stars: Annotated[int | None, Field(
+            description="Keep only offers with at least this hotel star rating (1-5), parsed "
+            "from the offer name. Offers with no detectable rating are excluded. Omit to not "
+            "filter by stars.",
+        )] = None,
+        flights_included: Annotated[bool | None, Field(
+            description="Filter on whether flights are part of the offer: true keeps "
+            "flight-bearing offers, false keeps hotel-only offers. Omit to not filter.",
+        )] = None,
+        sort_by: Annotated[Literal["discount", "price", "rating", "stars"] | None, Field(
+            description="Sort the results: 'discount' (biggest discount first), 'price' "
+            "(cheapest first), 'rating' (best-rated first), 'stars' (most stars first). "
+            "Offers missing the sort value are placed last. Omit to keep catalogue order.",
+        )] = None,
         limit: Annotated[int, Field(
             description="Maximum number of matching offers to return (default 20), applied "
-            "after filtering. No pagination.",
+            "after filtering and sorting. No pagination.",
         )] = 20,
     ) -> list[OfferOut]:
         """Search and filter the current VeryChic offers by destination, country, and/or price.
@@ -159,14 +181,20 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
         Filtering is done client-side over the live catalogue: `destination` is a
         case-insensitive substring (matched on destination or name), `country` is an exact
         case-insensitive match, `max_price` is an inclusive EUR ceiling. Prices are in EUR
-        and text is in French. Returns the first `limit` matches.
+        and text is in French. Returns the first `limit` matches after filtering and sorting.
 
-        Returns a list of offer objects with the same fields as `verychic_list_deals`
-        (including `source` + `external_id` for use with `verychic_offer_details`). An
-        empty list means no offer matched the filters.
+        Returns a list of offer objects (same `source` + `external_id` pair for use with
+        `verychic_offer_details`). Each offer also carries `discount` (percent off, may be
+        null), `stars` (1-5, may be null), `price_label` (human-readable price unit, e.g.
+        "à partir de par pers. pour 3 nuits" vs "par chambre" — read this before comparing
+        prices), `price_with_flights` (EUR, null when not applicable), `flights_included`
+        (bool), and `rating` (hotel grade, often null in the catalogue). An empty list means
+        no offer matched the filters.
         """
         offers = api.search_offers(client, destination=destination, country=country,
-                                   max_price=max_price, limit=limit)
+                                   max_price=max_price, min_discount=min_discount,
+                                   min_stars=min_stars, flights_included=flights_included,
+                                   sort_by=sort_by, limit=limit)
         return [_offer_dict(o) for o in offers]
 
     @mcp.tool(

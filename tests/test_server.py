@@ -201,3 +201,22 @@ def test_build_server_disables_dns_rebinding_protection():
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
     assert srv.settings.transport_security is not None
     assert srv.settings.transport_security.enable_dns_rebinding_protection is False
+
+
+def test_search_offers_structured_result_has_new_fields():
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    _content, structured = asyncio.run(srv.call_tool("verychic_search_offers", {"limit": 5}))
+    assert structured is not None and structured["result"]
+    first = structured["result"][0]
+    for key in ("stars", "price_label", "price_with_flights", "flights_included", "rating"):
+        assert key in first, key
+
+
+def test_search_offers_accepts_sort_and_filter_params():
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    _content, structured = asyncio.run(srv.call_tool(
+        "verychic_search_offers", {"sort_by": "discount", "min_discount": 50}))
+    assert structured is not None
+    discounts = [o["discount"] for o in structured["result"]]
+    assert discounts == sorted([d for d in discounts], reverse=True)
+    assert all(d >= 50 for d in discounts)
