@@ -217,6 +217,7 @@ def test_search_offers_accepts_sort_and_filter_params():
     _content, structured = asyncio.run(srv.call_tool(
         "verychic_search_offers", {"sort_by": "discount", "min_discount": 50}))
     assert structured is not None
+    assert structured["result"], "expected at least one offer with discount >= 50 in the fixture"
     discounts = [o["discount"] for o in structured["result"]]
-    assert discounts == sorted([d for d in discounts], reverse=True)
+    assert discounts == sorted(discounts, reverse=True)
     assert all(d >= 50 for d in discounts)
