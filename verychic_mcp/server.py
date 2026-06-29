@@ -8,7 +8,7 @@ from typing import Annotated
 
 from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
-from mcp.types import Icon
+from mcp.types import Icon, ToolAnnotations
 from pydantic import Field
 from starlette.responses import (
     FileResponse,
@@ -22,6 +22,17 @@ from .assets import ASSET_MEDIA_TYPES, resolve_asset
 from .discovery import get_channel_version
 from .http_client import VeryChicClient
 from .landing import LOGO_URL, WEBSITE_URL, render_landing
+from .models import OfferDetailsOut, OfferOut
+
+# All three tools are read-only, side-effect free, and reach a live external API
+# (the public VeryChic catalogue). Advertising these hints lets clients reason
+# about the tools without parsing prose, and lifts the Glama TDQS score.
+_READ_ONLY = ToolAnnotations(
+    readOnlyHint=True,
+    destructiveHint=False,
+    idempotentHint=True,
+    openWorldHint=True,
+)
 
 # Hostname chars + optional port only. Rejecting anything else keeps the (attacker-
 # controlled) Host header out of the landing HTML — no reflected XSS possible.
@@ -87,14 +98,16 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
             return PlainTextResponse("Not found", status_code=404)
         return FileResponse(path, media_type=ASSET_MEDIA_TYPES[name])
 
-    @mcp.tool()
+    @mcp.tool(
+        annotations=_READ_ONLY.model_copy(update={"title": "Browse current VeryChic hotel deals"}),
+    )
     def verychic_list_deals(
         limit: Annotated[int, Field(
             description="Maximum number of offers to return (default 20). Caps the result "
             "size only; there is no pagination or cursor, so this always returns the first "
             "N offers of the live catalogue.",
         )] = 20,
-    ) -> list[dict]:
+    ) -> list[OfferOut]:
         """Browse the VeryChic flash-sale hotel offers available right now.
 
         When to use: to discover the current catalogue without any filter. To narrow by
@@ -113,7 +126,9 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
         """
         return [_offer_dict(o) for o in api.list_deals(client, limit=limit)]
 
-    @mcp.tool()
+    @mcp.tool(
+        annotations=_READ_ONLY.model_copy(update={"title": "Search & filter VeryChic offers"}),
+    )
     def verychic_search_offers(
         destination: Annotated[str | None, Field(
             description="Case-insensitive substring matched against each offer's "
@@ -132,7 +147,7 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
             description="Maximum number of matching offers to return (default 20), applied "
             "after filtering. No pagination.",
         )] = 20,
-    ) -> list[dict]:
+    ) -> list[OfferOut]:
         """Search and filter the current VeryChic offers by destination, country, and/or price.
 
         When to use: when you already know roughly what the user wants (a place, a country,
@@ -154,7 +169,10 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
                                    max_price=max_price, limit=limit)
         return [_offer_dict(o) for o in offers]
 
-    @mcp.tool()
+    @mcp.tool(
+        annotations=_READ_ONLY.model_copy(
+            update={"title": "Get VeryChic offer details & availability"}),
+    )
     def verychic_offer_details(
         source: Annotated[str, Field(
             description="The offer's source type, copied verbatim from the `source` field "
@@ -167,7 +185,7 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
             "`verychic_list_deals`/`verychic_search_offers` result. Identifies the offer "
             "together with `source`.",
         )],
-    ) -> dict:
+    ) -> OfferDetailsOut:
         """Get full details plus per-date availability and prices for one specific VeryChic offer.
 
         When to use: after `verychic_list_deals` or `verychic_search_offers` returned an

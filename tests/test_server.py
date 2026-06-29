@@ -42,6 +42,51 @@ def test_build_server_registers_three_tools():
     assert names == {"verychic_list_deals", "verychic_search_offers", "verychic_offer_details"}
 
 
+def test_tools_declare_readonly_annotations():
+    # Glama TDQS rewards explicit behavioural annotations. All three tools are
+    # read-only and hit a live external API: readOnlyHint + openWorldHint, plus a
+    # human-friendly title, must be advertised.
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    tools = {t.name: t for t in asyncio.run(srv.list_tools())}
+    for name, t in tools.items():
+        ann = t.annotations
+        assert ann is not None, name
+        assert ann.readOnlyHint is True, name
+        assert ann.openWorldHint is True, name
+        assert ann.title, name
+
+
+def test_tools_declare_output_schema():
+    # Glama explicitly penalises the missing output schema. Each tool must expose one.
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    tools = {t.name: t for t in asyncio.run(srv.list_tools())}
+    for name, t in tools.items():
+        assert t.outputSchema is not None, name
+
+
+def test_list_deals_structured_result_matches_schema():
+    # The typed return must produce structured content whose shape matches what the
+    # tool actually returns (offer fields + the computed offer_url).
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    _content, structured = asyncio.run(srv.call_tool("verychic_list_deals", {"limit": 5}))
+    assert structured is not None
+    assert "result" in structured and structured["result"], "expected at least one offer"
+    first = structured["result"][0]
+    assert "source" in first and "external_id" in first
+    assert "offer_url" in first
+
+
+def test_offer_details_structured_result_matches_schema():
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    _content, structured = asyncio.run(srv.call_tool(
+        "verychic_offer_details", {"source": "ORCHESTRA", "external_id": 44983}))
+    assert structured is not None
+    assert "offer" in structured and "offer_url" in structured["offer"]
+    assert "availabilities" in structured
+    assert "availabilities_supported" in structured
+    assert "cheapest_price" in structured
+
+
 def test_build_server_declares_icon_and_website():
     # The custom remote connector shows a generic globe unless the server declares
     # an icon in serverInfo. We expose the project logo (raw GitHub URL) + website.

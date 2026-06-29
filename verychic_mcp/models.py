@@ -1,7 +1,8 @@
-"""Domain models (serializable dataclasses)."""
+"""Domain models (serializable dataclasses) and their serialized output shapes."""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import TypedDict
 
 from .config import SITE_BASE
 
@@ -59,3 +60,49 @@ class OfferDetails:
     def cheapest_price(self) -> int | None:
         prices = [a.price for a in self.availabilities if a.price is not None]
         return min(prices) if prices else None
+
+
+# Output shapes — the exact dicts the MCP tools return (the dataclasses above
+# serialized with their computed `offer_url` / `cheapest_price` included). They
+# give the tools a precise outputSchema, which the dataclasses' @property fields
+# cannot do on their own (asdict drops properties).
+
+
+class OfferOut(TypedDict):
+    source: str
+    external_id: int
+    name: str
+    destination: str | None
+    country: str | None
+    price: float | None
+    currency: str | None
+    short_desc: str | None
+    discount: float | None
+    url_name: str | None
+    sales_mode: str | None
+    offer_end_date: str | None
+    latitude: float | None
+    longitude: float | None
+    image: str | None
+    advantages: list[str]
+    offer_url: str | None
+
+
+class AvailabilityOut(TypedDict):
+    date: str
+    price: int | None
+    currency: str
+    nights: int | None
+    days: int | None
+    departure_city_code: str | None
+
+
+class OfferDetailsOut(TypedDict):
+    offer: OfferOut
+    advantages: list[str]
+    included_added_values: list[str]
+    non_included_added_values: list[str]
+    gallery: list[str]
+    availabilities: list[AvailabilityOut]
+    availabilities_supported: bool
+    cheapest_price: int | None
