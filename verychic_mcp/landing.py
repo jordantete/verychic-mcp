@@ -23,9 +23,9 @@ _PAGE = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VeryChic MCP: hotel deals for any MCP client</title>
-<meta name="description" content="Unofficial, read-only MCP server for VeryChic hotel offers. Search flash-sale deals, filter by destination or price, and read availability and prices by date from any MCP client.">
+<meta name="description" content="Unofficial, read-only MCP server for VeryChic hotel offers. Search flash-sale deals, filter by destination, price, discount, stars, theme or proximity, and read availability and prices by date from any MCP client.">
 <meta property="og:title" content="VeryChic MCP">
-<meta property="og:description" content="Search VeryChic flash-sale hotel deals from any MCP client.">
+<meta property="og:description" content="Search & filter VeryChic flash-sale hotel deals — by destination, price, theme or proximity — from any MCP client.">
 <meta property="og:image" content="__LOGO_URL__">
 <link rel="icon" type="image/png" href="__LOGO_URL__">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -170,7 +170,7 @@ footer a:hover{ color:var(--gold-2); border-color:var(--line-2); }
   <header class="hero">
     <div class="logo-wrap reveal" style="animation-delay:.08s"><img src="__LOGO_URL__" alt="VeryChic MCP logo"></div>
     <h1 class="reveal" style="animation-delay:.14s">VeryChic <em>MCP</em></h1>
-    <p class="lede reveal" style="animation-delay:.2s">Search VeryChic flash-sale hotel deals, filter them by destination or price, and read availability and prices by date, straight from any MCP client.</p>
+    <p class="lede reveal" style="animation-delay:.2s">Search VeryChic flash-sale hotel deals, filter them by destination, price, discount, stars, theme or proximity, and read availability and prices by date, straight from any MCP client.</p>
     <p class="tags reveal" style="animation-delay:.26s"><b>Unofficial</b> · <b>Read-only</b> · <b>Anonymous</b></p>
     <div class="endpoint reveal" style="animation-delay:.32s">
       <span class="label">Remote endpoint (HTTPS)</span>
@@ -207,7 +207,7 @@ footer a:hover{ color:var(--gold-2); border-color:var(--line-2); }
       <div class="card reveal" style="animation-delay:.12s">
         <div class="n">02</div>
         <h3>verychic_search_offers</h3>
-        <p>Filter offers by destination, country, and maximum price.</p>
+        <p>Filter offers by destination, country, price, discount, stars, flights, theme or proximity — and sort the results.</p>
       </div>
       <div class="card reveal" style="animation-delay:.19s">
         <div class="n">03</div>

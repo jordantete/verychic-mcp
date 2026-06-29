@@ -8,8 +8,9 @@
 
 ### Find, filter, and price VeryChic hotel deals from any MCP client
 
-Browse current flash-sale offers, filter them by destination or price, and read an
-offer's availability and prices by date. Read-only, anonymous, no account needed.
+Browse current flash-sale offers, filter them by destination, country, price, discount,
+stars, flights, theme, or proximity (and sort the results), then read an offer's
+availability and prices by date. Read-only, anonymous, no account needed.
 
 <br>
 
@@ -139,7 +140,7 @@ claude mcp add verychic -- uvx verychic-mcp
 | Tool | What it returns |
 | --- | --- |
 | `verychic_list_deals` | The current VeryChic offers, with a configurable limit. |
-| `verychic_search_offers` | Offers filtered by `destination` (substring match), `country` (exact match), and `max_price`. |
+| `verychic_search_offers` | Offers filtered by `destination`, `country`, `max_price`, `min_discount`, `min_stars`, `flights_included`, `theme`, or proximity (`near_lat`/`near_lng`/`radius_km`), with optional `sort_by`. |
 | `verychic_offer_details` | One offer's content (advantages, gallery) plus its availability and prices by date. |
 
 Every call is read-only and anonymous, with a conservative rate limit built into the client.
@@ -160,7 +161,14 @@ Returns the offers matching every filter you pass (filters are combined with AND
 | --- | --- | --- | --- |
 | `destination` | string | no | Case-insensitive substring matched against the offer's destination *or* name. |
 | `country` | string | no | Exact, case-insensitive country match (e.g. `"Espagne"`). |
-| `max_price` | number | no | Keep only offers priced at or below this value. |
+| `max_price` | number | no | Keep only offers priced at or below this value (EUR). |
+| `min_discount` | number | no | Keep only offers with at least this discount percentage (e.g. `40`). |
+| `min_stars` | integer | no | Keep only offers with at least this hotel star rating (1–5). |
+| `flights_included` | boolean | no | `true` keeps flight-bearing offers, `false` keeps hotel-only offers. |
+| `theme` | string (enum) | no | Keep only offers matching a curated theme decoded from the catalogue's thematics tags. One of: `adults_only`, `city_break`, `cruise`, `island`, `last_minute`, `luxury`, `mountain`, `nature`, `pool`, `romantic`, `rooftop`, `spa`, `sun`, `villa`. |
+| `near_lat` / `near_lng` | number | no | Latitude/longitude of a search center (decimal degrees), given together, to compute each offer's `distance_km`. |
+| `radius_km` | number | no | Keep only offers within this many km of `near_lat`/`near_lng` (requires both). |
+| `sort_by` | string (enum) | no | Order results: `discount`, `price`, `rating`, `stars`, or `distance` (nearest first, requires a center). |
 | `limit` | integer | no | Max number of offers to return. Defaults to `20`. |
 
 ### `verychic_offer_details`
@@ -180,6 +188,8 @@ Ask your assistant things like:
 
 - "List the current VeryChic deals."
 - "Search VeryChic offers in Spain under 600 euros."
+- "Find 5-star spa hotels with at least 40% off, cheapest first."
+- "Show VeryChic offers within 300 km of Paris (48.8566, 2.3522), nearest first."
 - "Get the details and dated prices for the ORCHESTRA hotel offer 44983."
 - "Get the details for the ORCHESTRA_TO package offer 301375." Tour-operator packages bundle
   flights with the hotel, so they do not expose day-by-day prices the way a single hotel does.

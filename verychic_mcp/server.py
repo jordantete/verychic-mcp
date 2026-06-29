@@ -193,18 +193,25 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
             "after filtering and sorting. No pagination.",
         )] = 20,
     ) -> list[OfferOut]:
-        """Search and filter the current VeryChic offers by destination, country, and/or price.
+        """Search and filter the current VeryChic offers by destination, country, price,
+        discount, stars, flights, theme, or proximity — with optional sorting.
 
-        When to use: when you already know roughly what the user wants (a place, a country,
-        a budget). To simply list everything on offer use `verychic_list_deals`; to inspect
-        one specific offer in depth use `verychic_offer_details`. All filters are optional
-        and combine with AND; calling with no filter is equivalent to `verychic_list_deals`.
+        When to use: when you already know roughly what the user wants — a place, a country,
+        a budget, a minimum discount or star rating, flights vs hotel-only, a theme (e.g.
+        pool, spa, romantic, last_minute), or hotels near a point (near_lat/near_lng, with an
+        optional radius_km). To simply list everything on offer use `verychic_list_deals`; to
+        inspect one specific offer in depth use `verychic_offer_details`. All filters are
+        optional and combine with AND; calling with no filter is equivalent to
+        `verychic_list_deals`.
 
         Behaviour: read-only and anonymous; rate-limited to about 1 request per second.
         Filtering is done client-side over the live catalogue: `destination` is a
         case-insensitive substring (matched on destination or name), `country` is an exact
-        case-insensitive match, `max_price` is an inclusive EUR ceiling. Prices are in EUR
-        and text is in French. Returns the first `limit` matches after filtering and sorting.
+        case-insensitive match, `max_price`/`min_discount`/`min_stars` are numeric bounds,
+        `flights_included` toggles flight-bearing vs hotel-only, and `theme` matches a curated
+        label decoded from the catalogue's thematics tags. Use `sort_by` to order results
+        (`discount`, `price`, `rating`, `stars`, or `distance`). Prices are in EUR and text is
+        in French. Returns the first `limit` matches after filtering and sorting.
 
         Returns a list of offer objects (same `source` + `external_id` pair for use with
         `verychic_offer_details`). Each offer also carries `discount` (percent off, may be
