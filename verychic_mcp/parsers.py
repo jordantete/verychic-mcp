@@ -4,6 +4,7 @@ from __future__ import annotations
 import re
 
 from .models import Availability, Offer, OfferDetails
+from .themes import decode_themes
 
 # Stars appear as a run of asterisks in the name ("Sofitel New York ****"),
 # or as "<n>-etoiles" inside the urlName slug. Tolerant: returns None if neither.
@@ -71,6 +72,7 @@ def parse_offer(d: dict) -> Offer:
         longitude=d.get("longitude"),
         image=d.get("image"),
         advantages=list(d.get("advantages") or []),
+        themes=decode_themes(d.get("thematics")),
         stars=parse_stars(d.get("name"), d.get("urlName")),
         price_label=parse_price_label(d),
         # priceWithFlights is 0 (or absent) when there is no flight price; treat as None.
