@@ -160,10 +160,24 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
             description="Filter on whether flights are part of the offer: true keeps "
             "flight-bearing offers, false keeps hotel-only offers. Omit to not filter.",
         )] = None,
-        sort_by: Annotated[Literal["discount", "price", "rating", "stars"] | None, Field(
+        near_lat: Annotated[float | None, Field(
+            description="Latitude of a search center for proximity search, in decimal "
+            "degrees. Must be given together with near_lng. Omit for no geo search.",
+        )] = None,
+        near_lng: Annotated[float | None, Field(
+            description="Longitude of a search center for proximity search, in decimal "
+            "degrees. Must be given together with near_lat. Omit for no geo search.",
+        )] = None,
+        radius_km: Annotated[float | None, Field(
+            description="Keep only offers within this many kilometers of the "
+            "near_lat/near_lng center. Requires near_lat and near_lng. Omit for no radius.",
+        )] = None,
+        sort_by: Annotated[
+                Literal["discount", "price", "rating", "stars", "distance"] | None, Field(
             description="Sort the results: 'discount' (biggest discount first), 'price' "
-            "(cheapest first), 'rating' (best-rated first), 'stars' (most stars first). "
-            "Offers missing the sort value are placed last. Omit to keep catalogue order.",
+            "(cheapest first), 'rating' (best-rated first), 'stars' (most stars first), "
+            "'distance' (nearest first, requires near_lat/near_lng). Offers missing the sort "
+            "value are placed last. Omit to keep catalogue order.",
         )] = None,
         limit: Annotated[int, Field(
             description="Maximum number of matching offers to return (default 20), applied "
@@ -190,10 +204,16 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
         prices), `price_with_flights` (EUR, null when not applicable), `flights_included`
         (bool), and `rating` (hotel grade, often null in the catalogue). An empty list means
         no offer matched the filters.
+
+        Proximity search: pass `near_lat` and `near_lng` (decimal degrees, together) to
+        compute each offer's `distance_km` from that point; add `radius_km` to keep only
+        offers within that distance, and/or `sort_by="distance"` for nearest-first.
+        `distance_km` is null when no center is given.
         """
         offers = api.search_offers(client, destination=destination, country=country,
                                    max_price=max_price, min_discount=min_discount,
                                    min_stars=min_stars, flights_included=flights_included,
+                                   near_lat=near_lat, near_lng=near_lng, radius_km=radius_km,
                                    sort_by=sort_by, limit=limit)
         return [_offer_dict(o) for o in offers]
 

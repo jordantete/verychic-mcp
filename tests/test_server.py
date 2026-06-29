@@ -221,3 +221,23 @@ def test_search_offers_accepts_sort_and_filter_params():
     discounts = [o["discount"] for o in structured["result"]]
     assert discounts == sorted(discounts, reverse=True)
     assert all(d >= 50 for d in discounts)
+
+
+def test_search_offers_geo_params_return_distance_km():
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    _content, structured = asyncio.run(srv.call_tool(
+        "verychic_search_offers",
+        {"near_lat": 48.8566, "near_lng": 2.3522, "sort_by": "distance", "limit": 5}))
+    assert structured is not None and structured["result"]
+    first = structured["result"][0]
+    assert "distance_km" in first
+    # nearest-first: the French offer (id 25122, ~112 km) leads
+    assert first["external_id"] == 25122
+    assert first["distance_km"] is not None
+
+
+def test_search_offers_distance_km_null_without_center():
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    _content, structured = asyncio.run(srv.call_tool("verychic_search_offers", {"limit": 1}))
+    assert structured is not None and structured["result"]
+    assert structured["result"][0]["distance_km"] is None
