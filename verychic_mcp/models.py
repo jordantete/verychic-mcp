@@ -30,6 +30,7 @@ class Offer:
     price_with_flights: float | None = None
     flights_included: bool = False
     rating: float | None = None
+    distance_km: float | None = None
 
     @property
     def offer_url(self) -> str | None:
@@ -95,6 +96,7 @@ class OfferOut(TypedDict):
     price_with_flights: float | None
     flights_included: bool
     rating: float | None
+    distance_km: float | None
     offer_url: str | None
 
 

@@ -4,7 +4,8 @@ from __future__ import annotations
 from datetime import date
 
 from .config import API_BASE, CHANNEL, PRODUCT_PARAMS
-from .errors import NotFound, UpstreamError
+from .errors import NotFound, UpstreamError, VeryChicError
+from .geo import haversine_km
 from .models import Offer, OfferDetails
 from .parsers import parse_offer_details, parse_offers
 
@@ -21,6 +22,7 @@ _SORT_SPEC = {
     "price": ("price", False),
     "rating": ("rating", True),
     "stars": ("stars", True),
+    "distance": ("distance_km", False),
 }
 
 
@@ -47,8 +49,23 @@ def list_deals(client, *, limit: int = 20) -> list[Offer]:
 def search_offers(client, *, destination: str | None = None, country: str | None = None,
                   max_price: float | None = None, min_discount: float | None = None,
                   min_stars: int | None = None, flights_included: bool | None = None,
-                  sort_by: str | None = None, limit: int = 20) -> list[Offer]:
+                  near_lat: float | None = None, near_lng: float | None = None,
+                  radius_km: float | None = None, sort_by: str | None = None,
+                  limit: int = 20) -> list[Offer]:
+    # Validate geo params before any network call (actionable, no raw stack trace).
+    if (near_lat is None) != (near_lng is None):
+        raise VeryChicError(
+            "Geo search requires both near_lat and near_lng (provide them together)."
+        )
+    has_center = near_lat is not None and near_lng is not None
+    if not has_center and (radius_km is not None or sort_by == "distance"):
+        raise VeryChicError("radius_km and sort_by='distance' require near_lat and near_lng.")
+
     offers = _fetch_all_offers(client)
+    if has_center:
+        for o in offers:
+            if o.latitude is not None and o.longitude is not None:
+                o.distance_km = haversine_km(near_lat, near_lng, o.latitude, o.longitude)
     if destination:
         d = destination.casefold()
         offers = [o for o in offers
@@ -64,6 +81,8 @@ def search_offers(client, *, destination: str | None = None, country: str | None
         offers = [o for o in offers if o.stars is not None and o.stars >= min_stars]
     if flights_included is not None:
         offers = [o for o in offers if o.flights_included == flights_included]
+    if radius_km is not None:
+        offers = [o for o in offers if o.distance_km is not None and o.distance_km <= radius_km]
     offers = _sort_offers(offers, sort_by)
     return offers[:limit]
 

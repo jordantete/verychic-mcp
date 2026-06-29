@@ -2,8 +2,10 @@ import json
 from datetime import date
 from pathlib import Path
 
+import pytest
+
 from verychic_mcp.api import default_months, list_deals, offer_details, search_offers
-from verychic_mcp.errors import NotFound, UpstreamError
+from verychic_mcp.errors import NotFound, UpstreamError, VeryChicError
 
 FIX = Path(__file__).parent / "fixtures"
 
@@ -150,3 +152,43 @@ def test_list_deals_still_returns_first_n_unchanged():
     offers = list_deals(RouterClient(), limit=2)
     assert len(offers) == 2
     assert offers[0].external_id == 301375  # catalogue order, unchanged
+
+
+# Center used by the geo tests: Paris.
+PARIS = (48.8566, 2.3522)
+
+
+def test_search_computes_distance_km_when_center_given():
+    offers = search_offers(RouterClient(), near_lat=PARIS[0], near_lng=PARIS[1])
+    by_id = {o.external_id: o for o in offers}
+    assert abs(by_id[25122].distance_km - 111.6) < 2.0  # Empreinte, France
+
+
+def test_search_distance_km_none_without_center():
+    offers = search_offers(RouterClient())
+    assert all(o.distance_km is None for o in offers)
+
+
+def test_search_radius_km_filters_out_far_offers():
+    offers = search_offers(RouterClient(), near_lat=PARIS[0], near_lng=PARIS[1], radius_km=500)
+    # Only the French offer (~112 km) is within 500 km; Montenegro/NYC are excluded.
+    assert [o.external_id for o in offers] == [25122]
+
+
+def test_search_sort_by_distance_orders_nearest_first():
+    offers = search_offers(RouterClient(), near_lat=PARIS[0], near_lng=PARIS[1], sort_by="distance")
+    assert [o.external_id for o in offers] == [25122, 301375, 36509]
+
+
+def test_search_one_coordinate_without_the_other_raises():
+    with pytest.raises(VeryChicError):
+        search_offers(RouterClient(), near_lat=PARIS[0])
+    with pytest.raises(VeryChicError):
+        search_offers(RouterClient(), near_lng=PARIS[1])
+
+
+def test_search_radius_or_distance_sort_without_center_raises():
+    with pytest.raises(VeryChicError):
+        search_offers(RouterClient(), radius_km=500)
+    with pytest.raises(VeryChicError):
+        search_offers(RouterClient(), sort_by="distance")
