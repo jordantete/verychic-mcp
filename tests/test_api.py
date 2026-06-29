@@ -107,3 +107,46 @@ def test_offer_details_hotel_marks_availabilities_supported():
     c = RouterClient()
     details = offer_details(c, "ORCHESTRA", 44983, channel_version="26.06.18.00")
     assert details.availabilities_supported is True
+
+
+def test_search_filters_by_min_discount():
+    offers = search_offers(RouterClient(), min_discount=50)
+    # Only Sofitel (61.0) clears the bar; None-discount offers are excluded.
+    assert offers and all(o.discount is not None and o.discount >= 50 for o in offers)
+    assert all(o.discount != 47.0 for o in offers)
+
+
+def test_search_filters_by_min_stars():
+    assert search_offers(RouterClient(), min_stars=5) == []        # none are 5*
+    assert len(search_offers(RouterClient(), min_stars=4)) == 3    # all are 4*
+
+
+def test_search_filters_by_flights_included():
+    offers = search_offers(RouterClient(), flights_included=True)
+    assert offers and all(o.flights_included is True for o in offers)
+    assert len(offers) == 1  # only the OPTIONAL_FLIGHT offer
+
+
+def test_search_sort_by_discount_desc_with_none_last():
+    offers = search_offers(RouterClient(), sort_by="discount")
+    discounts = [o.discount for o in offers]
+    assert discounts == [61.0, 47.0, None]  # descending, None placed last
+
+
+def test_search_sort_by_price_asc():
+    offers = search_offers(RouterClient(), sort_by="price")
+    prices = [o.price for o in offers]
+    assert prices == sorted(prices)
+
+
+def test_search_default_sort_preserves_catalogue_order():
+    offers = search_offers(RouterClient())
+    assert [o.external_id for o in offers] == [
+        o.external_id for o in list_deals(RouterClient(), limit=20)
+    ]
+
+
+def test_list_deals_still_returns_first_n_unchanged():
+    offers = list_deals(RouterClient(), limit=2)
+    assert len(offers) == 2
+    assert offers[0].external_id == 301375  # catalogue order, unchanged

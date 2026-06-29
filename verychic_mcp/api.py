@@ -15,12 +15,39 @@ def _fetch_all_offers(client) -> list[Offer]:
     return parse_offers(payload)
 
 
+# sort_by -> (Offer attribute, descending?). discount/rating/stars: best first.
+_SORT_SPEC = {
+    "discount": ("discount", True),
+    "price": ("price", False),
+    "rating": ("rating", True),
+    "stars": ("stars", True),
+}
+
+
+def _sort_offers(offers: list[Offer], sort_by: str | None) -> list[Offer]:
+    spec = _SORT_SPEC.get(sort_by) if sort_by else None
+    if spec is None:
+        return offers  # default: catalogue order
+    attr, descending = spec
+
+    def key(o: Offer):
+        v = getattr(o, attr)
+        if v is None:
+            return (1, 0.0)  # missing values always sort last
+        return (0, -v if descending else v)
+
+    return sorted(offers, key=key)
+
+
 def list_deals(client, *, limit: int = 20) -> list[Offer]:
-    return _fetch_all_offers(client)[:limit]
+    # [DEPRECATED] Thin alias: search with no filter/sort == catalogue order.
+    return search_offers(client, limit=limit)
 
 
 def search_offers(client, *, destination: str | None = None, country: str | None = None,
-                  max_price: float | None = None, limit: int = 20) -> list[Offer]:
+                  max_price: float | None = None, min_discount: float | None = None,
+                  min_stars: int | None = None, flights_included: bool | None = None,
+                  sort_by: str | None = None, limit: int = 20) -> list[Offer]:
     offers = _fetch_all_offers(client)
     if destination:
         d = destination.casefold()
@@ -31,6 +58,13 @@ def search_offers(client, *, destination: str | None = None, country: str | None
         offers = [o for o in offers if (o.country or "").casefold() == c]
     if max_price is not None:
         offers = [o for o in offers if o.price is not None and o.price <= max_price]
+    if min_discount is not None:
+        offers = [o for o in offers if o.discount is not None and o.discount >= min_discount]
+    if min_stars is not None:
+        offers = [o for o in offers if o.stars is not None and o.stars >= min_stars]
+    if flights_included is not None:
+        offers = [o for o in offers if o.flights_included == flights_included]
+    offers = _sort_offers(offers, sort_by)
     return offers[:limit]
 
 
