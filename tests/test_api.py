@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from verychic_mcp.api import default_months, list_deals, offer_details, search_offers
+from verychic_mcp.api import default_months, offer_details, search_offers
 from verychic_mcp.errors import NotFound, UpstreamError, VeryChicError
 
 FIX = Path(__file__).parent / "fixtures"
@@ -42,10 +42,10 @@ class RouterClient:
         raise AssertionError(f"Unexpected URL: {url}")
 
 
-def test_list_deals_limits_results():
-    offers = list_deals(RouterClient(), limit=2)
+def test_search_limits_results():
+    offers = search_offers(RouterClient(), limit=2)
     assert len(offers) == 2
-    assert offers[0].external_id == 301375
+    assert offers[0].external_id == 301375  # catalogue order, first N
 
 
 def test_search_filters_by_country():
@@ -144,14 +144,8 @@ def test_search_sort_by_price_asc():
 def test_search_default_sort_preserves_catalogue_order():
     offers = search_offers(RouterClient())
     # Independent ground truth from the fixture: catalogue order is preserved
-    # when sort_by is None (do not compare against list_deals — it delegates here).
+    # when sort_by is None.
     assert [o.external_id for o in offers] == [301375, 36509, 25122]
-
-
-def test_list_deals_still_returns_first_n_unchanged():
-    offers = list_deals(RouterClient(), limit=2)
-    assert len(offers) == 2
-    assert offers[0].external_id == 301375  # catalogue order, unchanged
 
 
 # Center used by the geo tests: Paris.

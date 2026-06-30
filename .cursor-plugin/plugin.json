@@ -1,7 +1,7 @@
 {
   "name": "verychic-mcp",
   "displayName": "VeryChic MCP",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Browse VeryChic flash-sale hotel deals from any MCP client. Filter offers by destination, price, discount, stars, theme or proximity, and look up prices and availability by date. Read-only and anonymous, no account needed. Unofficial, not affiliated with VeryChic.",
   "author": {
     "name": "Jordan Tete",

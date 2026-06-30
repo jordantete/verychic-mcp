@@ -139,19 +139,10 @@ claude mcp add verychic -- uvx verychic-mcp
 
 | Tool | What it returns |
 | --- | --- |
-| `verychic_list_deals` | The current VeryChic offers, with a configurable limit. |
 | `verychic_search_offers` | Offers filtered by `destination`, `country`, `max_price`, `min_discount`, `min_stars`, `flights_included`, `theme`, or proximity (`near_lat`/`near_lng`/`radius_km`), with optional `sort_by`. |
 | `verychic_offer_details` | One offer's content (advantages, gallery) plus its availability and prices by date. |
 
 Every call is read-only and anonymous, with a conservative rate limit built into the client.
-
-### `verychic_list_deals`
-
-Returns the current offers (a list of offer objects).
-
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| `limit` | integer | no | Max number of offers to return. Defaults to `20`. |
 
 ### `verychic_search_offers`
 
@@ -178,7 +169,7 @@ Returns one offer's full content plus, for hotels, its day-by-day availability a
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 | `source` | string | yes | `ORCHESTRA` for a hotel, `ORCHESTRA_TO` for a tour-operator package. |
-| `external_id` | integer | yes | The offer's id, as returned by `verychic_list_deals` / `verychic_search_offers`. |
+| `external_id` | integer | yes | The offer's id, as returned by `verychic_search_offers`. |
 
 ---
 
@@ -186,7 +177,7 @@ Returns one offer's full content plus, for hotels, its day-by-day availability a
 
 Ask your assistant things like:
 
-- "List the current VeryChic deals."
+- "Browse the current VeryChic deals."
 - "Search VeryChic offers in Spain under 600 euros."
 - "Find 5-star spa hotels with at least 40% off, cheapest first."
 - "Show VeryChic offers within 300 km of Paris (48.8566, 2.3522), nearest first."
@@ -198,10 +189,10 @@ Ask your assistant things like:
   offer type", not "no dates available".
 
 Offers carry a `source` (`ORCHESTRA` for a hotel, `ORCHESTRA_TO` for a package) and an
-`external_id`. Both come back from `verychic_list_deals` and `verychic_search_offers`, so the
+`external_id`. Both come back from `verychic_search_offers`, so the
 assistant can pass them to `verychic_offer_details` on its own.
 
-A `verychic_list_deals` result is a list of offer objects (one shown here, trimmed):
+A `verychic_search_offers` result is a list of offer objects (one shown here, trimmed):
 
 ```jsonc
 {

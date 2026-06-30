@@ -41,11 +41,6 @@ def _sort_offers(offers: list[Offer], sort_by: str | None) -> list[Offer]:
     return sorted(offers, key=key)
 
 
-def list_deals(client, *, limit: int = 20) -> list[Offer]:
-    # [DEPRECATED] Thin alias: search with no filter/sort == catalogue order.
-    return search_offers(client, limit=limit)
-
-
 def search_offers(client, *, destination: str | None = None, country: str | None = None,
                   max_price: float | None = None, min_discount: float | None = None,
                   min_stars: int | None = None, flights_included: bool | None = None,

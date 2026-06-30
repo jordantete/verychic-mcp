@@ -1,6 +1,6 @@
 [project]
 name = "verychic-mcp"
-version = "0.1.6"
+version = "0.1.7"
 description = "Unofficial read-only MCP server for VeryChic hotel offers"
 readme = "README.md"
 license = "MIT"

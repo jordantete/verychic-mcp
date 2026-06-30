@@ -196,21 +196,16 @@ footer a:hover{ color:var(--gold-2); border-color:var(--line-2); }
 
   <section>
     <p class="eyebrow reveal">What it does</p>
-    <h2 class="reveal">Three tools, zero account</h2>
+    <h2 class="reveal">Two tools, zero account</h2>
     <p class="sub reveal">Every call is read-only and anonymous, with a conservative rate limit built in.</p>
     <div class="grid">
       <div class="card reveal" style="animation-delay:.05s">
         <div class="n">01</div>
-        <h3>verychic_list_deals</h3>
-        <p>Browse the current VeryChic flash-sale offers, with a configurable limit.</p>
+        <h3>verychic_search_offers</h3>
+        <p>Browse and filter offers by destination, country, price, discount, stars, flights, theme or proximity — and sort the results.</p>
       </div>
       <div class="card reveal" style="animation-delay:.12s">
         <div class="n">02</div>
-        <h3>verychic_search_offers</h3>
-        <p>Filter offers by destination, country, price, discount, stars, flights, theme or proximity — and sort the results.</p>
-      </div>
-      <div class="card reveal" style="animation-delay:.19s">
-        <div class="n">03</div>
         <h3>verychic_offer_details</h3>
         <p>Full content, gallery, and day-by-day availability and prices for one offer.</p>
       </div>

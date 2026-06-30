@@ -37,14 +37,14 @@ def test_resolve_transport_http_with_host_port():
     ) == ("streamable-http", "0.0.0.0", 9000)
 
 
-def test_build_server_registers_three_tools():
+def test_build_server_registers_two_tools():
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
     names = {t.name for t in asyncio.run(srv.list_tools())}
-    assert names == {"verychic_list_deals", "verychic_search_offers", "verychic_offer_details"}
+    assert names == {"verychic_search_offers", "verychic_offer_details"}
 
 
 def test_tools_declare_readonly_annotations():
-    # Glama TDQS rewards explicit behavioural annotations. All three tools are
+    # Glama TDQS rewards explicit behavioural annotations. Both tools are
     # read-only and hit a live external API: readOnlyHint + openWorldHint, plus a
     # human-friendly title, must be advertised.
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
@@ -65,11 +65,11 @@ def test_tools_declare_output_schema():
         assert t.outputSchema is not None, name
 
 
-def test_list_deals_structured_result_matches_schema():
+def test_search_offers_structured_result_matches_schema():
     # The typed return must produce structured content whose shape matches what the
     # tool actually returns (offer fields + the computed offer_url).
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
-    _content, structured = asyncio.run(srv.call_tool("verychic_list_deals", {"limit": 5}))
+    _content, structured = asyncio.run(srv.call_tool("verychic_search_offers", {"limit": 5}))
     assert structured is not None
     assert "result" in structured and structured["result"], "expected at least one offer"
     first = structured["result"][0]
@@ -116,8 +116,8 @@ def test_root_page_links_icon():
     assert r.status_code == 200
     assert "text/html" in r.headers["content-type"]
     assert LOGO_URL in r.text
-    # Landing content: the 3 tools and the live endpoint (built from the Host header).
-    assert "verychic_list_deals" in r.text
+    # Landing content: the tools and the live endpoint (built from the Host header).
+    assert "verychic_search_offers" in r.text
     assert "verychic_offer_details" in r.text
     assert "https://testserver/mcp" in r.text
 

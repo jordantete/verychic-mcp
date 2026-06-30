@@ -100,37 +100,6 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
         return FileResponse(path, media_type=ASSET_MEDIA_TYPES[name])
 
     @mcp.tool(
-        annotations=_READ_ONLY.model_copy(update={"title": "Browse current VeryChic hotel deals"}),
-    )
-    def verychic_list_deals(
-        limit: Annotated[int, Field(
-            description="Maximum number of offers to return (default 20). Caps the result "
-            "size only; there is no pagination or cursor, so this always returns the first "
-            "N offers of the live catalogue.",
-        )] = 20,
-    ) -> list[OfferOut]:
-        """[DEPRECATED] Use `verychic_search_offers` (call it with no filter for the same
-        result). Kept for backward compatibility; will be removed in a future major version.
-
-        Browse the VeryChic flash-sale hotel offers available right now.
-
-        When to use: to discover the current catalogue without any filter. To narrow by
-        destination, country, or price use `verychic_search_offers` instead; to get the
-        full detail and per-date prices of one offer use `verychic_offer_details`.
-
-        Behaviour: read-only and anonymous (no account or credentials); rate-limited to
-        about 1 request per second. Returns the first `limit` offers in catalogue order
-        (no pagination). Prices are in EUR and text is in French. "Current" means live
-        offers at call time; the catalogue changes over time.
-
-        Returns a list of offer objects, each with: `source` and `external_id` (the pair
-        that identifies an offer for `verychic_offer_details`), `name`, `destination`,
-        `country`, `price` and `currency`, `discount`, `short_desc`, `offer_end_date`,
-        `latitude`/`longitude`, `image`, `advantages`, and `offer_url` (public web page).
-        """
-        return [_offer_dict(o) for o in api.list_deals(client, limit=limit)]
-
-    @mcp.tool(
         annotations=_READ_ONLY.model_copy(update={"title": "Search & filter VeryChic offers"}),
     )
     def verychic_search_offers(
@@ -199,10 +168,9 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
         When to use: when you already know roughly what the user wants — a place, a country,
         a budget, a minimum discount or star rating, flights vs hotel-only, a theme (e.g.
         pool, spa, romantic, last_minute), or hotels near a point (near_lat/near_lng, with an
-        optional radius_km). To simply list everything on offer use `verychic_list_deals`; to
-        inspect one specific offer in depth use `verychic_offer_details`. All filters are
-        optional and combine with AND; calling with no filter is equivalent to
-        `verychic_list_deals`.
+        optional radius_km). To inspect one specific offer in depth use
+        `verychic_offer_details`. All filters are optional and combine with AND; call it with
+        no filter to browse the full current catalogue in catalogue order.
 
         Behaviour: read-only and anonymous; rate-limited to about 1 request per second.
         Filtering is done client-side over the live catalogue: `destination` is a
@@ -211,7 +179,8 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
         `flights_included` toggles flight-bearing vs hotel-only, and `theme` matches a curated
         label decoded from the catalogue's thematics tags. Use `sort_by` to order results
         (`discount`, `price`, `rating`, `stars`, or `distance`). Prices are in EUR and text is
-        in French. Returns the first `limit` matches after filtering and sorting.
+        in French; there is no pagination. Returns the first `limit` matches after filtering
+        and sorting. "Current" means live offers at call time; the catalogue changes over time.
 
         Returns a list of offer objects (same `source` + `external_id` pair for use with
         `verychic_offer_details`). Each offer also carries `discount` (percent off, may be
@@ -242,22 +211,21 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
     def verychic_offer_details(
         source: Annotated[str, Field(
             description="The offer's source type, copied verbatim from the `source` field "
-            "of a `verychic_list_deals`/`verychic_search_offers` result. One of "
+            "of a `verychic_search_offers` result. One of "
             "'ORCHESTRA' (a single hotel) or 'ORCHESTRA_TO' (a tour-operator package). "
             "Packages have no per-date availability.",
         )],
         external_id: Annotated[int, Field(
             description="The offer's numeric `external_id`, copied from a "
-            "`verychic_list_deals`/`verychic_search_offers` result. Identifies the offer "
+            "`verychic_search_offers` result. Identifies the offer "
             "together with `source`.",
         )],
     ) -> OfferDetailsOut:
         """Get full details plus per-date availability and prices for one specific VeryChic offer.
 
-        When to use: after `verychic_list_deals` or `verychic_search_offers` returned an
-        offer you want to inspect — pass that offer's `source` and `external_id` here. You
-        must obtain those two identifiers from a list/search result first; this tool does
-        not search.
+        When to use: after `verychic_search_offers` returned an offer you want to inspect —
+        pass that offer's `source` and `external_id` here. You must obtain those two
+        identifiers from a search result first; this tool does not search.
 
         Behaviour: read-only and anonymous; rate-limited to about 1 request per second;
         prices in EUR, text in French. Availability is looked up for roughly the next 5
@@ -265,7 +233,7 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
         date-availability endpoint: `availabilities` is then empty and
         `availabilities_supported` is false — meaning "not supported", NOT "sold out".
 
-        Returns an object with: `offer` (same fields as a list result, plus `offer_url`),
+        Returns an object with: `offer` (same fields as a search result, plus `offer_url`),
         `advantages`, `included_added_values`, `non_included_added_values`, `gallery`
         (image URLs), `availabilities` (one entry per check-in date with `date`, `price`,
         `currency`, `nights`, `days`, `departure_city_code`), `availabilities_supported`

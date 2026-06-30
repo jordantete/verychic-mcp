@@ -1,7 +1,7 @@
 # CLAUDE.md — verychic-mcp
 
 **Unofficial, read-only, anonymous** MCP server for VeryChic hotel offers.
-3 tools: `verychic_list_deals`, `verychic_search_offers`, `verychic_offer_details`
+2 tools: `verychic_search_offers`, `verychic_offer_details`
 (details + availability/prices by date). Plain HTTP (curl_cffi), dual transport
 (stdio + streamable-http). Not affiliated with VeryChic — see the disclaimer in `README.md`.
 
@@ -38,7 +38,7 @@ http_client.py → VeryChicClient: curl_cffi session (Chrome fingerprint), injec
 discovery.py   → get_channel_version(): reads channelVersion from the live site, hardcoded fallback
 models.py      → Offer / Availability / OfferDetails dataclasses (+ offer_url, cheapest_price)
 parsers.py     → raw JSON → models (tolerant to missing fields via .get)
-api.py         → list_deals / search_offers / offer_details: composes client + routes + parsers
+api.py         → search_offers / offer_details: composes client + routes + parsers
 server.py      → FastMCP: registers the 3 tools, resolve_transport(), main()
 ```
 
