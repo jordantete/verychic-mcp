@@ -125,7 +125,7 @@ h2{ font-family:var(--serif); font-weight:400; font-size:clamp(1.8rem,4.5vw,2.7r
   letter-spacing:-.01em; text-align:center; margin:.5rem 0 0; }
 .sub{ text-align:center; color:var(--muted); margin:.7rem auto 0; max-width:42ch; }
 
-.grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:2.5rem; }
+.grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-top:2.5rem; max-width:640px; margin-left:auto; margin-right:auto; }
 .card{ position:relative; background:var(--panel); border:1px solid var(--line);
   border-radius:18px; padding:1.6rem 1.4rem 1.5rem; overflow:hidden; transition:.25s; }
 .card::before{ content:""; position:absolute; inset:0; opacity:0; transition:.25s;
