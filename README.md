@@ -21,6 +21,7 @@ availability and prices by date. Read-only, anonymous, no account needed.
 [![MCP](https://img.shields.io/badge/MCP-server-7C3AED?style=flat-square)](https://modelcontextprotocol.io)
 [![Smithery](https://smithery.ai/badge/tetej171/verychic-mcp)](https://smithery.ai/servers/tetej171/verychic-mcp)
 [![Glama score](https://glama.ai/mcp/servers/jordantete/verychic-mcp/badges/score.svg)](https://glama.ai/mcp/servers/jordantete/verychic-mcp)
+[![Available on CodeGuilds](https://img.shields.io/badge/Available_on-CodeGuilds-6366f1?style=flat-square)](https://codeguilds.dev/packages/verychic-mcp)
 
 <br>
 
