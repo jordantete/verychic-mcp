@@ -39,7 +39,7 @@ discovery.py   → get_channel_version(): reads channelVersion from the live sit
 models.py      → Offer / Availability / OfferDetails dataclasses (+ offer_url, cheapest_price)
 parsers.py     → raw JSON → models (tolerant to missing fields via .get)
 api.py         → search_offers / offer_details: composes client + routes + parsers
-server.py      → FastMCP: registers the 3 tools, resolve_transport(), main()
+server.py      → FastMCP: registers the 2 tools, resolve_transport(), main()
 ```
 
 Call flow: `server` (tool) → `api` (route + params) → `http_client.get_json` → `parsers` → model serialized to a dict.
