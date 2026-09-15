@@ -1,6 +1,6 @@
 [project]
 name = "verychic-mcp"
-version = "0.1.7"
+version = "0.1.8"
 description = "Unofficial read-only MCP server for VeryChic hotel offers"
 readme = "README.md"
 license = "MIT"
@@ -20,7 +20,9 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed",
 ]
-dependencies = ["curl_cffi>=0.7", "mcp[cli]>=1.2"]
+# mcp 2.x renamed FastMCP to MCPServer and changed the surrounding APIs: an
+# unpinned install resolves 2.x and fails at import. Capped until the migration.
+dependencies = ["curl_cffi>=0.7", "mcp[cli]>=1.2,<2"]
 
 [project.urls]
 Homepage = "https://github.com/jordantete/verychic-mcp"

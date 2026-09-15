@@ -1,4 +1,4 @@
-"""MCP server (FastMCP) exposing the 3 VeryChic tools, dual transport."""
+"""MCP server (FastMCP) exposing the 2 VeryChic tools, dual transport."""
 from __future__ import annotations
 
 import argparse
@@ -25,7 +25,7 @@ from .landing import LOGO_URL, WEBSITE_URL, render_landing
 from .models import OfferDetailsOut, OfferOut
 from .themes import THEME_NAMES
 
-# All three tools are read-only, side-effect free, and reach a live external API
+# Both tools are read-only, side-effect free, and reach a live external API
 # (the public VeryChic catalogue). Advertising these hints lets clients reason
 # about the tools without parsing prose, and lifts the Glama TDQS score.
 _READ_ONLY = ToolAnnotations(

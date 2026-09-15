@@ -88,7 +88,8 @@ The workflow does the rest (build + PyPI upload + GitHub Release). Once publishe
 ## Status & tracking
 
 MCP **functional and validated against the live API**, public GitHub repo, release CI in place
-(on `main`). Published to PyPI (latest `0.1.1`, `uvx verychic-mcp` works) and deployed remotely on
+(on `main`). Published to PyPI (`uvx verychic-mcp` works; the current version is whatever
+`pyproject.toml` holds — never hardcode it here) and deployed remotely on
 **Fly.io** (`https://verychic-mcp.fly.dev/mcp`; `fly.toml` is gitignored, kept out of the public
 repo). Remaining: wire the connector into Cowork (UI step). Tracked improvements and follow-ups:
 the `verychic-mcp` Notion project and `docs/superpowers/` (spec, Phase 0 verdict, plans).
