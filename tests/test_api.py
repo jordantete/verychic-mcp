@@ -63,6 +63,24 @@ def test_search_filters_by_destination_substring():
     assert offers and any("Herceg" in (o.destination or "") for o in offers)
 
 
+def test_search_country_ignores_accents():
+    """The catalogue is French ("Monténégro"); an unaccented query must still match."""
+    accented = search_offers(RouterClient(), country="Monténégro")
+    assert accented
+    assert search_offers(RouterClient(), country="montenegro") == accented
+
+
+def test_search_destination_ignores_accents():
+    plain = search_offers(RouterClient(), destination="montenegro")
+    assert plain and any("Monténégro" in (o.destination or "") for o in plain)
+
+
+def test_search_accent_folding_is_symmetric():
+    """An accented query must also match an unaccented catalogue entry."""
+    assert search_offers(RouterClient(), destination="hérceg") == \
+        search_offers(RouterClient(), destination="herceg")
+
+
 def test_offer_details_calls_three_routes_and_combines():
     c = RouterClient()
     details = offer_details(c, "ORCHESTRA", 44983, channel_version="26.06.18.00")

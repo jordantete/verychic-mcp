@@ -104,13 +104,14 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
     )
     def verychic_search_offers(
         destination: Annotated[str | None, Field(
-            description="Case-insensitive substring matched against each offer's "
-            "destination AND name (e.g. 'paris', 'maldives', 'crete'). Omit to not "
-            "filter by destination.",
+            description="Substring matched against each offer's destination AND name, "
+            "ignoring case and accents (e.g. 'paris', 'maldives', 'crete' finds "
+            "'Crète'). Omit to not filter by destination.",
         )] = None,
         country: Annotated[str | None, Field(
-            description="Exact country name, case-insensitive, as spelled in the (French) "
-            "catalogue, e.g. 'France', 'Italie', 'Grece'. Omit to not filter by country.",
+            description="Exact country name as spelled in the (French) catalogue, matched "
+            "ignoring case and accents, e.g. 'France', 'Italie', 'Grece' (finds 'Grèce'). "
+            "Omit to not filter by country.",
         )] = None,
         max_price: Annotated[float | None, Field(
             description="Inclusive upper bound on the offer price, in EUR. Offers with no "
@@ -174,8 +175,9 @@ def build_server(*, client=None, channel_version=None) -> FastMCP:
 
         Behaviour: read-only and anonymous; rate-limited to about 1 request per second.
         Filtering is done client-side over the live catalogue: `destination` is a
-        case-insensitive substring (matched on destination or name), `country` is an exact
-        case-insensitive match, `max_price`/`min_discount`/`min_stars` are numeric bounds,
+        substring (matched on destination or name), `country` is an exact match — both
+        ignore case and accents, so 'grece' matches the catalogue's 'Grèce' —
+        `max_price`/`min_discount`/`min_stars` are numeric bounds,
         `flights_included` toggles flight-bearing vs hotel-only, and `theme` matches a curated
         label decoded from the catalogue's thematics tags. Use `sort_by` to order results
         (`discount`, `price`, `rating`, `stars`, or `distance`). Prices are in EUR and text is

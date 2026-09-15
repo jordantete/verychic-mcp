@@ -1,6 +1,7 @@
 """API layer: composes the HTTP client, routes, and parsers."""
 from __future__ import annotations
 
+import unicodedata
 from datetime import date
 
 from .config import API_BASE, CHANNEL, PRODUCT_PARAMS
@@ -8,6 +9,17 @@ from .errors import NotFound, UpstreamError, VeryChicError
 from .geo import haversine_km
 from .models import Offer, OfferDetails
 from .parsers import parse_offer_details, parse_offers
+
+
+def _fold(text: str) -> str:
+    """Casefold and strip accents, for matching text filters against the catalogue.
+
+    The catalogue is French ("Grece" must find "Grèce", "Montenegro" must find
+    "Monténégro"), and folding both sides keeps the match symmetric: an accented
+    query also finds an unaccented entry.
+    """
+    decomposed = unicodedata.normalize("NFD", text.casefold())
+    return "".join(c for c in decomposed if unicodedata.category(c) != "Mn")
 
 
 def _fetch_all_offers(client) -> list[Offer]:
@@ -63,12 +75,12 @@ def search_offers(client, *, destination: str | None = None, country: str | None
             if o.latitude is not None and o.longitude is not None:
                 o.distance_km = haversine_km(near_lat, near_lng, o.latitude, o.longitude)
     if destination:
-        d = destination.casefold()
+        d = _fold(destination)
         offers = [o for o in offers
-                  if d in (o.destination or "").casefold() or d in (o.name or "").casefold()]
+                  if d in _fold(o.destination or "") or d in _fold(o.name or "")]
     if country:
-        c = country.casefold()
-        offers = [o for o in offers if (o.country or "").casefold() == c]
+        c = _fold(country)
+        offers = [o for o in offers if _fold(o.country or "") == c]
     if max_price is not None:
         offers = [o for o in offers if o.price is not None and o.price <= max_price]
     if min_discount is not None:
