@@ -1,5 +1,6 @@
 import asyncio
 import json
+from importlib.metadata import version as pkg_version
 from pathlib import Path
 
 from starlette.testclient import TestClient
@@ -12,6 +13,15 @@ FIX = Path(__file__).parent / "fixtures"
 
 def _load(name):
     return json.loads((FIX / name).read_text(encoding="utf-8"))
+
+
+def _call(coro):
+    """Run a tool call and keep the (content, structured) pair used throughout.
+
+    mcp 2.x returns a CallToolResult object where v1 returned that pair directly.
+    """
+    result = asyncio.run(coro)
+    return result.content, result.structured_content
 
 
 class RouterClient:
@@ -52,8 +62,8 @@ def test_tools_declare_readonly_annotations():
     for name, t in tools.items():
         ann = t.annotations
         assert ann is not None, name
-        assert ann.readOnlyHint is True, name
-        assert ann.openWorldHint is True, name
+        assert ann.read_only_hint is True, name
+        assert ann.open_world_hint is True, name
         assert ann.title, name
 
 
@@ -62,14 +72,14 @@ def test_tools_declare_output_schema():
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
     tools = {t.name: t for t in asyncio.run(srv.list_tools())}
     for name, t in tools.items():
-        assert t.outputSchema is not None, name
+        assert t.output_schema is not None, name
 
 
 def test_search_offers_structured_result_matches_schema():
     # The typed return must produce structured content whose shape matches what the
     # tool actually returns (offer fields + the computed offer_url).
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
-    _content, structured = asyncio.run(srv.call_tool("verychic_search_offers", {"limit": 5}))
+    _content, structured = _call(srv.call_tool("verychic_search_offers", {"limit": 5}))
     assert structured is not None
     assert "result" in structured and structured["result"], "expected at least one offer"
     first = structured["result"][0]
@@ -79,7 +89,7 @@ def test_search_offers_structured_result_matches_schema():
 
 def test_offer_details_structured_result_matches_schema():
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
-    _content, structured = asyncio.run(srv.call_tool(
+    _content, structured = _call(srv.call_tool(
         "verychic_offer_details", {"source": "ORCHESTRA", "external_id": 44983}))
     assert structured is not None
     assert "offer" in structured and "offer_url" in structured["offer"]
@@ -96,7 +106,15 @@ def test_build_server_declares_icon_and_website():
     assert srv.icons, "server should declare at least one icon"
     icon = srv.icons[0]
     assert icon.src.endswith("assets/logo.png")
-    assert icon.mimeType == "image/png"
+    assert icon.mime_type == "image/png"
+
+
+def test_build_server_declares_its_own_version():
+    # v1 filled serverInfo.version with the SDK's version; 2.x leaves the field to us,
+    # and an empty string tells a client nothing. Report the installed package version.
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    assert srv.version == pkg_version("verychic-mcp")
+    assert srv.version
 
 
 def test_favicon_route_redirects_to_logo():
@@ -196,17 +214,34 @@ def test_assets_route_404_for_path_traversal():
     assert r.status_code == 404
 
 
-def test_build_server_disables_dns_rebinding_protection():
-    # Remote deployment behind a proxy (Fly): the SDK's localhost-only protection
-    # would reject the public Host ("Invalid Host header"). It must stay disabled.
+def test_server_accepts_a_public_host_header():
+    # Remote deployment behind a proxy (Fly) presents a public Host. v1 needed an
+    # explicit DNS-rebinding opt-out for that; mcp 2.x only guards a localhost bind,
+    # so we assert the behaviour that matters rather than the vanished setting.
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
-    assert srv.settings.transport_security is not None
-    assert srv.settings.transport_security.enable_dns_rebinding_protection is False
+    with TestClient(srv.streamable_http_app(host="0.0.0.0")) as c:
+        r = c.post(
+            "/mcp",
+            headers={
+                "Host": "verychic-mcp.fly.dev",
+                "Content-Type": "application/json",
+                "Accept": "application/json, text/event-stream",
+            },
+            json={
+                "jsonrpc": "2.0", "id": 1, "method": "initialize",
+                "params": {
+                    "protocolVersion": "2025-06-18", "capabilities": {},
+                    "clientInfo": {"name": "test", "version": "1"},
+                },
+            },
+        )
+    assert r.status_code == 200, r.text
+    assert "Invalid Host header" not in r.text
 
 
 def test_search_offers_structured_result_has_new_fields():
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
-    _content, structured = asyncio.run(srv.call_tool("verychic_search_offers", {"limit": 5}))
+    _content, structured = _call(srv.call_tool("verychic_search_offers", {"limit": 5}))
     assert structured is not None and structured["result"]
     first = structured["result"][0]
     for key in ("stars", "price_label", "price_with_flights", "flights_included", "rating"):
@@ -215,7 +250,7 @@ def test_search_offers_structured_result_has_new_fields():
 
 def test_search_offers_accepts_sort_and_filter_params():
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
-    _content, structured = asyncio.run(srv.call_tool(
+    _content, structured = _call(srv.call_tool(
         "verychic_search_offers", {"sort_by": "discount", "min_discount": 50}))
     assert structured is not None
     assert structured["result"], "expected at least one offer with discount >= 50 in the fixture"
@@ -226,7 +261,7 @@ def test_search_offers_accepts_sort_and_filter_params():
 
 def test_search_offers_geo_params_return_distance_km():
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
-    _content, structured = asyncio.run(srv.call_tool(
+    _content, structured = _call(srv.call_tool(
         "verychic_search_offers",
         {"near_lat": 48.8566, "near_lng": 2.3522, "sort_by": "distance", "limit": 5}))
     assert structured is not None and structured["result"]
@@ -239,7 +274,7 @@ def test_search_offers_geo_params_return_distance_km():
 
 def test_search_offers_distance_km_null_without_center():
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
-    _content, structured = asyncio.run(srv.call_tool("verychic_search_offers", {"limit": 1}))
+    _content, structured = _call(srv.call_tool("verychic_search_offers", {"limit": 1}))
     assert structured is not None and structured["result"]
     assert structured["result"][0]["distance_km"] is None
 
@@ -248,7 +283,7 @@ def test_search_offers_tool_theme_enum_matches_mapping():
     # Sync-guard: the tool's `theme` enum must stay in sync with THEME_TO_CODES (anti-drift).
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
     tools = {t.name: t for t in asyncio.run(srv.list_tools())}
-    schema = tools["verychic_search_offers"].inputSchema
+    schema = tools["verychic_search_offers"].input_schema
     prop = schema["properties"]["theme"]
     # Optional[Literal[...]] renders as anyOf: [{enum: [...]}, {type: null}].
     # Find the branch that carries the enum values without hardcoding the index.
@@ -260,7 +295,7 @@ def test_search_offers_filters_by_theme():
     # End-to-end through the tool: the theme filter narrows results and every
     # returned offer carries the requested theme in its decoded `themes`.
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
-    _content, structured = asyncio.run(srv.call_tool(
+    _content, structured = _call(srv.call_tool(
         "verychic_search_offers", {"theme": "luxury"}))
     assert structured is not None
     assert structured["result"], "expected at least one 'luxury' offer in the fixture"

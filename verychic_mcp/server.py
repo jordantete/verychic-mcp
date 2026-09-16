@@ -1,13 +1,14 @@
-"""MCP server (FastMCP) exposing the 2 VeryChic tools, dual transport."""
+"""MCP server (MCPServer) exposing the 2 VeryChic tools, dual transport."""
 from __future__ import annotations
 
 import argparse
 import re
 from dataclasses import asdict
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as pkg_version
 from typing import Annotated, Literal
 
-from mcp.server.fastmcp import FastMCP
-from mcp.server.transport_security import TransportSecuritySettings
+from mcp.server.mcpserver import MCPServer
 from mcp.types import Icon, ToolAnnotations
 from pydantic import Field
 from starlette.responses import (
@@ -29,16 +30,24 @@ from .themes import THEME_NAMES
 # (the public VeryChic catalogue). Advertising these hints lets clients reason
 # about the tools without parsing prose, and lifts the Glama TDQS score.
 _READ_ONLY = ToolAnnotations(
-    readOnlyHint=True,
-    destructiveHint=False,
-    idempotentHint=True,
-    openWorldHint=True,
+    read_only_hint=True,
+    destructive_hint=False,
+    idempotent_hint=True,
+    open_world_hint=True,
 )
 
 # Hostname chars + optional port only. Rejecting anything else keeps the (attacker-
 # controlled) Host header out of the landing HTML — no reflected XSS possible.
 _HOST_RE = re.compile(r"^[A-Za-z0-9.\-:]+$")
 _DEFAULT_HOST = "verychic-mcp.fly.dev"
+
+
+def _server_version() -> str:
+    """Our own version for serverInfo. v1 reported the SDK's; 2.x leaves it to us."""
+    try:
+        return pkg_version("verychic-mcp")
+    except PackageNotFoundError:  # running from a source tree without an install
+        return "0+unknown"
 
 
 def _safe_host(raw: str | None) -> str:
@@ -60,21 +69,20 @@ def _offer_dict(offer) -> dict:
     return d
 
 
-def build_server(*, client=None, channel_version=None) -> FastMCP:
+def build_server(*, client=None, channel_version=None) -> MCPServer:
     client = client if client is not None else VeryChicClient()
     if channel_version is None:
         channel_version = get_channel_version(client)
-    # Remote HTTP transport: the server is public/anonymous and runs behind a proxy
-    # (Fly, etc.) that presents a public Host. The SDK's DNS-rebinding protection only
-    # allows localhost by default and would reject that Host ("Invalid Host header").
-    # We disable it explicitly: no secret nor localhost binding to protect here.
+    # Since mcp 2.x, DNS-rebinding protection auto-enables only for a localhost bind,
+    # so the public Host presented by our proxy (Fly) is accepted with no configuration —
+    # the explicit opt-out v1 needed here is gone, and the SDK default stands.
     # Declare a website and an icon in serverInfo so clients (e.g. a Claude Desktop
     # custom connector) can show the project logo instead of the generic placeholder.
-    mcp = FastMCP(
+    mcp = MCPServer(
         "verychic",
+        version=_server_version(),
         website_url=WEBSITE_URL,
-        icons=[Icon(src=LOGO_URL, mimeType="image/png", sizes=["512x512"])],
-        transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
+        icons=[Icon(src=LOGO_URL, mime_type="image/png", sizes=["512x512"])],
     )
 
     # The HTTP origin also serves a favicon (redirect to the public logo) and a
@@ -254,10 +262,11 @@ def main(argv: list[str] | None = None) -> int:
     import sys
     transport, host, port = resolve_transport(argv if argv is not None else sys.argv[1:])
     mcp = build_server()
+    # mcp 2.x moved the transport options off the constructor onto run().
     if transport == "streamable-http":
-        mcp.settings.host = host
-        mcp.settings.port = port
-    mcp.run(transport=transport)
+        mcp.run(transport=transport, host=host, port=port)
+    else:
+        mcp.run(transport=transport)
     return 0
 
 
