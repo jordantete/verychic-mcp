@@ -3,8 +3,11 @@ import json
 from importlib.metadata import version as pkg_version
 from pathlib import Path
 
+import pytest
+from mcp.server.mcpserver.exceptions import ToolError, UnexpectedToolError
 from starlette.testclient import TestClient
 
+from verychic_mcp.errors import NotFound
 from verychic_mcp.server import LOGO_URL, build_server, resolve_transport
 from verychic_mcp.themes import THEME_NAMES
 
@@ -25,7 +28,12 @@ def _call(coro):
 
 
 class RouterClient:
+    def __init__(self, raise_on_details=None):
+        self._raise_on_details = raise_on_details
+
     def get_json(self, url, params=None):
+        if self._raise_on_details is not None and "/hotel/" in url:
+            raise self._raise_on_details
         if "/products.json" in url:
             return _load("products_sample.json")
         if "/hotel/" in url:
@@ -115,6 +123,33 @@ def test_build_server_declares_its_own_version():
     srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
     assert srv.version == pkg_version("verychic-mcp")
     assert srv.version
+
+
+def test_tool_errors_reach_the_client_with_their_message():
+    """Our errors carry actionable guidance; it must survive the MCP boundary.
+
+    mcp 2.x forwards the text of a ToolError to the model but masks every other
+    exception as a bare "Error executing tool <name>", so a raw VeryChicError would
+    lose its message. UnexpectedToolError is the masked kind — assert we never get it.
+    """
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    with pytest.raises(ToolError) as exc_info:
+        asyncio.run(srv.call_tool("verychic_search_offers", {"near_lat": 45.0}))
+    assert not isinstance(exc_info.value, UnexpectedToolError)
+    assert "near_lat and near_lng" in str(exc_info.value)
+
+
+def test_upstream_tool_errors_reach_the_client_too():
+    # Same guarantee for an error raised deeper, from the API layer (NotFound).
+    srv = build_server(
+        client=RouterClient(raise_on_details=NotFound("offer or route not found")),
+        channel_version="26.06.18.00",
+    )
+    with pytest.raises(ToolError) as exc_info:
+        asyncio.run(srv.call_tool(
+            "verychic_offer_details", {"source": "ORCHESTRA", "external_id": 1}))
+    assert not isinstance(exc_info.value, UnexpectedToolError)
+    assert "not found" in str(exc_info.value)
 
 
 def test_favicon_route_redirects_to_logo():

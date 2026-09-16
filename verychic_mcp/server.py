@@ -9,6 +9,7 @@ from importlib.metadata import version as pkg_version
 from typing import Annotated, Literal
 
 from mcp.server.mcpserver import MCPServer
+from mcp.server.mcpserver.exceptions import ToolError
 from mcp.types import Icon, ToolAnnotations
 from pydantic import Field
 from starlette.responses import (
@@ -21,6 +22,7 @@ from starlette.responses import (
 from . import api
 from .assets import ASSET_MEDIA_TYPES, resolve_asset
 from .discovery import get_channel_version
+from .errors import VeryChicError
 from .http_client import VeryChicClient
 from .landing import LOGO_URL, WEBSITE_URL, render_landing
 from .models import OfferDetailsOut, OfferOut
@@ -61,6 +63,17 @@ def resolve_transport(argv: list[str]) -> tuple[str, str, int]:
     parser.add_argument("--port", type=int, default=8000)
     ns = parser.parse_args(argv)
     return ns.transport, ns.host, ns.port
+
+
+def _as_tool_error(exc: VeryChicError) -> ToolError:
+    """Carry one of our messages across the MCP boundary.
+
+    mcp 2.x forwards the text of a ToolError to the model, but treats any other
+    exception as a crash and masks it as "Error executing tool <name>". Every
+    error in errors.py is anticipated and actionable, so it must cross as a
+    ToolError or its guidance never reaches the caller.
+    """
+    return ToolError(str(exc))
 
 
 def _offer_dict(offer) -> dict:
@@ -206,12 +219,16 @@ def build_server(*, client=None, channel_version=None) -> MCPServer:
         offers within that distance, and/or `sort_by="distance"` for nearest-first.
         `distance_km` is null when no center is given.
         """
-        offers = api.search_offers(client, destination=destination, country=country,
-                                   max_price=max_price, min_discount=min_discount,
-                                   min_stars=min_stars, flights_included=flights_included,
-                                   theme=theme,
-                                   near_lat=near_lat, near_lng=near_lng, radius_km=radius_km,
-                                   sort_by=sort_by, limit=limit)
+        try:
+            offers = api.search_offers(client, destination=destination, country=country,
+                                       max_price=max_price, min_discount=min_discount,
+                                       min_stars=min_stars, flights_included=flights_included,
+                                       theme=theme,
+                                       near_lat=near_lat, near_lng=near_lng,
+                                       radius_km=radius_km,
+                                       sort_by=sort_by, limit=limit)
+        except VeryChicError as exc:
+            raise _as_tool_error(exc) from exc
         return [_offer_dict(o) for o in offers]
 
     @mcp.tool(
@@ -249,7 +266,11 @@ def build_server(*, client=None, channel_version=None) -> MCPServer:
         `currency`, `nights`, `days`, `departure_city_code`), `availabilities_supported`
         (bool), and `cheapest_price` (lowest available price, or null when none).
         """
-        details = api.offer_details(client, source, external_id, channel_version=channel_version)
+        try:
+            details = api.offer_details(client, source, external_id,
+                                        channel_version=channel_version)
+        except VeryChicError as exc:
+            raise _as_tool_error(exc) from exc
         out = asdict(details)
         out["offer"]["offer_url"] = details.offer.offer_url
         out["cheapest_price"] = details.cheapest_price

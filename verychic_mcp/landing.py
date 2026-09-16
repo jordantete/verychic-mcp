@@ -207,7 +207,7 @@ footer a:hover{ color:var(--gold-2); border-color:var(--line-2); }
       <div class="card reveal" style="animation-delay:.12s">
         <div class="n">02</div>
         <h3>verychic_offer_details</h3>
-        <p>Full content, gallery, and day-by-day availability and prices for one offer.</p>
+        <p>Full content, gallery, and — for hotels — day-by-day availability and prices for one offer.</p>
       </div>
     </div>
   </section>

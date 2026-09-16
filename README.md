@@ -151,8 +151,8 @@ Returns the offers matching every filter you pass (filters are combined with AND
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-| `destination` | string | no | Case-insensitive substring matched against the offer's destination *or* name. |
-| `country` | string | no | Exact, case-insensitive country match (e.g. `"Espagne"`). |
+| `destination` | string | no | Substring matched against the offer's destination *or* name, ignoring case **and accents** (`crete` finds `Crète`). |
+| `country` | string | no | Exact country match, ignoring case **and accents** (`"Espagne"`, `"Grece"` finds `Grèce`). |
 | `max_price` | number | no | Keep only offers priced at or below this value (EUR). |
 | `min_discount` | number | no | Keep only offers with at least this discount percentage (e.g. `40`). |
 | `min_stars` | integer | no | Keep only offers with at least this hotel star rating (1–5). |
