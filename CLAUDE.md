@@ -90,6 +90,15 @@ git push origin main --tags
 The workflow does the rest (build + PyPI upload + GitHub Release). Once published,
 `uvx verychic-mcp` works without cloning. Never commit a PyPI token.
 
+**Then publish the Glama release by hand** — it is not automated, despite the *Auto-Release*
+toggle being on. Pushing the tag makes Glama build the new commit, and there it stops: the
+build sits in *Recent Tests* with no release attached, so the directory keeps serving the
+previous version. Skipping this is how Glama stayed on `0.1.7` while the repo was at `0.2.1`.
+
+In *Admin → Dockerfile*, open the latest successful test, click **Create Release**, and
+**correct the pre-filled version** — Glama offers the last release + 1 (`0.1.8`), not the
+version actually built. Enter the tag you just pushed, add a changelog, publish.
+
 ## Status & tracking
 
 MCP **functional and validated against the live API**, public GitHub repo, release CI in place
