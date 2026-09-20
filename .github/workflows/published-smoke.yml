@@ -1,0 +1,21 @@
+name: Published Package Smoke Test
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    name: Run the published package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      # --refresh: without it uv reuses a cached resolution, so a dependency
+      # released since the last run would never be exercised.
+      - name: Start the latest release from PyPI
+        run: uvx --python 3.12 --refresh verychic-mcp --help

@@ -20,9 +20,10 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed",
 ]
-# Pinned to the 2.x line: the server is written against MCPServer, which v1 does
-# not have, and a future 3.x could rename it again. Bump deliberately.
-dependencies = ["curl_cffi>=0.7", "mcp[cli]>=2,<3"]
+# Both upper bounds are deliberate: the server is written against MCPServer, which
+# mcp 1.x does not have and a 3.x could rename again, and curl_cffi is still 0.x,
+# where a minor release may break the API. Bump them on purpose, not by resolution.
+dependencies = ["curl_cffi>=0.7,<1", "mcp[cli]>=2,<3"]
 
 [project.urls]
 Homepage = "https://github.com/jordantete/verychic-mcp"

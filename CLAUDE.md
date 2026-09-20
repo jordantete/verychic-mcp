@@ -73,6 +73,11 @@ PyPI publishing is **automated by `.github/workflows/release.yml`** on pushing a
 publisher* (project `verychic-mcp`, owner `jordantete`, repo `verychic-mcp`, workflow
 `release.yml`, environment `pypi`).
 
+A second workflow, `.github/workflows/published-smoke.yml`, runs `uvx verychic-mcp --help`
+against PyPI every Monday (and on demand). It guards the failure mode no tag-triggered job
+can see: a dependency released *after* a version is published breaking it in place — which is
+what silently broke `0.1.3` once `mcp` 2.x shipped.
+
 Publish a version (SemVer):
 ```bash
 git switch main && git pull
