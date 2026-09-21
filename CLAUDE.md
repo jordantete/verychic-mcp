@@ -82,22 +82,32 @@ Publish a version (SemVer):
 ```bash
 git switch main && git pull
 pytest && ruff check verychic_mcp tests   # must pass before tagging
-# bump "version" in pyproject.toml (X.Y.Z), then:
-git add pyproject.toml && git commit -m "chore: release vX.Y.Z"
+# bump X.Y.Z in ALL FOUR places `tests/test_version_consistency.py` checks:
+#   pyproject.toml, server.json (top-level AND packages[0]), .cursor-plugin/plugin.json
+git add pyproject.toml server.json .cursor-plugin/plugin.json
+git commit -m "chore: release vX.Y.Z"
 git tag vX.Y.Z
 git push origin main --tags
 ```
 The workflow does the rest (build + PyPI upload + GitHub Release). Once published,
 `uvx verychic-mcp` works without cloning. Never commit a PyPI token.
 
-**Then publish the Glama release by hand** — it is not automated, despite the *Auto-Release*
-toggle being on. Pushing the tag makes Glama build the new commit, and there it stops: the
-build sits in *Recent Tests* with no release attached, so the directory keeps serving the
-previous version. Skipping this is how Glama stayed on `0.1.7` while the repo was at `0.2.1`.
+**Then sync Glama — it does the rest on its own.** *Auto-Release* does work. What goes stale
+is Glama's mirror of the repo: it caches a head commit and does not re-fetch when a tag is
+pushed, so its builds keep rebuilding whatever commit it last saw. That is how `0.3.0` was
+tagged, published to PyPI and never showed up on Glama at all — its head was still a June
+commit, four months behind.
 
-In *Admin → Dockerfile*, open the latest successful test, click **Create Release**, and
-**correct the pre-filled version** — Glama offers the last release + 1 (`0.1.8`), not the
-version actually built. Enter the tag you just pushed, add a changelog, publish.
+In *Admin → Repository*, click **Sync Server** and wait for *Last known commit* to show the
+release commit you just pushed (the page needs a reload). Glama then builds that commit by
+itself and, on a green test, publishes the release with the correct version and a changelog
+pulled from the GitHub release — no manual *Create Release*, no pre-filled version to correct.
+Confirm in *Admin → Releases* that the new version carries the **Latest** badge.
+
+Two things that waste time if you don't know them. The build is not instant and the Dockerfile
+page says *"A test is already in progress"* while it runs — wait rather than starting another.
+And if a green test really does end up in *Recent Tests* with no release attached, the
+**Build & Release** button at the bottom of *Admin → Dockerfile* covers that case.
 
 ## Status & tracking
 
