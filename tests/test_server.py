@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 from importlib.metadata import version as pkg_version
 from pathlib import Path
 
@@ -8,7 +9,7 @@ from mcp.server.mcpserver.exceptions import ToolError, UnexpectedToolError
 from starlette.testclient import TestClient
 
 from verychic_mcp.errors import NotFound
-from verychic_mcp.server import LOGO_URL, build_server, resolve_transport
+from verychic_mcp.server import LOGO_URL, _log_usage, build_server, resolve_transport
 from verychic_mcp.themes import THEME_NAMES
 
 FIX = Path(__file__).parent / "fixtures"
@@ -335,3 +336,58 @@ def test_search_offers_filters_by_theme():
     assert structured is not None
     assert structured["result"], "expected at least one 'luxury' offer in the fixture"
     assert all("luxury" in o["themes"] for o in structured["result"])
+
+
+class _Ctx:
+    def __init__(self, method, params):
+        self.method = method
+        self.params = params
+
+
+def _run_middleware(method, params):
+    calls = []
+
+    async def call_next(ctx):
+        calls.append(ctx)
+        return "handler-result"
+
+    result = asyncio.run(_log_usage(_Ctx(method, params), call_next))
+    return result, calls
+
+
+def test_log_usage_records_client_on_initialize(caplog):
+    with caplog.at_level(logging.INFO, logger="verychic_mcp.server"):
+        _run_middleware("initialize", {"clientInfo": {"name": "claude-ai", "version": "1.4"}})
+    assert "client=claude-ai" in caplog.text
+    assert "version=1.4" in caplog.text
+
+
+def test_log_usage_records_tool_name(caplog):
+    with caplog.at_level(logging.INFO, logger="verychic_mcp.server"):
+        _run_middleware("tools/call", {"name": "verychic_search_offers"})
+    assert "tool=verychic_search_offers" in caplog.text
+
+
+def test_log_usage_tolerates_missing_fields(caplog):
+    with caplog.at_level(logging.INFO, logger="verychic_mcp.server"):
+        _run_middleware("initialize", None)
+    assert "client=?" in caplog.text
+
+
+def test_log_usage_passes_through_to_handler(caplog):
+    with caplog.at_level(logging.INFO, logger="verychic_mcp.server"):
+        result, calls = _run_middleware("resources/list", {})
+    assert result == "handler-result"
+    assert len(calls) == 1
+    assert "mcp client" not in caplog.text
+    assert "mcp tool" not in caplog.text
+
+
+def test_log_usage_middleware_is_wired_for_http():
+    srv = build_server(client=RouterClient(), channel_version="x", log_usage=True)
+    assert _log_usage in srv.middleware
+
+
+def test_log_usage_middleware_is_absent_on_stdio():
+    srv = build_server(client=RouterClient(), channel_version="x", log_usage=False)
+    assert _log_usage not in srv.middleware

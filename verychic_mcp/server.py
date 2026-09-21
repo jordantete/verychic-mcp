@@ -2,12 +2,14 @@
 from __future__ import annotations
 
 import argparse
+import logging
 import re
 from dataclasses import asdict
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as pkg_version
 from typing import Annotated, Literal
 
+from mcp.server.context import CallNext, HandlerResult, ServerRequestContext
 from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 from mcp.types import Icon, ToolAnnotations
@@ -43,6 +45,8 @@ _READ_ONLY = ToolAnnotations(
 _HOST_RE = re.compile(r"^[A-Za-z0-9.\-:]+$")
 _DEFAULT_HOST = "verychic-mcp.fly.dev"
 
+_logger = logging.getLogger(__name__)
+
 
 def _server_version() -> str:
     """Our own version for serverInfo. v1 reported the SDK's; 2.x leaves it to us."""
@@ -65,6 +69,21 @@ def resolve_transport(argv: list[str]) -> tuple[str, str, int]:
     return ns.transport, ns.host, ns.port
 
 
+async def _log_usage(ctx: ServerRequestContext, call_next: CallNext) -> HandlerResult:
+    """Log the connecting client and each tool invoked.
+
+    Every MCP message is a "POST /mcp" in the access log, so the handshake's
+    clientInfo and the tool name are the only things that tell callers apart.
+    """
+    params = ctx.params or {}
+    if ctx.method == "initialize":
+        info = params.get("clientInfo") or {}
+        _logger.info("mcp client=%s version=%s", info.get("name", "?"), info.get("version", "?"))
+    elif ctx.method == "tools/call":
+        _logger.info("mcp tool=%s", params.get("name", "?"))
+    return await call_next(ctx)
+
+
 def _as_tool_error(exc: VeryChicError) -> ToolError:
     """Carry one of our messages across the MCP boundary.
 
@@ -82,7 +101,7 @@ def _offer_dict(offer) -> dict:
     return d
 
 
-def build_server(*, client=None, channel_version=None) -> MCPServer:
+def build_server(*, client=None, channel_version=None, log_usage: bool = True) -> MCPServer:
     client = client if client is not None else VeryChicClient()
     if channel_version is None:
         channel_version = get_channel_version(client)
@@ -96,6 +115,7 @@ def build_server(*, client=None, channel_version=None) -> MCPServer:
         version=_server_version(),
         website_url=WEBSITE_URL,
         icons=[Icon(src=LOGO_URL, mime_type="image/png", sizes=["512x512"])],
+        middleware=[_log_usage] if log_usage else [],
     )
 
     # The HTTP origin also serves a favicon (redirect to the public logo) and a
@@ -282,7 +302,9 @@ def build_server(*, client=None, channel_version=None) -> MCPServer:
 def main(argv: list[str] | None = None) -> int:
     import sys
     transport, host, port = resolve_transport(argv if argv is not None else sys.argv[1:])
-    mcp = build_server()
+    # Only the hosted HTTP deployment logs usage: on stdio the server runs on the
+    # user's own machine, where those lines would just be noise in their session.
+    mcp = build_server(log_usage=transport == "streamable-http")
     # mcp 2.x moved the transport options off the constructor onto run().
     if transport == "streamable-http":
         mcp.run(transport=transport, host=host, port=port)
