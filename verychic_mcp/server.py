@@ -47,6 +47,16 @@ _DEFAULT_HOST = "verychic-mcp.fly.dev"
 
 _logger = logging.getLogger(__name__)
 
+# clientInfo and the tool name are caller-supplied on a public endpoint: a newline
+# in either forges whole log lines, so keep only printable, bounded text.
+_LOG_SAFE_RE = re.compile(r"[^A-Za-z0-9._\-/ ]")
+
+
+def _log_safe(raw: object) -> str:
+    if raw is None:
+        return "?"
+    return _LOG_SAFE_RE.sub("", str(raw))[:64] or "?"
+
 
 def _server_version() -> str:
     """Our own version for serverInfo. v1 reported the SDK's; 2.x leaves it to us."""
@@ -78,9 +88,11 @@ async def _log_usage(ctx: ServerRequestContext, call_next: CallNext) -> HandlerR
     params = ctx.params or {}
     if ctx.method == "initialize":
         info = params.get("clientInfo") or {}
-        _logger.info("mcp client=%s version=%s", info.get("name", "?"), info.get("version", "?"))
+        _logger.info(
+            "mcp client=%s version=%s", _log_safe(info.get("name")), _log_safe(info.get("version"))
+        )
     elif ctx.method == "tools/call":
-        _logger.info("mcp tool=%s", params.get("name", "?"))
+        _logger.info("mcp tool=%s", _log_safe(params.get("name")))
     return await call_next(ctx)
 
 

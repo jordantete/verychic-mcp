@@ -391,3 +391,25 @@ def test_log_usage_middleware_is_wired_for_http():
 def test_log_usage_middleware_is_absent_on_stdio():
     srv = build_server(client=RouterClient(), channel_version="x", log_usage=False)
     assert _log_usage not in srv.middleware
+
+
+def test_log_usage_strips_forged_lines_from_client_name(caplog):
+    evil = "x\nmcp client=claude-ai version=9.9.9\nmcp tool=verychic_search_offers"
+    with caplog.at_level(logging.INFO, logger="verychic_mcp.server"):
+        _run_middleware("initialize", {"clientInfo": {"name": evil, "version": "1"}})
+    assert len(caplog.records) == 1
+    assert "\n" not in caplog.records[0].getMessage()
+    assert "client=claude-ai" not in caplog.text
+
+
+def test_log_usage_strips_forged_lines_from_tool_name(caplog):
+    with caplog.at_level(logging.INFO, logger="verychic_mcp.server"):
+        _run_middleware("tools/call", {"name": "a\nmcp client=spoofed version=1"})
+    assert len(caplog.records) == 1
+    assert "client=spoofed" not in caplog.text
+
+
+def test_log_usage_bounds_field_length(caplog):
+    with caplog.at_level(logging.INFO, logger="verychic_mcp.server"):
+        _run_middleware("initialize", {"clientInfo": {"name": "z" * 5000, "version": "1"}})
+    assert len(caplog.records[0].getMessage()) < 200
