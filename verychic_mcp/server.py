@@ -242,8 +242,13 @@ def build_server(*, client=None, channel_version=None, log_usage: bool = True) -
         null), `stars` (1-5, may be null), `price_label` (human-readable price unit, e.g.
         "à partir de par pers. pour 3 nuits" vs "par chambre" — read this before comparing
         prices), `price_with_flights` (EUR, null when not applicable), `flights_included`
-        (bool), `rating` (hotel grade, often null in the catalogue), and `themes` (curated
-        theme labels decoded from the catalogue's thematics tags, e.g. ["pool", "luxury"]).
+        (bool), `rating` (overall guest grade out of 10), `opinion_count` (how many
+        reviews that grade rests on — check it before trusting a rating), the per-topic
+        grades `rating_location`, `rating_room`, `rating_service`, `rating_food` and
+        `rating_public_area` (out of 10, null when unrated), and `themes` (curated theme
+        labels decoded from the catalogue's thematics tags, e.g. ["pool", "luxury"]).
+        The catalogue carries no reviews, so every grade is null and `opinion_count` is 0
+        here; call `verychic_offer_details` on an offer to get its real review data.
         An empty list means no offer matched the filters.
 
         Proximity search: pass `near_lat` and `near_lng` (decimal degrees, together) to
@@ -279,6 +284,13 @@ def build_server(*, client=None, channel_version=None, log_usage: bool = True) -
             "`verychic_search_offers` result. Identifies the offer "
             "together with `source`.",
         )],
+        months: Annotated[list[str] | None, Field(
+            description="Months to look up check-in availability for, each written "
+            "'MM/YYYY' (e.g. ['01/2027', '02/2027']). Use it to look further ahead than "
+            "the default window, or to target a season. Omit for roughly the next 5 "
+            "months. Has no effect on tour-operator packages, which expose no date "
+            "availability.",
+        )] = None,
     ) -> OfferDetailsOut:
         """Get full details plus per-date availability and prices for one specific VeryChic offer.
 
@@ -288,24 +300,32 @@ def build_server(*, client=None, channel_version=None, log_usage: bool = True) -
 
         Behaviour: read-only and anonymous; rate-limited to about 1 request per second;
         prices in EUR, text in French. Availability is looked up for roughly the next 5
-        months. For tour-operator packages (`source` = 'ORCHESTRA_TO') VeryChic exposes no
-        date-availability endpoint: `availabilities` is then empty and
-        `availabilities_supported` is false — meaning "not supported", NOT "sold out".
+        months unless `months` names the window to query. For tour-operator packages
+        (`source` = 'ORCHESTRA_TO') VeryChic exposes no date-availability endpoint:
+        `availabilities` is then empty and `availabilities_supported` is false —
+        meaning "not supported", NOT "sold out".
 
         Returns an object with: `offer` (same fields as a search result, plus `offer_url`),
         `advantages`, `included_added_values`, `non_included_added_values`, `gallery`
         (image URLs), `availabilities` (one entry per check-in date with `date`, `price`,
-        `currency`, `nights`, `days`, `departure_city_code`), `availabilities_supported`
-        (bool), and `cheapest_price` (lowest available price, or null when none).
+        `currency`, `nights`, `days`, `departure_city_code`), `availabilities_by_month`
+        (one row per month with stock — `month` as 'MM/YYYY', `min_price`, `currency` and
+        `dates_available` — in chronological order), `availabilities_supported` (bool), and
+        `cheapest_price` (lowest available price, or null when none).
+
+        To answer "which month is cheapest", read `availabilities_by_month` rather than
+        scanning `availabilities`: it carries the same answer in a fraction of the size,
+        and it stays small when `months` asks for a wide window.
         """
         try:
             details = api.offer_details(client, source, external_id,
-                                        channel_version=channel_version)
+                                        channel_version=channel_version, months=months)
         except VeryChicError as exc:
             raise _as_tool_error(exc) from exc
         out = asdict(details)
         out["offer"]["offer_url"] = details.offer.offer_url
         out["cheapest_price"] = details.cheapest_price
+        out["availabilities_by_month"] = [asdict(m) for m in details.availabilities_by_month]
         return out
 
     return mcp

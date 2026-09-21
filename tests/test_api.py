@@ -219,3 +219,32 @@ def test_search_offers_theme_no_match_returns_empty():
 def test_search_offers_theme_combines_with_other_filter():
     # 25122 has theme 'last_minute' but is in France, not Italie — yields nothing.
     assert search_offers(RouterClient(), theme="last_minute", country="Italie") == []
+
+
+def test_offer_details_uses_custom_months_for_availabilities():
+    c = RouterClient()
+    offer_details(c, "ORCHESTRA", 44983, channel_version="26.06.18.00",
+                  months=["01/2027", "02/2027"])
+    params = next(p for u, p in c.calls if "checkin-availabilities" in u)
+    assert params["monthYear"] == "01/2027,02/2027"
+
+
+def test_offer_details_rejects_malformed_month():
+    for bad in ["13/2027", "2027-01", "1/2027", "janvier"]:
+        with pytest.raises(VeryChicError, match="MM/YYYY"):
+            offer_details(RouterClient(), "ORCHESTRA", 44983,
+                          channel_version="26.06.18.00", months=[bad])
+
+
+def test_offer_details_rejects_empty_months_list():
+    with pytest.raises(VeryChicError, match="MM/YYYY"):
+        offer_details(RouterClient(), "ORCHESTRA", 44983,
+                      channel_version="26.06.18.00", months=[])
+
+
+def test_offer_details_malformed_month_is_rejected_before_any_request():
+    c = RouterClient()
+    with pytest.raises(VeryChicError):
+        offer_details(c, "ORCHESTRA", 44983, channel_version="26.06.18.00",
+                      months=["13/2027"])
+    assert c.calls == []

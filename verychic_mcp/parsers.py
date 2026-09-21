@@ -53,6 +53,7 @@ def plausible_discount(v: float | None) -> float | None:
 
 
 def parse_offer(d: dict) -> Offer:
+    opinions = d.get("opinions") or {}
     return Offer(
         source=d.get("source", ""),
         external_id=d.get("externalId"),
@@ -78,7 +79,13 @@ def parse_offer(d: dict) -> Offer:
         # priceWithFlights is 0 (or absent) when there is no flight price; treat as None.
         price_with_flights=d.get("priceWithFlights") or None,
         flights_included=parse_flights_included(d),
-        rating=(d.get("opinions") or {}).get("generalGrade"),
+        rating=opinions.get("generalGrade"),
+        opinion_count=opinions.get("opinionCount"),
+        rating_location=opinions.get("locationGrade"),
+        rating_public_area=opinions.get("publicAreaGrade"),
+        rating_room=opinions.get("roomGrade"),
+        rating_service=opinions.get("serviceGrade"),
+        rating_food=opinions.get("foodGrade"),
     )
 
 

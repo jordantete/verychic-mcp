@@ -31,6 +31,12 @@ class Offer:
     price_with_flights: float | None = None
     flights_included: bool = False
     rating: float | None = None
+    opinion_count: int | None = None
+    rating_location: float | None = None
+    rating_public_area: float | None = None
+    rating_room: float | None = None
+    rating_service: float | None = None
+    rating_food: float | None = None
     distance_km: float | None = None
 
     @property
@@ -51,6 +57,14 @@ class Availability:
 
 
 @dataclass
+class MonthPrice:
+    month: str
+    min_price: int
+    currency: str
+    dates_available: int
+
+
+@dataclass
 class OfferDetails:
     offer: Offer
     advantages: list[str] = field(default_factory=list)
@@ -67,6 +81,27 @@ class OfferDetails:
     def cheapest_price(self) -> int | None:
         prices = [a.price for a in self.availabilities if a.price is not None]
         return min(prices) if prices else None
+
+    @property
+    def availabilities_by_month(self) -> list[MonthPrice]:
+        """The cheapest check-in date per month, chronologically.
+
+        Lets a caller answer "which month is cheapest" over a wide window without
+        carrying every single date: the raw list runs to a few hundred entries.
+        """
+        grouped: dict[str, list[Availability]] = {}
+        for a in self.availabilities:
+            # dates are "DD/MM/YYYY"; a priceless or shapeless one says nothing usable
+            if a.price is None or a.date.count("/") != 2:
+                continue
+            grouped.setdefault(a.date.split("/", 1)[1], []).append(a)
+        months = []
+        for month, items in grouped.items():
+            cheapest = min(items, key=lambda a: a.price)
+            months.append(MonthPrice(month, cheapest.price, cheapest.currency, len(items)))
+        # Sort on (year, month): "MM/YYYY" compared as text puts 01/2027 before 09/2026.
+        months.sort(key=lambda m: (m.month[-4:], m.month[:2]))
+        return months
 
 
 # Output shapes — the exact dicts the MCP tools return (the dataclasses above
@@ -98,8 +133,21 @@ class OfferOut(TypedDict):
     price_with_flights: float | None
     flights_included: bool
     rating: float | None
+    opinion_count: int | None
+    rating_location: float | None
+    rating_public_area: float | None
+    rating_room: float | None
+    rating_service: float | None
+    rating_food: float | None
     distance_km: float | None
     offer_url: str | None
+
+
+class MonthPriceOut(TypedDict):
+    month: str
+    min_price: int
+    currency: str
+    dates_available: int
 
 
 class AvailabilityOut(TypedDict):
@@ -118,5 +166,6 @@ class OfferDetailsOut(TypedDict):
     non_included_added_values: list[str]
     gallery: list[str]
     availabilities: list[AvailabilityOut]
+    availabilities_by_month: list[MonthPriceOut]
     availabilities_supported: bool
     cheapest_price: int | None

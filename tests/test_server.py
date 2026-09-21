@@ -31,8 +31,10 @@ def _call(coro):
 class RouterClient:
     def __init__(self, raise_on_details=None):
         self._raise_on_details = raise_on_details
+        self.calls = []
 
     def get_json(self, url, params=None):
+        self.calls.append((url, params))
         if self._raise_on_details is not None and "/hotel/" in url:
             raise self._raise_on_details
         if "/products.json" in url:
@@ -413,3 +415,40 @@ def test_log_usage_bounds_field_length(caplog):
     with caplog.at_level(logging.INFO, logger="verychic_mcp.server"):
         _run_middleware("initialize", {"clientInfo": {"name": "z" * 5000, "version": "1"}})
     assert len(caplog.records[0].getMessage()) < 200
+
+
+def test_offer_details_exposes_months_argument():
+    # api.offer_details has always accepted `months`, but the tool did not expose it,
+    # locking every caller to the default ~5-month window.
+    client = RouterClient()
+    srv = build_server(client=client, channel_version="26.06.18.00")
+    _call(srv.call_tool("verychic_offer_details", {
+        "source": "ORCHESTRA", "external_id": 44983, "months": ["01/2027", "02/2027"]}))
+    params = next(p for u, p in client.calls if "checkin-availabilities" in u)
+    assert params["monthYear"] == "01/2027,02/2027"
+
+
+def test_offer_details_malformed_month_reaches_client_with_guidance():
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    with pytest.raises(ToolError) as exc_info:
+        asyncio.run(srv.call_tool("verychic_offer_details", {
+            "source": "ORCHESTRA", "external_id": 44983, "months": ["janvier 2027"]}))
+    assert not isinstance(exc_info.value, UnexpectedToolError)
+    assert "MM/YYYY" in str(exc_info.value)
+
+
+def test_offer_details_structured_result_exposes_opinion_fields():
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    _content, structured = _call(srv.call_tool(
+        "verychic_offer_details", {"source": "ORCHESTRA", "external_id": 44983}))
+    offer = structured["offer"]
+    assert offer["opinion_count"] == 67
+    assert offer["rating_room"] == 9.2
+
+
+def test_offer_details_structured_result_exposes_availabilities_by_month():
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00")
+    _content, structured = _call(srv.call_tool(
+        "verychic_offer_details", {"source": "ORCHESTRA", "external_id": 44983}))
+    assert structured["availabilities_by_month"] == [
+        {"month": "06/2026", "min_price": 169, "currency": "EUR", "dates_available": 5}]

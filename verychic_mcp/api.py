@@ -1,6 +1,7 @@
 """API layer: composes the HTTP client, routes, and parsers."""
 from __future__ import annotations
 
+import re
 import unicodedata
 from datetime import date
 
@@ -110,9 +111,23 @@ def default_months(n: int = 5, today: date | None = None) -> list[str]:
     return out
 
 
+_MONTH_RE = re.compile(r"^(0[1-9]|1[0-2])/\d{4}$")
+
+
+def _validate_months(months: list[str]) -> None:
+    if not months or not all(_MONTH_RE.match(m) for m in months):
+        raise VeryChicError(
+            "months must be a non-empty list of 'MM/YYYY' strings "
+            "(e.g. ['01/2027', '02/2027']); omit it for the next few months."
+        )
+
+
 def offer_details(client, source: str, external_id: int, *, channel_version: str,
                   months: list[str] | None = None) -> OfferDetails:
-    months = months or default_months()
+    if months is None:
+        months = default_months()
+    else:
+        _validate_months(months)
     # Tour-operator packages (ORCHESTRA_TO) are exposed under /vacation-package/
     # and have no checkin-availabilities endpoint (date availability unsupported).
     is_package = source == "ORCHESTRA_TO"

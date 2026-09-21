@@ -28,3 +28,25 @@ def test_offer_details_live_has_availabilities():
     assert details.offer.external_id == offer.external_id
     # availability may be empty depending on the offer, but the call must succeed and parse
     assert isinstance(details.availabilities, list)
+    # the per-month rollup is derived from that same list, so it must agree with it
+    by_month = details.availabilities_by_month
+    assert [m.month for m in by_month] == sorted(
+        (m.month for m in by_month), key=lambda m: (m[-4:], m[:2]))
+    if by_month:
+        assert details.cheapest_price == min(m.min_price for m in by_month)
+
+
+def test_offer_details_live_honours_a_custom_month_window():
+    """`months` must actually narrow the live query, not be silently ignored."""
+    client = VeryChicClient()
+    cv = get_channel_version(client)
+    hotel = next(o for o in search_offers(client, limit=40) if o.source == "ORCHESTRA")
+    default = offer_details(client, hotel.source, hotel.external_id, channel_version=cv)
+    if not default.availabilities:
+        pytest.skip("offer has no availability in the default window")
+
+    month = default.availabilities[0].date.split("/", 1)[1]  # "DD/MM/YYYY" -> "MM/YYYY"
+    narrowed = offer_details(client, hotel.source, hotel.external_id,
+                             channel_version=cv, months=[month])
+    assert narrowed.availabilities, f"no availability returned for {month}"
+    assert all(a.date.endswith(month) for a in narrowed.availabilities)

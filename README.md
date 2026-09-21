@@ -171,6 +171,7 @@ Returns one offer's full content plus, for hotels, its day-by-day availability a
 | --- | --- | --- | --- |
 | `source` | string | yes | `ORCHESTRA` for a hotel, `ORCHESTRA_TO` for a tour-operator package. |
 | `external_id` | integer | yes | The offer's id, as returned by `verychic_search_offers`. |
+| `months` | array of strings | no | Months to look up availability for, each written `MM/YYYY` (e.g. `["01/2027", "02/2027"]`). Defaults to roughly the next 5 months. |
 
 ---
 
@@ -183,6 +184,10 @@ Ask your assistant things like:
 - "Find 5-star spa hotels with at least 40% off, cheapest first."
 - "Show VeryChic offers within 300 km of Paris (48.8566, 2.3522), nearest first."
 - "Get the details and dated prices for the ORCHESTRA hotel offer 44983."
+- "What does that hotel cost in February and March 2027?" The assistant passes
+  `months: ["02/2027", "03/2027"]` to look beyond the default window.
+- "Which month is cheapest for this hotel?" `availabilities_by_month` answers it directly —
+  one row per month with stock, so a wide `months` window stays cheap to read.
 - "Get the details for the ORCHESTRA_TO package offer 301375." Tour-operator packages bundle
   flights with the hotel, so they do not expose day-by-day prices the way a single hotel does.
   The tool still returns the offer content and advantages, and sets
@@ -213,14 +218,24 @@ A `verychic_search_offers` result is a list of offer objects (one shown here, tr
 }
 ```
 
-`verychic_offer_details` adds `gallery`, `included_added_values`, a `cheapest_price`, and the
-day-by-day `availabilities` for a hotel:
+`verychic_offer_details` adds `gallery`, `included_added_values`, a `cheapest_price`, the
+guest review grades, a per-month price rollup, and the day-by-day `availabilities`
+for a hotel:
 
 ```jsonc
 {
-  "offer": { "source": "ORCHESTRA", "external_id": 44983, "name": "Hotel Kaktus Playa *****", "...": "..." },
+  "offer": {
+    "source": "ORCHESTRA", "external_id": 44983, "name": "Hotel Kaktus Playa *****",
+    "rating": 8.5, "opinion_count": 67,
+    "rating_location": 8.1, "rating_room": 9.2, "rating_service": 8.9,
+    "rating_food": 9.1, "rating_public_area": 9.1,
+    "...": "..."
+  },
   "cheapest_price": 169,
   "availabilities_supported": true,
+  "availabilities_by_month": [
+    { "month": "06/2026", "min_price": 169, "currency": "EUR", "dates_available": 5 }
+  ],
   "availabilities": [
     { "date": "20/06/2026", "price": 169, "currency": "EUR", "nights": 1, "days": 2 },
     { "date": "21/06/2026", "price": 169, "currency": "EUR", "nights": 1, "days": 2 }

@@ -160,3 +160,92 @@ def test_parse_offer_decodes_themes_from_thematics():
 def test_parse_offer_themes_absent_is_empty_list():
     offer = parse_offers({"content": [{"externalId": 1, "name": "X"}]})[0]
     assert offer.themes == []
+
+
+def test_parse_offer_extracts_opinion_count_and_subgrades():
+    # The opinions block is already on the wire (offer_details asks for it); every
+    # grade must be exposed, not just generalGrade.
+    offer = parse_offer(_load("hotel_sample.json"))
+    assert offer.rating == 8.5
+    assert offer.opinion_count == 67
+    assert offer.rating_location == 8.1
+    assert offer.rating_public_area == 9.1
+    assert offer.rating_room == 9.2
+    assert offer.rating_service == 8.9
+    assert offer.rating_food == 9.1
+
+
+def test_parse_offer_opinions_absent_are_none():
+    offer = parse_offer({"source": "X", "externalId": 1, "name": "n"})
+    assert offer.opinion_count is None
+    assert offer.rating_location is None
+    assert offer.rating_room is None
+
+
+def test_parse_offer_opinion_count_zero_is_kept():
+    # 0 reviews is information ("nobody rated this"), not a missing value.
+    offers = parse_offers(_load("products_sample.json"))
+    assert offers[0].opinion_count == 0
+
+
+def _avail(date, price, currency="EUR"):
+    return Availability(date=date, price=price, currency=currency, nights=1, days=2)
+
+
+def _months(details):
+    return [(m.month, m.min_price, m.currency, m.dates_available)
+            for m in details.availabilities_by_month]
+
+
+def _details_with(avails):
+    return OfferDetails(offer=parse_offer({"source": "X", "externalId": 1, "name": "n"}),
+                        availabilities=avails)
+
+
+def test_availabilities_by_month_aggregates_min_price_from_fixture():
+    details = parse_offer_details(
+        _load("hotel_sample.json"),
+        _load("preview_sample.json"),
+        _load("checkin_availabilities_sample.json"),
+    )
+    # the fixture holds 5 dates, all in June 2026, all at 169
+    assert _months(details) == [("06/2026", 169, "EUR", 5)]
+
+
+def test_availabilities_by_month_keeps_the_cheapest_date_of_each_month():
+    details = _details_with([_avail("05/10/2026", 240), _avail("12/10/2026", 149),
+                             _avail("20/10/2026", 310)])
+    assert _months(details) == [("10/2026", 149, "EUR", 3)]
+
+
+def test_availabilities_by_month_is_chronological_across_a_year_boundary():
+    # "MM/YYYY" sorted as text would put 01/2027 first; order must be real time order.
+    details = _details_with([_avail("15/01/2027", 200), _avail("03/12/2026", 180),
+                             _avail("09/09/2026", 220)])
+    assert [m.month for m in details.availabilities_by_month] == [
+        "09/2026", "12/2026", "01/2027"]
+
+
+def test_availabilities_by_month_skips_dates_without_a_price():
+    details = _details_with([_avail("05/10/2026", None), _avail("12/10/2026", 149)])
+    assert _months(details) == [("10/2026", 149, "EUR", 1)]
+
+
+def test_availabilities_by_month_drops_a_month_with_no_priced_date():
+    details = _details_with([_avail("05/10/2026", None), _avail("12/11/2026", 149)])
+    assert [m.month for m in details.availabilities_by_month] == ["11/2026"]
+
+
+def test_availabilities_by_month_empty_without_availabilities():
+    # ORCHESTRA_TO packages expose no date availability at all.
+    details = parse_offer_details(
+        _load("hotel_sample.json"), _load("preview_sample.json"), [],
+        availabilities_supported=False,
+    )
+    assert details.availabilities_by_month == []
+
+
+def test_availabilities_by_month_ignores_a_malformed_date():
+    # parse_availabilities defaults a missing date to "", which has no month to group on.
+    details = _details_with([_avail("", 149), _avail("12/11/2026", 200)])
+    assert _months(details) == [("11/2026", 200, "EUR", 1)]
