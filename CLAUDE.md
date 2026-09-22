@@ -68,7 +68,8 @@ Call flow: `server` (tool) → `api` (route + params) → `http_client.get_json`
 Public repo: **https://github.com/jordantete/verychic-mcp**.
 
 PyPI publishing is **automated by `.github/workflows/release.yml`** on pushing a
-`v*` tag: `test → build → publish-pypi → github-release`. PyPI auth uses
+`v*` tag: `test → build → publish-pypi → github-release` + `publish-registry`
+(publishes `server.json` to the official MCP registry, OIDC too). PyPI auth uses
 **Trusted Publishing (OIDC)** — **no token stored**. One-time PyPI setup: a *trusted
 publisher* (project `verychic-mcp`, owner `jordantete`, repo `verychic-mcp`, workflow
 `release.yml`, environment `pypi`).
@@ -89,7 +90,7 @@ git commit -m "chore: release vX.Y.Z"
 git tag vX.Y.Z
 git push origin main --tags
 ```
-The workflow does the rest (build + PyPI upload + GitHub Release). Once published,
+The workflow does the rest (build + PyPI upload + GitHub Release + MCP registry). Once published,
 `uvx verychic-mcp` works without cloning. Never commit a PyPI token.
 
 **Then sync Glama — it does the rest on its own.** *Auto-Release* does work. What goes stale

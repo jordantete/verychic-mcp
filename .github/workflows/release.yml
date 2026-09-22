@@ -98,3 +98,39 @@ jobs:
         with:
           files: dist/*
           generate_release_notes: true
+
+  publish-registry:
+    name: Publish to MCP Registry
+    needs: publish-pypi
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # OIDC — no token stored
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install mcp-publisher
+        env:
+          MCP_PUBLISHER_VERSION: "1.8.1"
+        run: |
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/download/v${MCP_PUBLISHER_VERSION}/mcp-publisher_linux_amd64.tar.gz" \
+            | tar xz mcp-publisher
+
+      - name: Wait for PyPI to serve the new version
+        run: |
+          # The registry rejects server.json if the declared PyPI version is not indexed yet.
+          VERSION="${GITHUB_REF_NAME#v}"
+          for _ in $(seq 1 20); do
+            if curl -fsS "https://pypi.org/pypi/verychic-mcp/${VERSION}/json" > /dev/null; then
+              echo "verychic-mcp ${VERSION} is on PyPI"
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "::error::verychic-mcp ${VERSION} still not on PyPI after 5 minutes"
+          exit 1
+
+      - name: Publish server.json
+        run: |
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish
