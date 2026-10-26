@@ -8,6 +8,7 @@ import pytest
 from mcp.server.mcpserver.exceptions import ToolError, UnexpectedToolError
 from starlette.testclient import TestClient
 
+from verychic_mcp import server as server_module
 from verychic_mcp.errors import NotFound
 from verychic_mcp.server import LOGO_URL, _log_usage, build_server, resolve_transport
 from verychic_mcp.themes import THEME_NAMES
@@ -393,6 +394,39 @@ def test_log_usage_middleware_is_wired_for_http():
 def test_log_usage_middleware_is_absent_on_stdio():
     srv = build_server(client=RouterClient(), channel_version="x", log_usage=False)
     assert _log_usage not in srv.middleware
+
+
+def test_main_runs_http_transport_stateless(monkeypatch):
+    runs = []
+
+    class FakeServer:
+        def run(self, **kwargs):
+            runs.append(kwargs)
+
+    monkeypatch.setattr(server_module, "build_server", lambda **_: FakeServer())
+    server_module.main(["--transport", "streamable-http", "--port", "9000"])
+    assert runs == [{"transport": "streamable-http", "host": "127.0.0.1", "port": 9000,
+                     "stateless_http": True}]
+
+
+def test_stateless_http_serves_tool_calls_and_logs_usage(caplog):
+    srv = build_server(client=RouterClient(), channel_version="26.06.18.00", log_usage=True)
+    headers = {"Accept": "application/json, text/event-stream"}
+    init = {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {
+        "protocolVersion": "2025-06-18", "capabilities": {},
+        "clientInfo": {"name": "claude-ai", "version": "1.4"}}}
+    call = {"jsonrpc": "2.0", "id": 2, "method": "tools/call",
+            "params": {"name": "verychic_search_offers", "arguments": {}}}
+    app = srv.streamable_http_app(stateless_http=True, host="0.0.0.0")
+    with caplog.at_level(logging.INFO, logger="verychic_mcp.server"), TestClient(app) as c:
+        r_init = c.post("/mcp", json=init, headers=headers)
+        r_call = c.post("/mcp", json=call, headers=headers)
+    assert r_init.status_code == 200
+    assert "mcp-session-id" not in r_init.headers
+    assert r_call.status_code == 200
+    assert '"isError":false' in r_call.text.replace(" ", "")
+    assert "client=claude-ai" in caplog.text
+    assert "tool=verychic_search_offers" in caplog.text
 
 
 def test_log_usage_strips_forged_lines_from_client_name(caplog):

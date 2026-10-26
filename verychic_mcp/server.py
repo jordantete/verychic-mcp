@@ -338,8 +338,10 @@ def main(argv: list[str] | None = None) -> int:
     # user's own machine, where those lines would just be noise in their session.
     mcp = build_server(log_usage=transport == "streamable-http")
     # mcp 2.x moved the transport options off the constructor onto run().
+    # Stateless: the tools keep no per-client state, and on Linux the memory of
+    # expired sessions is never returned to the OS, so the hosted server grew until it crashed.
     if transport == "streamable-http":
-        mcp.run(transport=transport, host=host, port=port)
+        mcp.run(transport=transport, host=host, port=port, stateless_http=True)
     else:
         mcp.run(transport=transport)
     return 0
